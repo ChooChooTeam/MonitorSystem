@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BPowerM.h" />
     <ClInclude Include="DIALOG1.h" />
     <ClInclude Include="MonitorSystemClient.h" />
     <ClInclude Include="MonitorSystemClientDlg.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BPowerM.cpp" />
     <ClCompile Include="DIALOG1.cpp" />
     <ClCompile Include="MonitorSystemClient.cpp" />
     <ClCompile Include="MonitorSystemClientDlg.cpp" />

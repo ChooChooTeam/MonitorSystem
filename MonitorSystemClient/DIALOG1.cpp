@@ -5,7 +5,7 @@
 #include "MonitorSystemClient.h"
 #include "DIALOG1.h"
 #include "afxdialogex.h"
-
+#include "BPowerM.h"
 
 // CDIALOG1 对话框
 
@@ -28,7 +28,40 @@ void CDIALOG1::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CDIALOG1, CDialogEx)
+	ON_BN_CLICKED(IDC_BUTTON2, &CDIALOG1::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON5, &CDIALOG1::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON3, &CDIALOG1::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON7, &CDIALOG1::OnBnClickedButton7)
 END_MESSAGE_MAP()
 
 
 // CDIALOG1 消息处理程序
+
+
+void CDIALOG1::OnBnClickedButton2()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	BPowerM::EnableShutDownPriv();
+	BPowerM::ReSetWindows(EWX_SHUTDOWN, true);//关机  
+}
+
+
+void CDIALOG1::OnBnClickedButton5()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	BPowerM::ReSetWindows(EWX_LOGOFF, false);//注销  
+}
+
+
+void CDIALOG1::OnBnClickedButton3()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	BPowerM::ReSetWindows(EWX_REBOOT, true);//重启  
+}
+
+
+void CDIALOG1::OnBnClickedButton7()
+{
+	BPowerM::ReSetWindows(EWX_SETPOWER, true);//睡眠  
+	// TODO: 在此添加控件通知处理程序代码
+}
