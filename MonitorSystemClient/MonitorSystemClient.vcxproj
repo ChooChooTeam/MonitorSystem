@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DIALOG1.h" />
     <ClInclude Include="MonitorSystemClient.h" />
     <ClInclude Include="MonitorSystemClientDlg.h" />
     <ClInclude Include="resource.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DIALOG1.cpp" />
     <ClCompile Include="MonitorSystemClient.cpp" />
     <ClCompile Include="MonitorSystemClientDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
