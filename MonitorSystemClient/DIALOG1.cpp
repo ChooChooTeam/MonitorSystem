@@ -1,4 +1,4 @@
-// DIALOG1.cpp : ÊµÏÖÎÄ¼ş
+ï»¿// DIALOG1.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -8,7 +8,7 @@
 #include "BPowerM.h"
 #include "BProcessM.h"
 
-// CDIALOG1 ¶Ô»°¿ò
+// CDIALOG1 å¯¹è¯æ¡†
 
 IMPLEMENT_DYNAMIC(CDIALOG1, CDialogEx)
 
@@ -35,34 +35,35 @@ BEGIN_MESSAGE_MAP(CDIALOG1, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON7, &CDIALOG1::OnBnClickedButton7)
 	ON_BN_CLICKED(IDC_BUTTON4, &CDIALOG1::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON1, &CDIALOG1::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON6, &CDIALOG1::OnBnClickedButton6)
 END_MESSAGE_MAP()
 
 
-// CDIALOG1 ÏûÏ¢´¦Àí³ÌĞò
+// CDIALOG1 æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 
 void CDIALOG1::OnBnClickedButton2()
 {
 	BPowerM::EnableShutDownPriv();
-	BPowerM::ReSetWindows(EWX_SHUTDOWN, true);//¹Ø»ú  
+	BPowerM::ReSetWindows(EWX_SHUTDOWN, true);//å…³æœº  
 }
 
 
 void CDIALOG1::OnBnClickedButton5()
 {
-	BPowerM::ReSetWindows(EWX_LOGOFF, false);//×¢Ïú  
+	BPowerM::ReSetWindows(EWX_LOGOFF, false);//æ³¨é”€  
 }
 
 
 void CDIALOG1::OnBnClickedButton3()
 {
-	BPowerM::ReSetWindows(EWX_REBOOT, true);//ÖØÆô  
+	BPowerM::ReSetWindows(EWX_REBOOT, true);//é‡å¯  
 }
 
 
 void CDIALOG1::OnBnClickedButton7()
 {
-	BPowerM::ReSetWindows(EWX_SETPOWER, true);//Ë¯Ãß  
+	BPowerM::ReSetWindows(EWX_SETPOWER, true);//ç¡çœ   
 }
 
 
@@ -132,21 +133,21 @@ void CDIALOG1::ShowJPEG(void* pData, int DataSize)
 }
 void CDIALOG1::OnBnClickedButton1()
 {
-	//TODO:ĞŞ¸ÄÄÚ´æĞ¹Â©£¬Ã¿´Îµ÷ÓÃ»áÓĞÆ½¾ù200byteĞ¹Â¶
-	CDC* pDeskDC = GetDesktopWindow()->GetDC();		//»ñÈ¡×ÀÃæ»­²¼¶ÔÏó
+	//TODO:ä¿®æ”¹å†…å­˜æ³„æ¼ï¼Œæ¯æ¬¡è°ƒç”¨ä¼šæœ‰å¹³å‡200byteæ³„éœ²
+	CDC* pDeskDC = GetDesktopWindow()->GetDC();		//è·å–æ¡Œé¢ç”»å¸ƒå¯¹è±¡
 	CRect rc;
-	GetDesktopWindow()->GetClientRect(rc);				//»ñÈ¡ÆÁÄ»µÄ¿Í»§ÇøÓò
+	GetDesktopWindow()->GetClientRect(rc);				//è·å–å±å¹•çš„å®¢æˆ·åŒºåŸŸ
 
-	CDC  memDC;											//¶¨ÒåÒ»¸öÄÚ´æ»­²¼
-	memDC.CreateCompatibleDC(pDeskDC);					//´´½¨Ò»¸ö¼æÈİµÄ»­²¼
+	CDC  memDC;											//å®šä¹‰ä¸€ä¸ªå†…å­˜ç”»å¸ƒ
+	memDC.CreateCompatibleDC(pDeskDC);					//åˆ›å»ºä¸€ä¸ªå…¼å®¹çš„ç”»å¸ƒ
 	CBitmap bmp;
-	bmp.CreateCompatibleBitmap(pDeskDC, rc.Width(), rc.Height());	//´´½¨¼æÈİÎ»Í¼
-	memDC.SelectObject(&bmp);							//Ñ¡ÖĞÎ»Í¼¶ÔÏó
+	bmp.CreateCompatibleBitmap(pDeskDC, rc.Width(), rc.Height());	//åˆ›å»ºå…¼å®¹ä½å›¾
+	memDC.SelectObject(&bmp);							//é€‰ä¸­ä½å›¾å¯¹è±¡
 	BITMAP bitmap;
 	bmp.GetBitmap(&bitmap);
 
-	int panelsize = 0;									//¼ÇÂ¼µ÷É«°å´óĞ¡
-	if (bitmap.bmBitsPixel<16)							//ÅĞ¶ÏÊÇ·ñÎªÕæ²ÊÉ«Î»Í¼
+	int panelsize = 0;									//è®°å½•è°ƒè‰²æ¿å¤§å°
+	if (bitmap.bmBitsPixel<16)							//åˆ¤æ–­æ˜¯å¦ä¸ºçœŸå½©è‰²ä½å›¾
 		panelsize = pow(2, bitmap.bmBitsPixel * sizeof(RGBQUAD));
 
 	BITMAPINFO *pBInfo = (BITMAPINFO*)LocalAlloc(LPTR, sizeof(BITMAPINFO) + panelsize);
@@ -202,7 +203,7 @@ void CDIALOG1::OnBnClickedButton1()
 	//m_Addr.sin_port = htons(5002);
 	//m_Addr.sin_addr.S_un.S_addr = inet_addr(m_ServerIP);
 	//m_Bmpsize = GraphSize;
-	////¼ÆËãÃ¿¸öÎ»Í¼·¢ËÍµÄ´ÎÊı
+	////è®¡ç®—æ¯ä¸ªä½å›¾å‘é€çš„æ¬¡æ•°
 	//m_Count = m_JpegSize / GraphSize;
 	//m_Mod = m_JpegSize % GraphSize;
 	//if (m_Mod != 0)
@@ -213,7 +214,7 @@ void CDIALOG1::OnBnClickedButton1()
 
 
 	//for server
-	//ÏÔÊ¾jpegÍ¼Æ¬¡£
+	//æ˜¾ç¤ºjpegå›¾ç‰‡ã€‚
 	//ShowJPEG(lpData, mJpegSize);
 	//end for
 
@@ -230,5 +231,18 @@ void CDIALOG1::OnBnClickedButton1()
 	//GlobalFree(m_hMem);
 	//::LocalFree((HLOCAL)pBInfo);
 	bmp.DeleteObject();
-	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
+}
+void showMessage(CString message) {
+	;
+	MessageBox(NULL, message, TEXT("æœåŠ¡å™¨ç«¯æ¶ˆæ¯!"), MB_ICONWARNING | MB_SYSTEMMODAL);
+
+}
+
+void CDIALOG1::OnBnClickedButton6()
+{
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
+	CString s;
+	s = "hello";
+	showMessage(s);
 }
