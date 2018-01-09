@@ -36,6 +36,9 @@
     <ClInclude Include="BPowerM.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BProcessM.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MonitorSystemClient.cpp">
@@ -51,6 +54,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BPowerM.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BProcessM.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
