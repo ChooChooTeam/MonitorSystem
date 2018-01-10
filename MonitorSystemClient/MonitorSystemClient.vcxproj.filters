@@ -75,6 +75,7 @@
     <None Include="res\MonitorSystemClient.rc2">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="KeyboardHook.dll" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\MonitorSystemClient.ico">
@@ -86,5 +87,10 @@
     <Image Include="res\Toolbar256.bmp">
       <Filter>资源文件</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="KeyboardHook.lib">
+      <Filter>头文件</Filter>
+    </Library>
   </ItemGroup>
 </Project>
