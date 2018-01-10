@@ -183,6 +183,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Adosql.h" />
     <ClInclude Include="MonitorSystemServer.h" />
     <ClInclude Include="MonitorSystemServerDlg.h" />
     <ClInclude Include="resource.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Adosql.cpp" />
     <ClCompile Include="MonitorSystemServer.cpp" />
     <ClCompile Include="MonitorSystemServerDlg.cpp" />
     <ClCompile Include="stdafx.cpp">
