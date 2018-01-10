@@ -23,4 +23,5 @@ protected:
 public:
 	CListCtrl m_list;
 	virtual BOOL OnInitDialog();
+	CListCtrl m_userlist;
 };

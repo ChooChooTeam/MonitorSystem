@@ -25,6 +25,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST2, m_list);
+	DDX_Control(pDX, IDC_LIST4, m_userlist);
 }
 
 
@@ -44,6 +45,7 @@ BOOL CMainDlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	// TODO:  在此添加额外的初始化
+	//初始化进程信息列表
 	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);      // 整行选择、网格线  
 	m_list.InsertColumn(0, _T(""), LVCFMT_LEFT, 0);
 	m_list.InsertColumn(1, _T("进程名"), LVCFMT_LEFT, 100);        // 插入第2列的列名  
@@ -59,6 +61,22 @@ BOOL CMainDlg::OnInitDialog()
 		m_list.SetItemText(i, 2, strAge);                      // 设置第3列(年龄)  
 		m_list.SetItemText(i, 3, strSex);                      // 设置第4列(性别)  
 	}
+
+	//初始化用户信息列表
+	m_userlist.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);      // 整行选择、网格线  
+	m_userlist.InsertColumn(0, _T(""), LVCFMT_LEFT, 0);
+	m_userlist.InsertColumn(1, _T("用户名"), LVCFMT_LEFT, 100);        // 插入第2列的列名  
+	
+	CString userName;
+	for (int i = 0; i <= 7; i++) {
+		userName.Format(_T("用户%d"), i);
+		m_userlist.InsertItem(i, _T(""));                          // 插入行  
+		m_userlist.SetItemText(i, 1, userName);                     // 设置第2列(姓名)  
+		
+	}
+
+
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
 }
