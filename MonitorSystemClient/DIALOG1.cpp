@@ -7,6 +7,7 @@
 #include "afxdialogex.h"
 #include "BPowerM.h"
 #include "BProcessM.h"
+#include "BComInfo.h"
 #pragma comment(lib, "KeyboardHook.lib")
 _declspec(dllimport) void SetHook(HWND hwnd);
 _declspec(dllimport)	void UnHook(void);
@@ -236,6 +237,7 @@ void CDIALOG1::OnBnClickedButton1()
 	//GlobalFree(m_hMem);
 	//::LocalFree((HLOCAL)pBInfo);
 	bmp.DeleteObject();
+	img.Destroy();
 	// TODO: 在此添加控件通知处理程序代码
 }
 void showMessage(CString message) {
@@ -255,8 +257,8 @@ void CDIALOG1::OnBnClickedButton6()
 
 void CDIALOG1::OnBnClickedButton8()
 {
-	
-	SetHook(m_hWnd);
+	BComInfo::GetSysInfo();
+	//SetHook(m_hWnd);
 	MessageBox(TEXT("你已经被管理员锁定！请联系管理员 /f8 解锁！"), TEXT("警告!"), MB_ICONWARNING | MB_SYSTEMMODAL);
 	
 	// TODO: 在此添加控件通知处理程序代码
