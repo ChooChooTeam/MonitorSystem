@@ -8,6 +8,8 @@
 #include "BPowerM.h"
 #include "BProcessM.h"
 #include "BComInfo.h"
+#include "BScreenM.h"
+
 #pragma comment(lib, "KeyboardHook.lib")
 _declspec(dllimport) void SetHook(HWND hwnd);
 _declspec(dllimport)	void UnHook(void);
@@ -135,110 +137,16 @@ void CDIALOG1::ShowJPEG(void* pData, int DataSize)
 		::ReleaseDC(m_hWnd, hDC);
 	/*}*/
 }
+
+BScreenM *b=NULL;
 void CDIALOG1::OnBnClickedButton1()
 {
 	
-	CDC* pDeskDC = GetDesktopWindow()->GetDC();		//获取桌面画布对象
-	CRect rc;
-	GetDesktopWindow()->GetClientRect(rc);				//获取屏幕的客户区域
-
-	CDC  memDC;											//定义一个内存画布
-	memDC.CreateCompatibleDC(pDeskDC);					//创建一个兼容的画布
-	CBitmap bmp;
-	bmp.CreateCompatibleBitmap(pDeskDC, rc.Width(), rc.Height());	//创建兼容位图
-	memDC.SelectObject(&bmp);							//选中位图对象
-	BITMAP bitmap;
-	bmp.GetBitmap(&bitmap);
-
-	int panelsize = 0;									//记录调色板大小
-	if (bitmap.bmBitsPixel<16)							//判断是否为真彩色位图
-		panelsize = pow(2, bitmap.bmBitsPixel * sizeof(RGBQUAD));
-
-	BITMAPINFO *pBInfo = (BITMAPINFO*)LocalAlloc(LPTR, sizeof(BITMAPINFO) + panelsize);
-	pBInfo->bmiHeader.biBitCount = bitmap.bmBitsPixel;
-	pBInfo->bmiHeader.biClrImportant = 0;
-	pBInfo->bmiHeader.biCompression = 0;
-	pBInfo->bmiHeader.biHeight = bitmap.bmHeight;
-	pBInfo->bmiHeader.biPlanes = bitmap.bmPlanes;
-	pBInfo->bmiHeader.biSize = sizeof(BITMAPINFO);
-	pBInfo->bmiHeader.biSizeImage = bitmap.bmWidthBytes*bitmap.bmHeight;
-	pBInfo->bmiHeader.biWidth = bitmap.bmWidth;
-	pBInfo->bmiHeader.biXPelsPerMeter = 0;
-	pBInfo->bmiHeader.biYPelsPerMeter = 0;
-
-	memDC.BitBlt(0, 0, bitmap.bmWidth, bitmap.bmHeight, pDeskDC, 0, 0, SRCCOPY);
-
-	char* pData = new char[bitmap.bmWidthBytes* bitmap.bmHeight];
-	::GetDIBits(memDC.m_hDC, bmp, 0, bitmap.bmHeight, pData, pBInfo, DIB_RGB_COLORS);
-	//new code
-	int BufSize = panelsize + sizeof(BITMAPINFO) + bitmap.bmWidthBytes*bitmap.bmHeight;
-
-
-	CImage img;
-	img.Attach(bmp);
-	IStream* pOutStream = NULL;
-	CreateStreamOnHGlobal(NULL, TRUE, &pOutStream);
-	img.Save(pOutStream, Gdiplus::ImageFormatJPEG);
-	HGLOBAL hOutGlobal = NULL;
-	GetHGlobalFromStream(pOutStream, &hOutGlobal);
-	LPBYTE lpData = (LPBYTE)GlobalLock(hOutGlobal);
-	int mJpegSize = GlobalSize(lpData);
-	char *pBuffer = new char[mJpegSize];
-	memcpy(pBuffer, lpData, mJpegSize);
-
-	GlobalUnlock(hOutGlobal);
-
-
-	//old code
-	/*int BufSize = panelsize + sizeof(BITMAPINFO) + bitmap.bmWidthBytes*bitmap.bmHeight;
-	Bitmap*  mmage;
-	mmage = Bitmap::FromBITMAPINFO(pBInfo, pData);
-	CLSID clsid;
-	GetCodecClsid(L"image/jpeg", &clsid);
-	HGLOBAL m_hMem = GlobalAlloc(GMEM_MOVEABLE, 0);
-	IStream *pstm = NULL;
-	CreateStreamOnHGlobal(m_hMem, TRUE, &pstm);
-	mmage->Save(pstm, &clsid, NULL);
-	m_JpegSize = GlobalSize(m_hMem);
-	LPBYTE lpData = (LPBYTE)GlobalLock(m_hMem);*/
-	//end old
-
-	//m_Addr.sin_family = AF_INET;
-	//m_Addr.sin_port = htons(5002);
-	//m_Addr.sin_addr.S_un.S_addr = inet_addr(m_ServerIP);
-	//m_Bmpsize = GraphSize;
-	////计算每个位图发送的次数
-	//m_Count = m_JpegSize / GraphSize;
-	//m_Mod = m_JpegSize % GraphSize;
-	//if (m_Mod != 0)
-	//	m_Count += 1;
-	//m_FrameIndex = 0;
-	//memcpy(m_pSendBuf, lpData, m_JpegSize);
-	//int ret = SendData(m_FrameIndex, m_Mod, GraphSize, m_JpegSize, m_Count, m_pSendBuf, m_Addr);
-
-
-	//for server
-	//显示jpeg图片。
-	//ShowJPEG(lpData, mJpegSize);
-	//end for
-
-	memDC.DeleteDC();
-	pDeskDC->DeleteDC();
-
-	//pstm->Release();
-	//if (mmage)
-	//	delete mmage;
-	delete[] pData;
-	delete[] pBuffer;
-	pOutStream->Release();
-	LocalFree(pBInfo);
-	GlobalFree(hOutGlobal);
-	//GlobalUnlock(m_hMem);
-	//GlobalFree(m_hMem);
-	//::LocalFree((HLOCAL)pBInfo);
-	bmp.DeleteObject();
-	img.Destroy();
-	// TODO: 在此添加控件通知处理程序代码
+	DWORD threadID;
+	b = new BScreenM(this);
+	b->runThreading();
+	
+	
 }
 void showMessage(CString message) {
 	
