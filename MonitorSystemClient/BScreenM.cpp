@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "BScreenM.h"
 struct para {
-	CDIALOG1* dlg;
 	BScreenM * M;
 };
 
@@ -18,9 +17,9 @@ void  sendScreenData(para* p) {
 		BITMAP bitmap;
 		int panelsize = 0;
 		BITMAPINFO *pBInfo;
-		pDeskDC = p->dlg->GetDesktopWindow()->GetDC();		//获取桌面画布对象
+		pDeskDC = AfxGetMainWnd()->GetDesktopWindow()->GetDC();		//获取桌面画布对象
 
-		p->dlg->GetDesktopWindow()->GetClientRect(rc);				//获取屏幕的客户区域
+		AfxGetMainWnd()->GetDesktopWindow()->GetClientRect(rc);				//获取屏幕的客户区域
 
 																//定义一个内存画布
 		memDC.CreateCompatibleDC(pDeskDC);					//创建一个兼容的画布
@@ -71,10 +70,10 @@ void  sendScreenData(para* p) {
 
 		//send data
 
-
+		p->M->socket->SendJPGE(pBuffer, mJpegSize);
 
 		delete[] pData;
-		delete[] pBuffer;
+		//delete[] pBuffer;
 		pOutStream->Release();
 		LocalFree(pBInfo);
 		GlobalFree(hOutGlobal);
@@ -84,13 +83,14 @@ void  sendScreenData(para* p) {
 
 
 		end = GetTickCount();
+		
 		DWORD  runTime = end - start;
 		Sleep(10000);
-		/*if (runTime) {
-		
+		if (runTime) {
+	
 			Sleep(1000- runTime);
 		
-		}*/
+		}
 	}
 	//delete p;
 
@@ -139,12 +139,11 @@ HANDLE BScreenM::runThreading()
 {
 	
 		para* p = new para;
-		p->dlg = this->dlg;
 		p->M = this;
 		return  CreateThread(NULL,
 			0,
 			(LPTHREAD_START_ROUTINE)sendScreenData,
-			&p,
+			p,
 			0,
 			&threadID);
 

@@ -9,7 +9,8 @@
 #include "BProcessM.h"
 #include "BComInfo.h"
 #include "BScreenM.h"
-
+#include "Controler.h"
+#include "../MonitorSystemServer/WrkSocket.h"
 #pragma comment(lib, "KeyboardHook.lib")
 _declspec(dllimport) void SetHook(HWND hwnd);
 _declspec(dllimport)	void UnHook(void);
@@ -138,14 +139,18 @@ void CDIALOG1::ShowJPEG(void* pData, int DataSize)
 	/*}*/
 }
 
-BScreenM *b=NULL;
+#include "../MonitorSystemServer/IControler.h"
 void CDIALOG1::OnBnClickedButton1()
 {
 	
+	Controler * controler=new Controler();
+	WrkSocket * w;
+	w = new WrkSocket(*controler,_T("sdds"));
+	controler->setSocket(w);
+	w->Connect(_T("192.168.1.101"),8848 );
 	DWORD threadID;
-	b = new BScreenM(this);
+	BScreenM* b = new BScreenM(w);
 	b->runThreading();
-	
 	
 }
 void showMessage(CString message) {

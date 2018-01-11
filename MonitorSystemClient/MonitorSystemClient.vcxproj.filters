@@ -51,6 +51,18 @@
     <ClInclude Include="BComInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Controler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MonitorSystemServer\IControler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MonitorSystemServer\WrkSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MonitorSystemServer\LstnSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MonitorSystemClient.cpp">
@@ -78,6 +90,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="BComInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Controler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MonitorSystemServer\WrkSocket.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MonitorSystemServer\LstnSocket.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
