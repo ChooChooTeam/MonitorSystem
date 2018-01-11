@@ -136,7 +136,7 @@ void CDIALOG1::ShowJPEG(void* pData, int DataSize)
 }
 void CDIALOG1::OnBnClickedButton1()
 {
-	//TODO:修改内存泄漏，每次调用会有平均200byte泄露
+	
 	CDC* pDeskDC = GetDesktopWindow()->GetDC();		//获取桌面画布对象
 	CRect rc;
 	GetDesktopWindow()->GetClientRect(rc);				//获取屏幕的客户区域
@@ -223,6 +223,7 @@ void CDIALOG1::OnBnClickedButton1()
 
 	memDC.DeleteDC();
 	pDeskDC->DeleteDC();
+
 	//pstm->Release();
 	//if (mmage)
 	//	delete mmage;
@@ -230,6 +231,7 @@ void CDIALOG1::OnBnClickedButton1()
 	delete[] pBuffer;
 	pOutStream->Release();
 	LocalFree(pBInfo);
+	GlobalFree(hOutGlobal);
 	//GlobalUnlock(m_hMem);
 	//GlobalFree(m_hMem);
 	//::LocalFree((HLOCAL)pBInfo);
