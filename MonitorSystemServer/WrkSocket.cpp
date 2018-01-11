@@ -2,7 +2,7 @@
 #include "WrkSocket.h"
 #include "IControler.h"
 #include "LstnSocket.h"
-#include "Adosql.h"
+//#include "Adosql.h"
 
 //const char ran[] = "0123456789";
 WrkSocket::WrkSocket(IControler& con, CString username) :
@@ -86,10 +86,10 @@ void WrkSocket::OnReceive(int nErrorCode)
 		md5[n] = '\0'; md5[n] = '\0';
 		CString cName(name), cMd5(md5);
 
-		Adosql db;
-		bool rtn = db.queryClient(cName, cMd5);
-		SendControl(USER_RETURN);
-		Send(&rtn, sizeof(bool));
+		//Adosql db;
+		//bool rtn = db.queryClient(cName, cMd5);
+		//SendControl(USER_RETURN);
+		//Send(&rtn, sizeof(bool));
 		
 	}
 	else if (op == USER_RETURN) {
