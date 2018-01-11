@@ -14,7 +14,9 @@ IMPLEMENT_DYNAMIC(CMainDlg, CDialogEx)
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_MAIN_DIALOG, pParent)
 {
-	
+	mSerCtrl = new SerCtrl(this);
+	LSocket = new LstnSocket(*mSerCtrl);
+	LSocket->Listen(8848);
 }
 
 void CMainDlg::ShowJPEG(void * pData, int DataSize)

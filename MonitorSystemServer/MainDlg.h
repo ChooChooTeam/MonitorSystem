@@ -1,6 +1,7 @@
 #pragma once
 #include "afxcmn.h"
-
+#include "SerCtrl.h"
+#include "LstnSocket.h"
 
 // CMainDlg 对话框
 using namespace Gdiplus;
@@ -17,6 +18,9 @@ public:
 private:
 	IStream * m_pStm;
 	Bitmap *m_pNewBmp;
+
+	SerCtrl* mSerCtrl;
+	LstnSocket* LSocket;
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_MAIN_DIALOG };
