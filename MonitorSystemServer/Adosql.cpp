@@ -47,11 +47,11 @@ bool queryAdmin(CString str1,CString str2)
 	_RecordsetPtr pRst(__uuidof(Recordset)); //实例化一个Recordset对象pRst
 	_CommandPtr pCmd(__uuidof(Command)); //实例化一个Command对象pCmd
 	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
-	sprintf(strsql, "SELECT * FROM Admin WHERE AdminName = '%s'", str1);
+	sprintf(strsql, "SELECT * FROM Admin WHERE AdminName = '%s'", (char*)str1.GetBuffer());
 	
 	pCmd->CommandText = strsql; //通过pCmd对象访问数据库
 	pRst = pCmd->Execute(NULL, NULL, adCmdText);
-	while (!pRst->rsEOF)
+	while (!pRst->adoEOF)
 	{
 		
 		if (str2 == pRst->GetCollect("AdminName"))
@@ -91,10 +91,9 @@ bool queryClient(CString str1, CString str2)
 	_CommandPtr pCmd(__uuidof(Command)); //实例化一个Command对象pCmd
 	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
 	sprintf(strsql, "SELECT * FROM Client WHERE AdminName = '%s'", str1);
-
 	pCmd->CommandText = strsql; //通过pCmd对象访问数据库
 	pRst = pCmd->Execute(NULL, NULL, adCmdText);
-	while (!pRst->rsEOF)
+	while (!pRst->adoEOF)
 	{
 
 		if (str2 == pRst->GetCollect("AdminName"))
@@ -108,7 +107,6 @@ bool queryClient(CString str1, CString str2)
 			return true;
 		}
 
-		//把数据库中学号这列的内容放入IDC_LIST1的LIST控件中
 		pRst->MoveNext(); //下移一个
 	}
 	pRst->Close(); //关闭对象
