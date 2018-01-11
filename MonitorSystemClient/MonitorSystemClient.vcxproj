@@ -224,6 +224,11 @@
   <ItemGroup>
     <Library Include="KeyboardHook.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MonitorSystemServer\MonitorSystemServer.vcxproj">
+      <Project>{4dc499fd-2b49-4d35-9d84-a53c3f95ad54}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
