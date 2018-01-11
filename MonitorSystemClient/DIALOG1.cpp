@@ -151,6 +151,7 @@ void CDIALOG1::OnBnClickedButton1()
 	DWORD threadID;
 	BScreenM* b = new BScreenM(w);
 	b->runThreading();
+
 	
 }
 void showMessage(CString message) {
