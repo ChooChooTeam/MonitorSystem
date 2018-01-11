@@ -33,5 +33,5 @@ public:
 	CListCtrl m_list;
 	virtual BOOL OnInitDialog();
 	CListCtrl m_userlist;
-	CStatic* pic;
+	afx_msg void OnBnClickedButton3();
 };

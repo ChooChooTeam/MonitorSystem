@@ -52,51 +52,75 @@ void WrkSocket::OnConnect(int nErrorCode)
 
 void WrkSocket::OnReceive(int nErrorCode)
 {
-	WsOp op;
-	Receive(&op, sizeof(WsOp));
+	if (step == 0) {
+		WsOp op;
+		Receive(&op, sizeof(WsOp));
+		if (op == SHUTDOWN || op == REBOOT || op == LOOK ||
+			op == UNLOOK || op == STOP || op == RESUME) {
+			ctrler.DoCmd(op);
+		}
+		else if (op == JPGE) {
+			status = JPGE;
+			step = 1;
+		}
+		else if (op == PROGRESS) {
+			//TODO: 后续的进程信息读取
+		}
+		else if (op == USER_NAME) {
+			status = USER_NAME;
+			step = 1;
+		}
+		else if (op == USER_INFO) {
+			status = USER_INFO;
+			step = 1;
+		}
+		else if (op == USER_RETURN) {
+			bool isValid;
+			Receive(&isValid, sizeof(bool));
+			// TODO: 由核对结果进行判断
+		}
+	}
+	else if (step == 1) {
+		if (status == JPGE) {
+			Receive(&mSize, sizeof(int));
+			step = 2;
+		}
+		else if (status == USER_NAME) {
+			char szTemp[34];
+			int n = Receive(szTemp, 34);
+			szTemp[n] = '\0';
+			szTemp[n + 1] = '\0';
+			this->name.Format(_T("%s"), szTemp);
+			pParent->NewOnLine();
+			step = 0;
+		}
+		else if (status == USER_INFO) {
+			char name[34];
+			int n;
+			n = Receive(name, 34);
+			name[n] = '\0'; name[n + 1] = '\0';
+			step = 2;
+		}
 
-	if (op == SHUTDOWN || op == REBOOT || op == LOOK ||
-		op == UNLOOK || op == STOP || op == RESUME) {
-		ctrler.DoCmd(op);
-	}
-	else if (op == JPGE) {
-		delete jpgBuff;
-		Receive(&mSize, sizeof(int));
-		jpgBuff = new char[mSize];
-		Receive(jpgBuff, mSize);
-		ctrler.DoJPG(jpgBuff, mSize);
-	}
-	else if (op == PROGRESS) {
-		//TODO: 后续的进程信息读取
-	}
-	else if (op == USER_NAME) {
-		char szTemp[34];
-		int n = Receive(szTemp, 34);
-		szTemp[n] = '\0';
-		szTemp[n + 1] = '\0';
-		this->name.Format(_T("%s"), szTemp);
-		pParent->NewOnLine();
-	}
-	else if (op == USER_INFO) {
-		char name[34], md5[34];
-		int n;
-		n = Receive(name, 34);
-		name[n] = '\0'; name[n + 1] = '\0';
-		n = Receive(md5, 34);
-		md5[n] = '\0'; md5[n] = '\0';
-		CString cName(name), cMd5(md5);
-
-		//Adosql db;
-		//bool rtn = db.queryClient(cName, cMd5);
-		//SendControl(USER_RETURN);
-		//Send(&rtn, sizeof(bool));
 		
 	}
-	else if (op == USER_RETURN) {
-		bool isValid;
-		Receive(&isValid, sizeof(bool));
-		// TODO: 由核对结果进行判断
+	else if (step == 2) {
+		if (status == JPGE) {
+			delete jpgBuff;
+			jpgBuff = new char[mSize];
+			Receive(jpgBuff, mSize);
+			ctrler.DoJPG(jpgBuff, mSize);
+			step = 0;
+		}
+		else if (status == USER_INFO) {
+			char md5[34];
+			int n = Receive(md5, 34);
+			md5[n] = '\0'; md5[n] = '\0';
+			// TODO:
+			step = 0;
+		}
 	}
+
 
 
 	CAsyncSocket::OnReceive(nErrorCode);

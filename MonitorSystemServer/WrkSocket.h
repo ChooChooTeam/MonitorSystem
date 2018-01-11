@@ -46,5 +46,8 @@ private:
 
 	int mSize;
 	char* jpgBuff;
+
+	int step = 0;
+	WsOp status;
 };
 
