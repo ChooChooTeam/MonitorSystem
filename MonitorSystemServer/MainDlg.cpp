@@ -5,7 +5,7 @@
 #include "MonitorSystemServer.h"
 #include "MainDlg.h"
 #include "afxdialogex.h"
-
+using namespace Gdiplus;
 
 // CMainDlg 对话框
 
@@ -15,6 +15,28 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_MAIN_DIALOG, pParent)
 {
 	
+}
+
+void CMainDlg::ShowJPEG(void * pData, int DataSize)
+{
+
+	HGLOBAL m_hMem1 = GlobalAlloc(GMEM_MOVEABLE, DataSize);
+	LPBYTE lpData1 = (LPBYTE)GlobalLock(m_hMem1);
+	memcpy(lpData1, pData, DataSize);
+	GlobalUnlock(m_hMem1);
+	::CreateStreamOnHGlobal(m_hMem1, TRUE, &m_pStm);
+
+	m_pNewBmp = Bitmap::FromStream(m_pStm);
+	CRect rc;
+	GetClientRect(rc);
+	HDC hDC = pic->GetDC()->m_hDC;
+	Graphics *graphics = Graphics::FromHDC(hDC);
+	graphics->DrawImage(m_pNewBmp, 1, 1, rc.Width(), rc.Height());
+	m_pStm->Release();
+	m_pStm = NULL;
+	delete graphics;
+	GlobalFree(m_hMem1);
+	::ReleaseDC(m_hWnd, hDC);
 }
 
 CMainDlg::~CMainDlg()
@@ -75,7 +97,7 @@ BOOL CMainDlg::OnInitDialog()
 		
 	}
 
-
+	pic = (CStatic*)GetDlgItem(IDC_STATIC);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
