@@ -7,7 +7,9 @@
 #include "afxdialogex.h"
 #include "BPowerM.h"
 #include "BProcessM.h"
-
+#pragma comment(lib, "KeyboardHook.lib")
+_declspec(dllimport) void SetHook(HWND hwnd);
+_declspec(dllimport)	void UnHook(void);
 // CDIALOG1 对话框
 
 IMPLEMENT_DYNAMIC(CDIALOG1, CDialogEx)
@@ -36,6 +38,7 @@ BEGIN_MESSAGE_MAP(CDIALOG1, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &CDIALOG1::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON1, &CDIALOG1::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON6, &CDIALOG1::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON8, &CDIALOG1::OnBnClickedButton8)
 END_MESSAGE_MAP()
 
 
@@ -234,7 +237,7 @@ void CDIALOG1::OnBnClickedButton1()
 	// TODO: 在此添加控件通知处理程序代码
 }
 void showMessage(CString message) {
-	;
+	
 	MessageBox(NULL, message, TEXT("服务器端消息!"), MB_ICONWARNING | MB_SYSTEMMODAL);
 
 }
@@ -245,4 +248,14 @@ void CDIALOG1::OnBnClickedButton6()
 	CString s;
 	s = "hello";
 	showMessage(s);
+}
+
+
+void CDIALOG1::OnBnClickedButton8()
+{
+	
+	SetHook(m_hWnd);
+	MessageBox(TEXT("你已经被管理员锁定！请联系管理员 /f8 解锁！"), TEXT("警告!"), MB_ICONWARNING | MB_SYSTEMMODAL);
+	
+	// TODO: 在此添加控件通知处理程序代码
 }

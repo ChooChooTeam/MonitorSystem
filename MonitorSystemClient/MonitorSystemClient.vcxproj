@@ -211,12 +211,16 @@
     <ResourceCompile Include="MonitorSystemClient.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="KeyboardHook.dll" />
     <None Include="res\MonitorSystemClient.rc2" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\MonitorSystemClient.ico" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\Toolbar256.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="KeyboardHook.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
