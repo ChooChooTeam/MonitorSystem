@@ -45,6 +45,9 @@
     <ClInclude Include="RegisterDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MonitorSystemClient.cpp">
@@ -74,6 +77,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MonitorSystemClient.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="MonitorSystemClient1.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>
