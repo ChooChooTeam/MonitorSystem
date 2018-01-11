@@ -1,4 +1,5 @@
 #pragma once
+#include "afxwin.h"
 
 
 // CRegisterDlg 对话框
@@ -20,4 +21,12 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL OnInitDialog();
+	afx_msg void OnEnUpdateEditUsername();
+	
+	// 对注册的用户名约束	// 对注册的用户名约束
+	CEdit username;
+	int bytes;
+
 };
