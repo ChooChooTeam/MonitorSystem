@@ -183,6 +183,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="IControler.h" />
+    <ClInclude Include="LstnSocket.h" />
     <ClInclude Include="MainDlg.h" />
     <ClInclude Include="Adosql.h" />
     <ClInclude Include="MonitorSystemServer.h" />
@@ -191,8 +193,10 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="WrkSocket.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="LstnSocket.cpp" />
     <ClCompile Include="MainDlg.cpp" />
     <ClCompile Include="Adosql.cpp" />
     <ClCompile Include="MonitorSystemServer.cpp" />
@@ -204,6 +208,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="WrkSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MonitorSystemServer.rc" />
