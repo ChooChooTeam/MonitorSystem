@@ -39,6 +39,15 @@
     <ClInclude Include="RegisterDLg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="IControler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LstnSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WrkSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MonitorSystemServer.cpp">
@@ -58,6 +67,12 @@
     </ClCompile>
     <ClCompile Include="RegisterDLg.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LstnSocket.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WrkSocket.cpp">
+      <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
