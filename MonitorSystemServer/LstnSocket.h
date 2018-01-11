@@ -12,6 +12,7 @@ public:
 	void Listen(int nPort);
 	void SendControl(CString name, WsOp op);	// 发送控制信息
 	void Activate(CString name);				// 激活指定名的客户端
+	CString GetCurrName();						// 获得当前处于激活状态的Socket客户名
 
 	virtual ~LstnSocket();
 	virtual void OnAccept(int nErrorCode);
