@@ -34,13 +34,14 @@ void Adosql::ExitConnect()
 	m_pConnection->Close();
 	::CoUninitialize();
 }
+
 /*
 核对管理员身份
 输入1：管理员帐户
 输入2：管理员密码
 输出：bool值，true为身份确认，否则帐户或密码错误
 */
-bool queryAdmin(CString str1,CString str2)
+bool Adosql::queryAdmin(CString str1,CString str2)
 {
 	CoInitialize(NULL); //初始化COM组件
 	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
@@ -83,7 +84,7 @@ bool queryAdmin(CString str1,CString str2)
 输入2：用户密码
 输出：bool值，true为身份确认，否则帐户或密码错误
 */
-bool queryClient(CString str1, CString str2)
+bool Adosql::queryClient(CString str1, CString str2)
 {
 	CoInitialize(NULL); //初始化COM组件
 	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
@@ -124,7 +125,7 @@ bool queryClient(CString str1, CString str2)
 输入2：管理员密码
 输出：bool值，若为true则添加成功，否则失败
 */
-bool insertAdmin(CString str1, CString str2)
+bool Adosql::insertAdmin(CString str1, CString str2)
 {
 	CoInitialize(NULL); //初始化COM组件
 	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
@@ -160,7 +161,7 @@ bool insertAdmin(CString str1, CString str2)
 输入2：用户码
 输出：bool值，若为true则添加成功，否则失败
 */
-bool insertClient(CString str1, CString str2)
+bool Adosql::insertClient(CString str1, CString str2)
 {
 	CoInitialize(NULL); //初始化COM组件
 	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
@@ -196,7 +197,7 @@ bool insertClient(CString str1, CString str2)
 输入2：修改后密码
 输出：bool值，若为true则修改成功，否则修改失败
 */
-bool updateAdmin(CString str1,CString str2)
+bool Adosql::updateAdmin(CString str1,CString str2)
 {
 	CoInitialize(NULL); //初始化COM组件
 	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
@@ -232,7 +233,7 @@ bool updateAdmin(CString str1,CString str2)
 输入2：修改后密码
 输出：bool值，若为true则修改成功，否则修改失败
 */
-bool updateClient(CString str1, CString str2)
+bool Adosql::updateClient(CString str1, CString str2)
 {
 	CoInitialize(NULL); //初始化COM组件
 	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
@@ -268,7 +269,7 @@ bool updateClient(CString str1, CString str2)
 输入：管理员帐户
 输出：bool，若为true则删除成功，否则删除失败
 */
-bool deleteAdmin(CString str)
+bool Adosql::deleteAdmin(CString str)
 {
 	CoInitialize(NULL); //初始化COM组件
 	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
@@ -305,7 +306,7 @@ bool deleteAdmin(CString str)
 输入：用户帐户
 输出：bool，若为true则删除成功，否则删除失败
 */
-bool deleteClient(CString str)
+bool Adosql::deleteClient(CString str)
 {
 	CoInitialize(NULL); //初始化COM组件
 	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
