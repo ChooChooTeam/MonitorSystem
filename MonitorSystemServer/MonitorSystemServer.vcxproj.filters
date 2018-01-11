@@ -68,11 +68,11 @@
     <ClCompile Include="RegisterDLg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="LstnSocket.cpp">
-      <Filter>头文件</Filter>
-    </ClCompile>
     <ClCompile Include="WrkSocket.cpp">
-      <Filter>头文件</Filter>
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LstnSocket.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
