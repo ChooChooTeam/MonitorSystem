@@ -18,7 +18,7 @@ void Adosql::OnInitADOConn()
 	try
 	{
 		m_pConnection.CreateInstance("ADODB.Connection");
-		_bstr_t strConnect = "driver = { SQL Server }; Server = (local); DATABASE = UserInfo; UID = sa; PWD = 123456";
+		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;User ID=Windows身份验证;Initial Catalog=UserInfo;Data Source=DESKTOP-90Q3P13";
 		m_pConnection->Open(strConnect, "", "", adModeUnknown);
 		AfxMessageBox(_T("数据库连接成功"));
 	}
