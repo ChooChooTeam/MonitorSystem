@@ -8,7 +8,7 @@ struct para {
 void  sendScreenData(para* p) {
 	DWORD start;
 	DWORD end;
-	while (p->M->getrunAble()) {
+	while (true) {
 		start = GetTickCount();
 		CDC* pDeskDC;
 		CRect rc;
@@ -85,10 +85,9 @@ void  sendScreenData(para* p) {
 		end = GetTickCount();
 		
 		DWORD  runTime = end - start;
-		Sleep(10000);
 		if (runTime) {
 	
-			Sleep(1000- runTime);
+			Sleep(20000000000- runTime);
 		
 		}
 	}

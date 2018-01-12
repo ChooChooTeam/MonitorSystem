@@ -79,7 +79,7 @@ void LstnSocket::SendControl(CString name, WsOp op)
 {
 	for (auto&w : vecWrk) {
 		if (w->GetName() == name) {
-			w->SendControl(op);
+			//w->SendControl(op);
 			return;
 		}
 	}
@@ -91,10 +91,10 @@ void LstnSocket::Activate(CString name)
 
 	for (auto&w : vecWrk) {
 		if (w->GetName() == currName) {
-			w->SendControl(RESUME);
+			//w->SendControl(RESUME);
 		}
 		else {
-			w->SendControl(STOP);
+			//w->SendControl(STOP);
 		}
 	}
 }
