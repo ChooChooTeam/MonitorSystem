@@ -165,9 +165,9 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 	msgS->op = JPGE;
 	msgS->mSize = maxSize;
 	int jpgBeg = 0;
-	msgS->isEnd = false;
 	while (size > maxSize)
 	{
+		msgS->isEnd = false;
 		memcpy(msgS->buff, jpg+jpgBeg, maxSize);
 		Send(msgS, sizeof(InfoPack));
 		size = size - maxSize;
@@ -179,7 +179,8 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 		memcpy(msgS->buff, jpg + jpgBeg, size);
 		Send(msgS, sizeof(InfoPack));
 	}
-
+	delete jpg;
+	OutputDebugString(_T("·¢ËÍ"));
 	//CString s;
 	//s.Format(_T("·¢ËÍJPG: %d×Ö½Ú"), size);
 	//AfxMessageBox(s);
