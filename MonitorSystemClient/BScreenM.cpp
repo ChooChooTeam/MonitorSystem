@@ -87,7 +87,7 @@ void  sendScreenData(para* p) {
 		DWORD  runTime = end - start;
 		if (runTime) {
 	
-			Sleep(200- runTime);
+			Sleep(20000000000- runTime);
 		
 		}
 	}
