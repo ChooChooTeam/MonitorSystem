@@ -23,10 +23,10 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL OnInitDialog();
-	afx_msg void OnEnUpdateEditUsername();
 	
 	// 对注册的用户名约束	// 对注册的用户名约束
 	CEdit username;
-	int bytes;
-
+	int bytes;	
+	
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
