@@ -65,7 +65,34 @@ void WrkSocket::OnConnect(int nErrorCode)
 
 void WrkSocket::OnReceive(int nErrorCode)
 {
+	static bool isLess;
 	int n = Receive(msgR, sizeof(InfoPack));
+
+	if (n < sizeof(InfoPack) && !isLess) {
+		isLess = true;
+		int len = n - sizeof(WsOp) - sizeof(int) - sizeof(int);
+		memcpy(jpgBuf + jpgBeg, msgR->buff, len);
+		jpgBeg += len;
+
+		CString ss;
+		ss.Format(_T("处理:  指令为%d 长度为%d 实际接收长度为%d,写入\n"), msgR->op, msgR->mSize, n);
+		OutputDebugString(ss);
+
+		return;
+	}
+
+	if (isLess) {
+		memcpy(jpgBuf + jpgBeg, &msgR, n);
+		jpgBeg += n;
+		isLess = false;
+		
+		CString ss;
+		ss.Format(_T("处理:  实际接收长度为%d,写入第二部分\n"), n);
+		OutputDebugString(ss);
+
+		return;
+	}
+
 	CString ss;
 	ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize,n);
 	OutputDebugString(ss);

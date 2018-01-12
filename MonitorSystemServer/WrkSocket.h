@@ -21,7 +21,7 @@ enum WsOp
 struct InfoPack {
 	WsOp op;
 	int mSize;
-	bool isEnd;
+	int isEnd;
 	char buff[1024];
 };
 
