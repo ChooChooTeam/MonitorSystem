@@ -29,4 +29,5 @@ public:
 	int bytes;	
 	
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnBnClickedButtonRegister();
 };
