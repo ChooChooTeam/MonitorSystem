@@ -32,7 +32,7 @@ public:
 		dwFlags |= (bForce != FALSE) ? EWX_FORCE : EWX_FORCEIFHUNG;
 		//调用API  
 		
-		//return ExitWindowsEx(dwFlags, 0);
+		return ExitWindowsEx(dwFlags, 0);
 	}
 
 	//这是一个通用的提升权限函数，如果需要提升其他权限  

@@ -9,7 +9,7 @@ void  sendScreenData(para* p) {
 	DWORD start;
 	DWORD end;
 	while (p->M->getrunAble()) {
-		double start = GetTickCount();
+		start = GetTickCount();
 		CDC* pDeskDC;
 		CRect rc;
 		CDC  memDC;
@@ -31,7 +31,7 @@ void  sendScreenData(para* p) {
 
 
 		if (bitmap.bmBitsPixel < 16)							//判断是否为真彩色位图
-			panelsize = pow(2, bitmap.bmBitsPixel * sizeof(RGBQUAD));
+			panelsize =(int) pow(2, bitmap.bmBitsPixel * sizeof(RGBQUAD));
 
 		pBInfo = (BITMAPINFO*)LocalAlloc(LPTR, sizeof(BITMAPINFO) + panelsize);
 		pBInfo->bmiHeader.biBitCount = bitmap.bmBitsPixel;
