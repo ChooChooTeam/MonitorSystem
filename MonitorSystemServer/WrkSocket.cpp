@@ -2,6 +2,8 @@
 #include "WrkSocket.h"
 #include "IControler.h"
 #include "LstnSocket.h"
+#include <Winsock2.h>
+
 //#include "Adosql.h"
 
 //const char ran[] = "0123456789";
@@ -134,6 +136,12 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 		msgS->isEnd = false;
 		memcpy(msgS->buff, jpg+jpgBeg, maxSize);
 		int n = Send(msgS, sizeof(InfoPack));
+		
+		if (n == SOCKET_ERROR) {
+			int err = GetLastError(); 
+			CString ss;
+			ss.Format(_T("err = %d\n"), err);
+		}
 
 		CString ss;
 		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
@@ -148,7 +156,7 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 		msgS->mSize = size;
 		memcpy(msgS->buff, jpg + jpgBeg, size);
 		int n = Send(msgS, sizeof(InfoPack));
-
+	
 		CString ss;
 		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
 		OutputDebugString(ss);
