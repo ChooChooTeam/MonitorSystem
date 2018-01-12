@@ -18,6 +18,13 @@ enum WsOp
 	JPGE = 0x24,		// 将要发送图片信息
 };
 
+struct InfoPack {
+	WsOp op;
+	int mSize;
+	bool isEnd;
+	char buff[35 * 1024];
+};
+
 // 工作Socket
 // 客户端可使用此Socket向服务器端通讯
 class WrkSocket : public CAsyncSocket
@@ -34,7 +41,7 @@ public:
 	virtual void OnReceive(int nErrorCode);
 
 	void SendUserInfo(CString name, CString pwdMD5);
-	void SendControl(WsOp op);	// 发送控制信息
+	//void SendControl(WsOp op);	// 发送控制信息
 	void SendJPGE(char* jpg, int size);	// 发送图片信息
 
 	const CString& GetName();
@@ -44,10 +51,14 @@ private:
 	IControler & ctrler;
 	LstnSocket* pParent;
 
-	int mSize;
-	char* jpgBuff;
+	//int mSize;
+	//char* jpgBuff;
 
-	int step = 0;
-	WsOp status;
+	int jpgBeg = 0;
+
+	InfoPack* msgS;
+	InfoPack* msgR;
+
+	char* jpgBuf;
 };
 
