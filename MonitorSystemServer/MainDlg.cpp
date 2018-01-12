@@ -31,8 +31,8 @@ void CMainDlg::ShowJPEG(void * pData, int DataSize)
 
 	CRect rc;
 	CStatic* pic = (CStatic*)GetDlgItem(IDC_PIC);
-	GetClientRect(rc);
-	HDC hDC = GetDC()->m_hDC;
+	pic->GetClientRect(rc);
+	HDC hDC = pic->GetDC()->m_hDC;
 	// DEBUG: 此处返回值不正确
 	//Gdiplus::Graphics *graphics = Gdiplus::Graphics::FromHDC(hDC);
 	Gdiplus::Graphics graphics(hDC);

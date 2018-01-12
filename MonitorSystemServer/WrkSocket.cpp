@@ -88,8 +88,8 @@ void WrkSocket::OnReceive(int nErrorCode)
 		else if (status == USER_NAME) {
 			char szTemp[34];
 			int n = Receive(szTemp, 34);
-			szTemp[n] = '\0';
-			szTemp[n + 1] = '\0';
+			//szTemp[n] = '\0';
+			//szTemp[n + 1] = '\0';
 			this->name.Format(_T("%s"), szTemp);
 			pParent->NewOnLine();
 			step = 0;
@@ -120,7 +120,6 @@ void WrkSocket::OnReceive(int nErrorCode)
 			step = 0;
 		}
 	}
-
 
 
 	CAsyncSocket::OnReceive(nErrorCode);
