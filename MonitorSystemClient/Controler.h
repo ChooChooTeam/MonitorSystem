@@ -4,8 +4,8 @@
 #include "BScreenM.h"
 class Controler :public IControler{
 	WrkSocket * socket;
-	BScreenM *b = NULL;
-public:
+	BScreenM *ptrMBScreen = NULL;
+	public:
 	Controler();
 	void setSocket(WrkSocket * socket) {
 		this->socket = socket;

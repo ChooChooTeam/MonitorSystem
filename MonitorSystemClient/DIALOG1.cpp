@@ -11,9 +11,7 @@
 #include "BScreenM.h"
 #include "Controler.h"
 #include "../MonitorSystemServer/WrkSocket.h"
-#pragma comment(lib, "KeyboardHook.lib")
-_declspec(dllimport) void SetHook(HWND hwnd);
-_declspec(dllimport)	void UnHook(void);
+
 // CDIALOG1 对话框
 
 IMPLEMENT_DYNAMIC(CDIALOG1, CDialogEx)
@@ -148,7 +146,6 @@ void CDIALOG1::OnBnClickedButton1()
 	w = new WrkSocket(*controler,_T("sdds"));
 	controler->setSocket(w);
 	w->Connect(_T("192.168.1.101"),8848 );
-	DWORD threadID;
 	BScreenM* b = new BScreenM(w);
 	b->runThreading();
 
@@ -172,7 +169,7 @@ void CDIALOG1::OnBnClickedButton6()
 void CDIALOG1::OnBnClickedButton8()
 {
 	BComInfo::GetSysInfo();
-	//SetHook(m_hWnd);
+	//SetHook();
 	MessageBox(TEXT("你已经被管理员锁定！请联系管理员 /f8 解锁！"), TEXT("警告!"), MB_ICONWARNING | MB_SYSTEMMODAL);
 	
 	// TODO: 在此添加控件通知处理程序代码
