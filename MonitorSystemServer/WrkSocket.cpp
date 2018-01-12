@@ -54,8 +54,8 @@ void WrkSocket::OnConnect(int nErrorCode)
 	msgS->op = USER_NAME;
 	msgS->mSize = name.GetLength() * sizeof(TCHAR);
 	memcpy(msgS->buff, name.GetBuffer(),34);
-	int n = sizeof(WsOp) + sizeof(int) + msgS->mSize;
-	Send(msgS, n);
+	//int n = sizeof(WsOp) + sizeof(int) + msgS->mSize;
+	Send(msgS, sizeof(InfoPack));
 	
 	CAsyncSocket::OnConnect(nErrorCode);
 }
@@ -64,6 +64,11 @@ void WrkSocket::OnConnect(int nErrorCode)
 void WrkSocket::OnReceive(int nErrorCode)
 {
 	int n = Receive(msgR, sizeof(InfoPack));
+	CString ss;
+	ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize,n);
+	OutputDebugString(ss);
+
+	
 	WsOp op = msgR->op;
 	if (op == SHUTDOWN || op == REBOOT || op == LOOK ||
 		op == UNLOOK || op == STOP || op == RESUME) {
@@ -73,6 +78,11 @@ void WrkSocket::OnReceive(int nErrorCode)
 		if (msgR->isEnd == false) {
 			memcpy(jpgBuf + jpgBeg, msgR->buff, msgR->mSize);
 			jpgBeg += msgR->mSize;
+			//FILE* f;
+			//fopen_s(&f, "a.bin", "a");
+			//fwrite(msgR, sizeof(InfoPack), 1, f);
+			//fclose(f);
+			OutputDebugString(_T("写入\n"));
 		}
 		else {
 			memcpy(jpgBuf + jpgBeg, msgR->buff, msgR->mSize);
@@ -94,55 +104,9 @@ void WrkSocket::OnReceive(int nErrorCode)
 	else if (op == USER_RETURN) {
 
 	}
-
-
-
-	//if (step == 0) {
-	//	WsOp op;
-	//	Receive(&op, sizeof(WsOp));
-
-	//}
-	//else if (step == 1) {
-	//	if (status == JPGE) {
-	//		Receive(&mSize, sizeof(int));
-	//		step = 2;
-	//	}
-	//	else if (status == USER_NAME) {
-	//		char szTemp[34];
-	//		int n = Receive(szTemp, 34);
-	//		//szTemp[n] = '\0';
-	//		//szTemp[n + 1] = '\0';
-	//		this->name.Format(_T("%s"), szTemp);
-	//		pParent->NewOnLine();
-	//		step = 0;
-	//	}
-	//	else if (status == USER_INFO) {
-	//		char name[34];
-	//		int n;
-	//		n = Receive(name, 34);
-	//		name[n] = '\0'; name[n + 1] = '\0';
-	//		step = 2;
-	//	}
-
-	//	
-	//}
-	//else if (step == 2) {
-	//	if (status == JPGE) {
-	//		delete jpgBuff;
-	//		jpgBuff = new char[mSize];
-	//		Receive(jpgBuff, mSize);
-	//		ctrler.DoJPG(jpgBuff, mSize);
-	//		step = 0;
-	//	}
-	//	else if (status == USER_INFO) {
-	//		char md5[34];
-	//		int n = Receive(md5, 34);
-	//		md5[n] = '\0'; md5[n] = '\0';
-	//		// TODO:
-	//		step = 0;
-	//	}
-	//}
-
+	else {
+		OutputDebugString(_T("未定义的指令"));
+	}
 
 	CAsyncSocket::OnReceive(nErrorCode);
 }
