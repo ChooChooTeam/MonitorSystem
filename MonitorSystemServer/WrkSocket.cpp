@@ -140,6 +140,7 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 
 	if (size != 0) {
 		msgS->isEnd = true;
+		msgS->mSize = size;
 		memcpy(msgS->buff, jpg + jpgBeg, size);
 		Send(msgS, sizeof(InfoPack));
 	}
