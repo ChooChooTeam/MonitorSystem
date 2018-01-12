@@ -125,7 +125,7 @@ void WrkSocket::SendUserInfo(CString name, CString pwdMD5)
 
 void WrkSocket::SendJPGE(char * jpg, int size)
 {
-	const int maxSize = 35 * 1024;
+	const int maxSize = 1024;
 	msgS->op = JPGE;
 	msgS->mSize = maxSize;
 	int jpgBeg = 0;
