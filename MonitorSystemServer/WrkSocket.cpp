@@ -133,7 +133,12 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 	{
 		msgS->isEnd = false;
 		memcpy(msgS->buff, jpg+jpgBeg, maxSize);
-		Send(msgS, sizeof(InfoPack));
+		int n = Send(msgS, sizeof(InfoPack));
+
+		CString ss;
+		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
+		OutputDebugString(ss);
+
 		size = size - maxSize;
 		jpgBeg += maxSize;
 	}
@@ -142,13 +147,13 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 		msgS->isEnd = true;
 		msgS->mSize = size;
 		memcpy(msgS->buff, jpg + jpgBeg, size);
-		Send(msgS, sizeof(InfoPack));
+		int n = Send(msgS, sizeof(InfoPack));
+
+		CString ss;
+		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
+		OutputDebugString(ss);
 	}
 	delete jpg;
-	OutputDebugString(_T("发送"));
-	//CString s;
-	//s.Format(_T("发送JPG: %d字节"), size);
-	//AfxMessageBox(s);
 }
 
 const CString& WrkSocket::GetName()
