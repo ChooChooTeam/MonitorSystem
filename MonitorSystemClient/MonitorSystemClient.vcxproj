@@ -184,23 +184,31 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\MonitorSystemServer\IControler.h" />
+    <ClInclude Include="..\MonitorSystemServer\LstnSocket.h" />
+    <ClInclude Include="..\MonitorSystemServer\WrkSocket.h" />
     <ClInclude Include="BComInfo.h" />
     <ClInclude Include="BPowerM.h" />
     <ClInclude Include="BProcessM.h" />
     <ClInclude Include="BScreenM.h" />
+    <ClInclude Include="Controler.h" />
     <ClInclude Include="DIALOG1.h" />
     <ClInclude Include="MonitorSystemClient.h" />
     <ClInclude Include="MonitorSystemClientDlg.h" />
     <ClInclude Include="RegisterDlg.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\MonitorSystemServer\LstnSocket.cpp" />
+    <ClCompile Include="..\MonitorSystemServer\WrkSocket.cpp" />
     <ClCompile Include="BComInfo.cpp" />
     <ClCompile Include="BPowerM.cpp" />
     <ClCompile Include="BProcessM.cpp" />
     <ClCompile Include="BScreenM.cpp" />
+    <ClCompile Include="Controler.cpp" />
     <ClCompile Include="DIALOG1.cpp" />
     <ClCompile Include="MonitorSystemClient.cpp" />
     <ClCompile Include="MonitorSystemClientDlg.cpp" />
@@ -214,6 +222,7 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MonitorSystemClient.rc" />
+    <ResourceCompile Include="MonitorSystemClient1.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="KeyboardHook.dll" />

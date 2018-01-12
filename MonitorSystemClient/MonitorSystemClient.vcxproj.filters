@@ -45,7 +45,22 @@
     <ClInclude Include="RegisterDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="BComInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Controler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MonitorSystemServer\IControler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MonitorSystemServer\WrkSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MonitorSystemServer\LstnSocket.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,9 +92,21 @@
     <ClCompile Include="BComInfo.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Controler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MonitorSystemServer\WrkSocket.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MonitorSystemServer\LstnSocket.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MonitorSystemClient.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="MonitorSystemClient1.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>

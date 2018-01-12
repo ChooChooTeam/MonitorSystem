@@ -2,7 +2,7 @@
 #include "Adosql.h"
 #include<afx.h>
 
-char* strsql;
+char strsql[1024];
 Adosql::Adosql()
 {
 }
@@ -18,7 +18,7 @@ void Adosql::OnInitADOConn()
 	try
 	{
 		m_pConnection.CreateInstance("ADODB.Connection");
-		_bstr_t strConnect = "driver = { SQL Server }; Server = (local); DATABASE = UserInfo; UID = sa; PWD = 123456";
+		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;User ID=sa;Password=123456;Initial Catalog=UserInfo;Data Source=.";
 		m_pConnection->Open(strConnect, "", "", adModeUnknown);
 		AfxMessageBox(_T("连接成功"));
 	}
@@ -48,7 +48,7 @@ bool Adosql::queryAdmin(CString str1,CString str2)
 	_RecordsetPtr pRst(__uuidof(Recordset)); //实例化一个Recordset对象pRst
 	_CommandPtr pCmd(__uuidof(Command)); //实例化一个Command对象pCmd
 	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
-	sprintf(strsql, "SELECT * FROM Admin WHERE AdminName = '%s'", (char*)str1.GetBuffer());
+	sprintf(strsql, "SELECT * FROM Admin WHERE AdminName = '%s'", (char*)str1.GetBuffer(str1.GetLength()));
 	
 	pCmd->CommandText = strsql; //通过pCmd对象访问数据库
 	pRst = pCmd->Execute(NULL, NULL, adCmdText);

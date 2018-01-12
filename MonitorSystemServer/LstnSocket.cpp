@@ -98,3 +98,8 @@ void LstnSocket::Activate(CString name)
 		}
 	}
 }
+
+CString LstnSocket::GetCurrName()
+{
+	return currName;
+}
