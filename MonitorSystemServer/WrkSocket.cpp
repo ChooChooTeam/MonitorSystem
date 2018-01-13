@@ -2,6 +2,8 @@
 #include "WrkSocket.h"
 #include "IControler.h"
 #include "LstnSocket.h"
+#include <Winsock2.h>
+
 //#include "Adosql.h"
 
 //const char ran[] = "0123456789";
@@ -63,7 +65,34 @@ void WrkSocket::OnConnect(int nErrorCode)
 
 void WrkSocket::OnReceive(int nErrorCode)
 {
+	static bool isLess;
 	int n = Receive(msgR, sizeof(InfoPack));
+
+	if (n < sizeof(InfoPack) && !isLess) {
+		isLess = true;
+		int len = n - sizeof(WsOp) - sizeof(int) - sizeof(int);
+		memcpy(jpgBuf + jpgBeg, msgR->buff, len);
+		jpgBeg += len;
+
+		CString ss;
+		ss.Format(_T("处理:  指令为%d 长度为%d 实际接收长度为%d,写入\n"), msgR->op, msgR->mSize, n);
+		OutputDebugString(ss);
+
+		return;
+	}
+
+	if (isLess) {
+		memcpy(jpgBuf + jpgBeg, &msgR, n);
+		jpgBeg += n;
+		isLess = false;
+		
+		CString ss;
+		ss.Format(_T("处理:  实际接收长度为%d,写入第二部分\n"), n);
+		OutputDebugString(ss);
+
+		return;
+	}
+
 	CString ss;
 	ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize,n);
 	OutputDebugString(ss);
@@ -133,21 +162,33 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 	{
 		msgS->isEnd = false;
 		memcpy(msgS->buff, jpg+jpgBeg, maxSize);
-		Send(msgS, sizeof(InfoPack));
+		int n = Send(msgS, sizeof(InfoPack));
+		
+		if (n == SOCKET_ERROR) {
+			int err = GetLastError(); 
+			CString ss;
+			ss.Format(_T("err = %d\n"), err);
+		}
+
+		CString ss;
+		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
+		OutputDebugString(ss);
+
 		size = size - maxSize;
 		jpgBeg += maxSize;
 	}
 
 	if (size != 0) {
 		msgS->isEnd = true;
+		msgS->mSize = size;
 		memcpy(msgS->buff, jpg + jpgBeg, size);
-		Send(msgS, sizeof(InfoPack));
+		int n = Send(msgS, sizeof(InfoPack));
+	
+		CString ss;
+		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
+		OutputDebugString(ss);
 	}
 	delete jpg;
-	OutputDebugString(_T("发送"));
-	//CString s;
-	//s.Format(_T("发送JPG: %d字节"), size);
-	//AfxMessageBox(s);
 }
 
 const CString& WrkSocket::GetName()
