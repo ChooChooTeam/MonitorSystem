@@ -173,6 +173,7 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 	{
 		msgS->isEnd = false;
 		memcpy(msgS->buff, jpg+jpgBeg, maxSize);
+		Sleep(10);
 		int n = Send(msgS, sizeof(InfoPack));
 		while (n == -1) {
 			Sleep(1);
@@ -183,7 +184,6 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 			CString ss;
 			ss.Format(_T("err = %d\n"), err);
 		}
-
 		CString ss;
 		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
 		OutputDebugString(ss);
