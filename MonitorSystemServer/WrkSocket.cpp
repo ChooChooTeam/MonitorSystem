@@ -161,7 +161,10 @@ void WrkSocket::SendJPGE(char * jpg, int size)
 		msgS->isEnd = false;
 		memcpy(msgS->buff, jpg+jpgBeg, maxSize);
 		int n = Send(msgS, sizeof(InfoPack));
-		Sleep(5);
+		while (n == -1) {
+			Sleep(1);
+			n = Send(msgS, sizeof(InfoPack));
+		}
 		if (n == SOCKET_ERROR) {
 			int err = GetLastError(); 
 			CString ss;

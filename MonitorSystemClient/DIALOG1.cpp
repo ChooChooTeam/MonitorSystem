@@ -138,23 +138,16 @@ void CDIALOG1::ShowJPEG(void* pData, int DataSize)
 }
 
 #include "../MonitorSystemServer/IControler.h"
-void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nTimerid, DWORD dwTime) {
+void CDIALOG1::OnBnClickedButton1()
+{
 	Controler * controler = new Controler();
 	WrkSocket * w;
 	w = new WrkSocket(*controler, _T("sdds"));
 	controler->setSocket(w);
 	w->Connect(_T("192.168.1.101"), 8848);
 	BScreenM* b = new BScreenM(w);
-	b->runOnce();
-}
-void CDIALOG1::OnBnClickedButton1()
-{
-	
-	
-	//b->runThreading();
-	SetTimer(1, 200, TimerProc);
-
-	
+	b->runThreading();
+	//SetTimer(1, 50, TimerProc);
 }
 
 void showMessage(CString message) {
