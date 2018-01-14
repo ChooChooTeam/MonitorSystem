@@ -144,7 +144,6 @@ void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nTimerid, DWORD dwTime) {
 	w = new WrkSocket(*controler, _T("sdds"));
 	controler->setSocket(w);
 	w->Connect(_T("192.168.1.101"), 8848);
-	w->
 	BScreenM* b = new BScreenM(w);
 	b->runOnce();
 }
