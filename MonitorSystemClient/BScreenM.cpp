@@ -85,11 +85,11 @@ void  sendScreenData(para* p) {
 		end = GetTickCount();
 		
 		DWORD  runTime = end - start;
-		//if (runTime) {
+		if (runTime) {
 	
-		//	Sleep(500- runTime);
+			Sleep(50- runTime);
 		
-		//}
+		}
 	}
 	//delete p;
 
