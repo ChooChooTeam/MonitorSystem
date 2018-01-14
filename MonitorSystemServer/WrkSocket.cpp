@@ -87,22 +87,22 @@ void WrkSocket::OnReceive(int nErrorCode)
 			ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
 			OutputDebugString(ss);
 		}
-
-
-
 	}
 	else {
 		n = Receive(msgR + lastLen, sizeof(InfoPack) - lastLen);
 
 		lastLen += n;
+
+		CString ss;
+		ss.Format(_T("处理: 本次接收%d 累计%d 指令为%d\n"), n, lastLen, msgR->op);
+		OutputDebugString(ss);
+
 		if (lastLen >= sizeof(InfoPack)) {
 			isLess = false;
 		}
-		
-		CString ss;
-		ss.Format(_T("处理: 本次接收%d 累计%d 指令为%d,写入\n"),n,lastLen,msgR->op);
-		OutputDebugString(ss);
-
+		else {
+			return;
+		}
 	}
 
 
