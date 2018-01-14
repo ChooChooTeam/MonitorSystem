@@ -138,19 +138,26 @@ void CDIALOG1::ShowJPEG(void* pData, int DataSize)
 }
 
 #include "../MonitorSystemServer/IControler.h"
+void CALLBACK TimerProc(HWND hWnd, UINT nMsg, UINT nTimerid, DWORD dwTime) {
+	Controler * controler = new Controler();
+	WrkSocket * w;
+	w = new WrkSocket(*controler, _T("sdds"));
+	controler->setSocket(w);
+	w->Connect(_T("192.168.1.101"), 8848);
+	w->
+	BScreenM* b = new BScreenM(w);
+	b->runOnce();
+}
 void CDIALOG1::OnBnClickedButton1()
 {
 	
-	Controler * controler=new Controler();
-	WrkSocket * w;
-	w = new WrkSocket(*controler,_T("sdds"));
-	controler->setSocket(w);
-	w->Connect(_T("10.138.83.168"),8848 );
-	BScreenM* b = new BScreenM(w);
-	b->runThreading();
+	
+	//b->runThreading();
+	SetTimer(1, 200, TimerProc);
 
 	
 }
+
 void showMessage(CString message) {
 	
 	MessageBox(NULL, message, TEXT("服务器端消息!"), MB_ICONWARNING | MB_SYSTEMMODAL);
