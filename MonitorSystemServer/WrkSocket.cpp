@@ -74,13 +74,21 @@ void WrkSocket::OnReceive(int nErrorCode)
 		if (n < sizeof(InfoPack)) {
 			lastLen = n; 
 			isLess = true;
+
+			CString ss;
+			ss.Format(_T("拼接: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
+			OutputDebugString(ss);
+
 			return;
 			
 		}
+		else {
+			CString ss;
+			ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
+			OutputDebugString(ss);
+		}
 
-		CString ss;
-		ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
-		OutputDebugString(ss);
+
 
 	}
 	else {
@@ -157,7 +165,7 @@ void WrkSocket::SendUserInfo(CString name, CString pwdMD5)
 
 void WrkSocket::SendJPGE(char * jpg, int size)
 {
-	const int maxSize = 1024;
+	const int maxSize = _JPGE_MAX_SIZE_;
 	msgS->op = JPGE;
 	msgS->mSize = maxSize;
 	int jpgBeg = 0;

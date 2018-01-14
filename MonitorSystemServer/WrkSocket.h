@@ -1,6 +1,9 @@
 #pragma once
 class IControler;
 class LstnSocket;
+
+#define _JPGE_MAX_SIZE_  35*1024
+
 enum WsOp
 {
 	// 控制信息
@@ -22,7 +25,7 @@ struct InfoPack {
 	WsOp op;
 	int mSize;
 	int isEnd;
-	char buff[35*1024];
+	char buff[_JPGE_MAX_SIZE_];
 };
 
 // 工作Socket
