@@ -85,11 +85,11 @@ void  sendScreenData(para* p) {
 		end = GetTickCount();
 		
 		DWORD  runTime = end - start;
-		if (runTime) {
+		//if (runTime) {
 	
-			Sleep(20000000000- runTime);
+		//	Sleep(500- runTime);
 		
-		}
+		//}
 	}
 	//delete p;
 
@@ -134,6 +134,12 @@ void  sendScreenData(para* p) {
 }
 HANDLE BScreenM::g_hMutex=NULL;
 bool BScreenM::runAble = 1;
+void BScreenM::runOnce()
+{
+	para* p = new para;
+	p->M = this;
+	sendScreenData(p);
+}
 HANDLE BScreenM::runThreading()
 {
 	

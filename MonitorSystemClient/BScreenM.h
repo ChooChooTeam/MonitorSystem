@@ -20,6 +20,7 @@ class BScreenM
 	}
 	
 public:
+	void runOnce();
 	WrkSocket * socket = NULL;
 	static bool getrunAble() {
 		bool b;
