@@ -2,7 +2,7 @@
 class IControler;
 class LstnSocket;
 
-#define _JPGE_MAX_SIZE_  35*1024
+#define _JPGE_MAX_SIZE_  7*1024
 
 enum WsOp
 {
