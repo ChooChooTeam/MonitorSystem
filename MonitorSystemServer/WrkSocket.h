@@ -22,7 +22,7 @@ struct InfoPack {
 	WsOp op;
 	int mSize;
 	int isEnd;
-	char buff[1024];
+	char buff[35*1024];
 };
 
 // ¹¤×÷Socket
