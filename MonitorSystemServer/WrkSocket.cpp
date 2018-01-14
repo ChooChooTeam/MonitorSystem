@@ -65,35 +65,40 @@ void WrkSocket::OnConnect(int nErrorCode)
 
 void WrkSocket::OnReceive(int nErrorCode)
 {
-	//Sleep(10);
-	//static int lastLen = 0;
-	//static bool isLess;
-	//int n;
-	//if (!isLess) {
-	//	n = Receive(msgR, sizeof(InfoPack));
-	//	if (n < sizeof(InfoPack)) {
-	//		lastLen = n; 
-	//		isLess = true;
-	//		return;
-	//		
-	//	}
-	//}
-	//else {
-	//	n = Receive((char*)(&msgR) + lastLen, sizeof(InfoPack) - lastLen);
-	//	isLess = false;
-	//	CString ss;
-	//	ss.Format(_T("处理:  上次接收%d 本次接收%d 累计%d 指令为%d,写入\n"), lastLen,n,lastLen+n,msgR->op, msgR->mSize);
-	//	OutputDebugString(ss);
+	Sleep(10);
+	static int lastLen = 0;
+	static bool isLess;
+	int n;
+	if (!isLess) {
+		n = Receive(msgR, sizeof(InfoPack));
+		if (n < sizeof(InfoPack)) {
+			lastLen = n; 
+			isLess = true;
+			return;
+			
+		}
 
-	//	n += isLess;
-	//}
+		CString ss;
+		ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
+		OutputDebugString(ss);
 
-	recv((SOCKET)this, (char*)&msgR, sizeof(InfoPack), 0);
-	
+	}
+	else {
+		n = Receive(msgR + lastLen, sizeof(InfoPack) - lastLen);
 
-	//CString ss;
-	//ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize,n);
-	//OutputDebugString(ss);
+		lastLen += n;
+		if (lastLen >= sizeof(InfoPack)) {
+			isLess = false;
+		}
+		
+		CString ss;
+		ss.Format(_T("处理: 本次接收%d 累计%d 指令为%d,写入\n"),n,lastLen,msgR->op);
+		OutputDebugString(ss);
+
+	}
+
+
+
 
 	
 	WsOp op = msgR->op;
@@ -109,7 +114,7 @@ void WrkSocket::OnReceive(int nErrorCode)
 			//fopen_s(&f, "a.bin", "a");
 			//fwrite(msgR, sizeof(InfoPack), 1, f);
 			//fclose(f);
-			OutputDebugString(_T("写入\n"));
+			//OutputDebugString(_T("写入\n"));
 		}
 		else {
 			memcpy(jpgBuf + jpgBeg, msgR->buff, msgR->mSize);
