@@ -91,6 +91,13 @@ void WrkSocket::OnReceive(int nErrorCode)
 	else {
 		n = Receive(msgR + lastLen, sizeof(InfoPack) - lastLen);
 
+		if (n == SOCKET_ERROR) {
+			int err = GetLastError();
+			CString ss;
+			ss.Format(_T("err = %d\n"), err);
+			OutputDebugString(ss);
+		}
+
 		lastLen += n;
 
 		CString ss;
