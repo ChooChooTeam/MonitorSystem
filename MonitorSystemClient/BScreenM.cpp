@@ -69,8 +69,8 @@ void  sendScreenData(para* p) {
 		pDeskDC->DeleteDC();
 
 		//send data
-
-		p->M->socket->SendJPGE(pBuffer, mJpegSize);
+			
+		//p->M->dlg->SendData((m_FrameIndex, m_Mod, GraphSize, m_JpegSize, m_Count, m_pSendBuf, m_Addr));
 
 		delete[] pData;
 		//delete[] pBuffer;

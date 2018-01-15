@@ -35,8 +35,8 @@ void Controler::DoCmd(WsOp op)
 		}
 		break;
 	case RESUME:
-		ptrMBScreen = new BScreenM(this->socket);
-		ptrMBScreen->runThreading();
+		//ptrMBScreen = new BScreenM(this->socket);
+		//ptrMBScreen->runThreading();
 		break;
 	case USER_INFO://´ı¶¨
 
@@ -45,8 +45,8 @@ void Controler::DoCmd(WsOp op)
 
 		break;
 	case JPGE:
-		ptrMBScreen = new BScreenM(this->socket);
-		ptrMBScreen->runThreading();
+	//	ptrMBScreen = new BScreenM(this->socket);
+		//ptrMBScreen->runThreading();
 		
 		break;
 	default:
