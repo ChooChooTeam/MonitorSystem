@@ -177,7 +177,7 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 		if (revIP != m_ClientIP)
 		{
 			delete[] buffer;
-			return;
+			return 0;
 		}
 		/*序号2位||结束标记2位||JPG数据||JPG数据大小4位||JPG数据总大小4位||数据报大小4位*/
 		m_ClientPort = ntohs(m_Addr.sin_port);
@@ -192,7 +192,8 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 		sockaddr_in addr;
 		addr.sin_family = AF_INET;
 		addr.sin_port = htons(m_ClientPort);
-		addr.sin_addr.S_un.S_addr = inet_addr((LPSTR)(LPCTSTR)m_ClientIP.GetBuffer(0));
+		USES_CONVERSION;
+		addr.sin_addr.S_un.S_addr = inet_addr(T2A(m_ClientIP));
 		int size = sizeof(addr);
 		m_JPGSize = 0;
 		//发送确认信息

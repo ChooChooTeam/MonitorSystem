@@ -220,7 +220,8 @@ void CDIALOG1::OnOK()
 
 	m_Addr.sin_family = AF_INET;
 	m_Addr.sin_port = htons(5002);
-	m_Addr.sin_addr.S_un.S_addr = inet_addr((LPSTR)(LPCTSTR)m_ServerIP);
+	USES_CONVERSION;
+	m_Addr.sin_addr.S_un.S_addr = inet_addr(T2A(m_ServerIP));
 	m_Bmpsize = GraphSize;
 	//计算每个位图发送的次数
 	m_Count = m_JpegSize / GraphSize;
@@ -374,7 +375,7 @@ void CDIALOG1::OnBnClickedButton1()
 	//w = new WrkSocket(*controler, _T("sdds"));
 	//controler->setSocket(w);
 	//w->Connect(_T("192.168.1.101"), 8848);
-	//BScreenM* b = new BScreenM(this);
+	BScreenM* b = new BScreenM(this);
 	//b->runThreading();
 	//SetTimer(1, 50, TimerProc);
 }
