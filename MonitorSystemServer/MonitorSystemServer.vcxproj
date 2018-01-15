@@ -216,6 +216,7 @@
     <ResourceCompile Include="MonitorSystemServer.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Client.ini" />
     <None Include="res\MonitorSystemServer.rc2" />
   </ItemGroup>
   <ItemGroup>

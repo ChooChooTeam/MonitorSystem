@@ -227,6 +227,7 @@
   <ItemGroup>
     <None Include="KeyboardHook.dll" />
     <None Include="res\MonitorSystemClient.rc2" />
+    <None Include="Server.ini" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\MonitorSystemClient.ico" />

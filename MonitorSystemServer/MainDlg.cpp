@@ -7,8 +7,21 @@
 #include "afxdialogex.h"
 #include <gdiplus.h>
 // CMainDlg 对话框
-
+#define CM_RECEIVED  WM_USER+1001
+#pragma warning(disable: 4996)   
+#define MAX_BUFF 99999
 IMPLEMENT_DYNAMIC(CMainDlg, CDialogEx)
+
+enum CmdType {
+	CT_Confirm, CT_HideDesk, CT_ShowDesk, CT_ShutDown,
+	CT_ReRun, CT_Logout, CT_SendText, CT_CloseClient
+};
+
+typedef struct DataPackage
+{
+	CmdType	MsgType;		//命令类型
+	char	Content[512];	//文本信息,只有在命令类型为CT_SendText时合法
+};
 
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_MAIN_DIALOG, pParent)
@@ -108,8 +121,109 @@ BOOL CMainDlg::OnInitDialog()
 	LSocket = new LstnSocket(*mSerCtrl);
 	LSocket->Listen(8848);
 
+
+	//获取本机IP
+	hostent* phost = gethostbyname("");
+	char* localIP = inet_ntoa(*(struct in_addr *)*phost->h_addr_list);
+	sockaddr_in addr;
+	addr.sin_family = AF_INET;
+	addr.sin_addr.S_un.S_addr = inet_addr(localIP);
+	addr.sin_port = htons(5002);
+	//创建套接字
+	m_Socket = socket(AF_INET, SOCK_DGRAM, 0);
+	if (m_Socket == INVALID_SOCKET)
+	{
+		MessageBox(_T("套接字创建失败!"));
+	}
+	//绑定套接字
+	if (bind(m_Socket, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR)
+	{
+		MessageBox(_T("套接字绑定失败!"));
+	}
+	m_BmpData = new char[1024 * 1024];
+	memset(m_BmpData, 0, 1024 * 1024);
+	m_TempData = new char[1024 * 1024 * 2];
+	memset(m_TempData, 0, 1024 * 1024 * 2);
+	m_Header = m_BmpData;
+	WSAAsyncSelect(m_Socket, m_hWnd, CM_RECEIVED, FD_READ);
+	m_ShowBmp = FALSE;
+	m_BmpSize = 0;
+	m_RecSize = 0;
+	m_ClientPort = 0;
+	WCHAR IP[MAX_PATH] = { 0 };
+	GetPrivateProfileString(_T("ClientInfo"),_T( "IP"),_T( "127.0.0.1"), IP, MAX_PATH, _T("./Client.ini"));
+	m_ClientIP = IP;
+
+
+
+
+
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
+}
+
+void CMainDlg::OnReceived()
+{
+	//接收数据
+	BYTE* buffer = new BYTE[MAX_BUFF];
+
+	int factsize = sizeof(sockaddr);
+	int ret = recvfrom(m_Socket, (char*)buffer, MAX_BUFF, 0, (sockaddr*)&m_Addr, &factsize);
+
+	if (ret != -1)
+	{
+		CString revIP =CString( inet_ntoa(m_Addr.sin_addr));
+		if (revIP != m_ClientIP)
+		{
+			delete[] buffer;
+			return;
+		}
+		/*序号2位||结束标记2位||JPG数据||JPG数据大小4位||JPG数据总大小4位||数据报大小4位*/
+		m_ClientPort = ntohs(m_Addr.sin_port);
+		//记录接收的数据报大小
+		m_RecSize += ret;
+		//读取序号
+		WORD orderID = *(WORD*)&buffer[0];
+		//读取结束标记
+		WORD endID = *(WORD*)&buffer[2];
+		//读取位图大小
+		int bmpsize = *(int*)&buffer[ret - 12];
+		sockaddr_in addr;
+		addr.sin_family = AF_INET;
+		addr.sin_port = htons(m_ClientPort);
+		addr.sin_addr.S_un.S_addr = inet_addr((LPSTR)(LPCTSTR)m_ClientIP.GetBuffer(0));
+		int size = sizeof(addr);
+		m_JPGSize = 0;
+		//发送确认信息
+		DataPackage Package;
+		memset(&Package, 0, sizeof(DataPackage));
+
+		Package.MsgType = CT_Confirm;
+
+		int nRet = sendto(m_Socket, (char*)&Package, sizeof(DataPackage), 0, (sockaddr*)&m_Addr, size);
+
+		if (orderID == 0)
+		{
+			m_BmpSize = bmpsize;
+			m_BmpData = m_Header;
+		}
+		else
+			m_BmpSize += bmpsize;
+		memcpy(m_BmpData, &buffer[4], bmpsize);
+		m_BmpData += bmpsize;
+		m_ShowBmp = FALSE;
+		if (endID == 1)
+		{
+			m_ShowBmp = TRUE;
+			m_BmpData = m_Header;
+			m_JPGSize = *(int*)&buffer[ret - 8];
+			memset(m_TempData, 0, 1024 * 1024 * 2);
+			memcpy(m_TempData, m_Header, 1024 * 1024);
+			ShowJPEG(m_TempData, m_JPGSize);
+			m_RecSize = 0;
+		}
+	}
+	delete[] buffer;
 }
 
 
