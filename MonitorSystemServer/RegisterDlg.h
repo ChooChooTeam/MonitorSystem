@@ -13,7 +13,7 @@ public:
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_DIALOG1 };
+	enum { IDD = IDD_DIALOG_REGISTER };
 #endif
 
 protected:
@@ -21,5 +21,5 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedButtonRegister();
 };

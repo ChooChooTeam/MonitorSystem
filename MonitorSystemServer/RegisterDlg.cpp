@@ -12,7 +12,7 @@
 IMPLEMENT_DYNAMIC(RegisterDlg, CDialogEx)
 
 RegisterDlg::RegisterDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(IDD_DIALOG1, pParent)
+	: CDialogEx(IDD_DIALOG_REGISTER, pParent)
 {
 
 }
@@ -28,24 +28,14 @@ void RegisterDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(RegisterDlg, CDialogEx)
+	ON_BN_CLICKED(IDC_BUTTON_REGISTER, &RegisterDlg::OnBnClickedButtonRegister)
 END_MESSAGE_MAP()
 
 
 // RegisterDlg 消息处理程序
 
 
-BOOL RegisterDlg::OnInitDialog()
+void RegisterDlg::OnBnClickedButtonRegister()
 {
-	CDialogEx::OnInitDialog();
-
-	// TODO:  在此添加额外的初始化
-
-	//这里给注册界面一些控件的大小、字体设置属性
-
-
-
-
-
-	return TRUE;  // return TRUE unless you set the focus to a control
-				  // 异常: OCX 属性页应返回 FALSE
+	// TODO: 在此添加控件通知处理程序代码
 }

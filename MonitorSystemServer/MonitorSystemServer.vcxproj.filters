@@ -36,9 +36,6 @@
     <ClInclude Include="MainDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="RegisterDLg.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="IControler.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -49,6 +46,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="SerCtrl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,9 +68,6 @@
     <ClCompile Include="MainDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="RegisterDLg.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="WrkSocket.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -78,6 +75,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SerCtrl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RegisterDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
