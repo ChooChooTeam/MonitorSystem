@@ -1,8 +1,10 @@
 ﻿#include "stdafx.h"
 #include "Adosql.h"
 #include<afx.h>
+#include<string.h>
+#include<afxpriv.h>
 
-char* strsql;
+char strsql[1024];
 Adosql::Adosql()
 {
 }
@@ -18,13 +20,13 @@ void Adosql::OnInitADOConn()
 	try
 	{
 		m_pConnection.CreateInstance("ADODB.Connection");
-		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;User ID=sa;Password=123;Initial Catalog=UserInfo;Data Source=.";
+		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;User ID=Windows身份验证;Initial Catalog=UserInfo;Data Source=LAPTOP-LTK0NPPQ";
 		m_pConnection->Open(strConnect, "", "", adModeUnknown);
-		AfxMessageBox(_T("连接成功"));
+		AfxMessageBox(_T("数据库连接成功"));
 	}
 	catch (_com_error e)
 	{
-		AfxMessageBox(_T("连接失败"));
+		AfxMessageBox(_T("数据库连接失败"));
 	}
 }
 void Adosql::ExitConnect()
@@ -43,38 +45,26 @@ void Adosql::ExitConnect()
 */
 bool Adosql::queryAdmin(CString str1,CString str2)
 {
-	CoInitialize(NULL); //初始化COM组件
-	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
-	_RecordsetPtr pRst(__uuidof(Recordset)); //实例化一个Recordset对象pRst
-	_CommandPtr pCmd(__uuidof(Command)); //实例化一个Command对象pCmd
-	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
-	sprintf(strsql, "SELECT * FROM Admin WHERE AdminName = '%s'", (char*)str1.GetBuffer());
-	
-	pCmd->CommandText = strsql; //通过pCmd对象访问数据库
-	pRst = pCmd->Execute(NULL, NULL, adCmdText);
-	while (!pRst->adoEOF)
+	m_pCommand.CreateInstance(__uuidof(Command));
+	m_pRecordset.CreateInstance(__uuidof(Record));
+	m_pCommand->State;
+	m_pCommand->ActiveConnection = m_pConnection;
+	m_pCommand->State;
+	USES_CONVERSION;
+	sprintf(strsql, "SELECT * FROM Admin WHERE AdminName = '%s'",T2A(str1));
+	m_pCommand->CommandText = strsql; //通过pCmd对象访问数据库
+
+	m_pRecordset = m_pCommand->Execute(NULL, NULL, adCmdText);
+	while (!m_pRecordset->adoEOF)
 	{
-		
-		if (str2 == pRst->GetCollect("AdminPWord"))
+		if (strcmp(T2A(str2), (char*)(_bstr_t)(m_pRecordset->GetCollect("AdminPWord"))));
 		{
-			pRst->Close(); //关闭对象
-			pConn->Close();
-			pCmd.Release(); //释放对象
-			pRst.Release();
-			pConn.Release();
-			CoUninitialize(); //卸载COM组件
 			return true;
 		}
-		
-		//把数据库中学号这列的内容放入IDC_LIST1的LIST控件中
-		pRst->MoveNext(); //下移一个
+
+		m_pRecordset->MoveNext(); //下移一个
 	}
-	pRst->Close(); //关闭对象
-	pConn->Close();
-	pCmd.Release(); //释放对象
-	pRst.Release();
-	pConn.Release();
-	CoUninitialize(); //卸载COM组件
+	
 	return false;
 }
 
@@ -86,36 +76,25 @@ bool Adosql::queryAdmin(CString str1,CString str2)
 */
 bool Adosql::queryClient(CString str1, CString str2)
 {
-	CoInitialize(NULL); //初始化COM组件
-	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
-	_RecordsetPtr pRst(__uuidof(Recordset)); //实例化一个Recordset对象pRst
-	_CommandPtr pCmd(__uuidof(Command)); //实例化一个Command对象pCmd
-	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
-	sprintf(strsql, "SELECT * FROM Client WHERE UserName = '%s'", (char*)str1.GetBuffer());
-	pCmd->CommandText = strsql; //通过pCmd对象访问数据库
-	pRst = pCmd->Execute(NULL, NULL, adCmdText);
-	while (!pRst->adoEOF)
-	{
+	m_pCommand.CreateInstance(__uuidof(Command));
+	m_pRecordset.CreateInstance(__uuidof(Record));
+	m_pCommand->State;
+	m_pCommand->ActiveConnection = m_pConnection;
+	m_pCommand->State;
+	USES_CONVERSION;
+	sprintf(strsql, "SELECT * FROM Client WHERE UserName = '%s'", T2A(str1));
+	m_pCommand->CommandText = strsql; //通过pCmd对象访问数据库
 
-		if (str2 == pRst->GetCollect("ClientPwd"))
+	m_pRecordset = m_pCommand->Execute(NULL, NULL, adCmdText);
+	while (!m_pRecordset->adoEOF)
+	{
+		if (strcmp(T2A(str2), (char*)(_bstr_t)(m_pRecordset->GetCollect("ClientPWd"))));
 		{
-			pRst->Close(); //关闭对象
-			pConn->Close();
-			pCmd.Release(); //释放对象
-			pRst.Release();
-			pConn.Release();
-			CoUninitialize(); //卸载COM组件
 			return true;
 		}
 
-		pRst->MoveNext(); //下移一个
+		m_pRecordset->MoveNext(); //下移一个
 	}
-	pRst->Close(); //关闭对象
-	pConn->Close();
-	pCmd.Release(); //释放对象
-	pRst.Release();
-	pConn.Release();
-	CoUninitialize(); //卸载COM组件
 	return false;
 }
 

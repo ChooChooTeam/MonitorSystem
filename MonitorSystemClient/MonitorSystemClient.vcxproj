@@ -184,10 +184,14 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\MonitorSystemServer\IControler.h" />
+    <ClInclude Include="..\MonitorSystemServer\LstnSocket.h" />
+    <ClInclude Include="..\MonitorSystemServer\WrkSocket.h" />
     <ClInclude Include="BComInfo.h" />
     <ClInclude Include="BPowerM.h" />
     <ClInclude Include="BProcessM.h" />
     <ClInclude Include="BScreenM.h" />
+    <ClInclude Include="Controler.h" />
     <ClInclude Include="DIALOG1.h" />
     <ClInclude Include="MonitorSystemClient.h" />
     <ClInclude Include="MonitorSystemClientDlg.h" />
@@ -198,10 +202,13 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\MonitorSystemServer\LstnSocket.cpp" />
+    <ClCompile Include="..\MonitorSystemServer\WrkSocket.cpp" />
     <ClCompile Include="BComInfo.cpp" />
     <ClCompile Include="BPowerM.cpp" />
     <ClCompile Include="BProcessM.cpp" />
     <ClCompile Include="BScreenM.cpp" />
+    <ClCompile Include="Controler.cpp" />
     <ClCompile Include="DIALOG1.cpp" />
     <ClCompile Include="MonitorSystemClient.cpp" />
     <ClCompile Include="MonitorSystemClientDlg.cpp" />
@@ -227,12 +234,12 @@
     <Image Include="res\Toolbar256.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="KeyboardHook.lib" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MonitorSystemServer\MonitorSystemServer.vcxproj">
       <Project>{4dc499fd-2b49-4d35-9d84-a53c3f95ad54}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="KeyboardHook.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

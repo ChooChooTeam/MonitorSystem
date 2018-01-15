@@ -5,8 +5,7 @@
 #include "MonitorSystemServer.h"
 #include "MainDlg.h"
 #include "afxdialogex.h"
-
-
+#include <gdiplus.h>
 // CMainDlg 对话框
 
 IMPLEMENT_DYNAMIC(CMainDlg, CDialogEx)
@@ -14,7 +13,35 @@ IMPLEMENT_DYNAMIC(CMainDlg, CDialogEx)
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_MAIN_DIALOG, pParent)
 {
-	
+
+}
+
+void CMainDlg::ShowJPEG(void * pData, int DataSize)
+{
+
+	HGLOBAL m_hMem1 = GlobalAlloc(GMEM_MOVEABLE, DataSize);
+	LPBYTE lpData1 = (LPBYTE)GlobalLock(m_hMem1);
+	memcpy(lpData1, pData, DataSize);
+	GlobalUnlock(m_hMem1);
+	::CreateStreamOnHGlobal(m_hMem1, TRUE, &m_pStm);
+
+	m_pNewBmp = Bitmap::FromStream(m_pStm);
+	CClientDC dc(this);
+
+
+	CRect rc;
+	CStatic* pic = (CStatic*)GetDlgItem(IDC_PIC);
+	pic->GetClientRect(rc);
+	HDC hDC = pic->GetDC()->m_hDC;
+	// DEBUG: 此处返回值不正确
+	//Gdiplus::Graphics *graphics = Gdiplus::Graphics::FromHDC(hDC);
+	Gdiplus::Graphics graphics(hDC);
+	graphics.DrawImage(m_pNewBmp, 1, 1, rc.Width(), rc.Height());
+	m_pStm->Release();
+	m_pStm = NULL;
+	//delete graphics;
+	GlobalFree(m_hMem1);
+	::ReleaseDC(m_hWnd, hDC);
 }
 
 CMainDlg::~CMainDlg()
@@ -31,6 +58,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMainDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -75,8 +103,16 @@ BOOL CMainDlg::OnInitDialog()
 		
 	}
 
-
+	mSerCtrl = new SerCtrl(this);
+	LSocket = new LstnSocket(*mSerCtrl);
+	LSocket->Listen(8848);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
+}
+
+
+void CMainDlg::OnBnClickedButton3()
+{
+	ShowJPEG(nullptr, 0);
 }

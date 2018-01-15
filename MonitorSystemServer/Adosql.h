@@ -1,5 +1,6 @@
 #pragma once
 #include"stdafx.h"
+
 class Adosql
 {
 public:
@@ -7,8 +8,8 @@ public:
 	~Adosql();
 
 	_ConnectionPtr m_pConnection; //数据库
-	_RecordsetPtr m_pRecordset; //命令
-	_CommandPtr m_pCommand; // 记录
+	_RecordsetPtr m_pRecordset; //记录
+	_CommandPtr m_pCommand; // 命令
 	void OnInitADOConn();
 	void ExitConnect();
 	bool queryAdmin(CString str1, CString str2);
