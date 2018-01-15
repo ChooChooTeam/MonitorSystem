@@ -42,7 +42,10 @@ void LstnSocket::NewOnLine()
 {
 	std::vector<CString> vecName;
 	for (auto&w : vecWrk) {
-		vecName.push_back(w->GetName());
+		// 只放入已经有名字的Socket
+		if (w->GetName().Compare(_T("")) != 0) {
+			vecName.push_back(w->GetName());
+		}
 	}
 	ctrler.DoOnLine(vecName);
 }
@@ -79,7 +82,8 @@ void LstnSocket::SendControl(CString name, WsOp op)
 {
 	for (auto&w : vecWrk) {
 		if (w->GetName() == name) {
-			//w->SendControl(op);
+			w->SendControl(op);
+
 			return;
 		}
 	}
@@ -91,10 +95,10 @@ void LstnSocket::Activate(CString name)
 
 	for (auto&w : vecWrk) {
 		if (w->GetName() == currName) {
-			//w->SendControl(RESUME);
+			w->SendControl(RESUME);
 		}
 		else {
-			//w->SendControl(STOP);
+			w->SendControl(STOP);
 		}
 	}
 }

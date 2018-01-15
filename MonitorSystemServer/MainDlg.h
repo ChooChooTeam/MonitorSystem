@@ -34,4 +34,5 @@ public:
 	virtual BOOL OnInitDialog();
 	CListCtrl m_userlist;
 	afx_msg void OnBnClickedButton3();
+	afx_msg void OnNMClickList4(NMHDR *pNMHDR, LRESULT *pResult);
 };
