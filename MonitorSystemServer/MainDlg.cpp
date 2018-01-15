@@ -73,6 +73,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMainDlg::OnBnClickedButton3)
 	ON_NOTIFY(NM_CLICK, IDC_LIST4, &CMainDlg::OnNMClickList4)
+	ON_MESSAGE(CM_RECEIVED, &CMainDlg::OnReceived)
 END_MESSAGE_MAP()
 
 
@@ -162,7 +163,7 @@ BOOL CMainDlg::OnInitDialog()
 				  // 异常: OCX 属性页应返回 FALSE
 }
 
-void CMainDlg::OnReceived()
+afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 {
 	//接收数据
 	BYTE* buffer = new BYTE[MAX_BUFF];

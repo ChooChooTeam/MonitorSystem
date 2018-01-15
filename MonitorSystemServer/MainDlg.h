@@ -45,7 +45,7 @@ protected:
 public:
 	CListCtrl m_list;
 	virtual BOOL OnInitDialog();
-	void OnReceived();
+	afx_msg LRESULT OnReceived(WPARAM wParam,LPARAM lParam);
 	CListCtrl m_userlist;
 	afx_msg void OnBnClickedButton3();
 	afx_msg void OnNMClickList4(NMHDR *pNMHDR, LRESULT *pResult);
