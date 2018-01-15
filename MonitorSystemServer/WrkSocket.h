@@ -44,7 +44,7 @@ public:
 	virtual void OnReceive(int nErrorCode);
 
 	void SendUserInfo(CString name, CString pwdMD5);
-	//void SendControl(WsOp op);	// 发送控制信息
+	void SendControl(WsOp op);			// 发送控制信息
 	void SendJPGE(char* jpg, int size);	// 发送图片信息
 
 	const CString& GetName();

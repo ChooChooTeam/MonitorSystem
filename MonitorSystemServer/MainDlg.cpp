@@ -59,6 +59,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CMainDlg::OnBnClickedButton3)
+	ON_NOTIFY(NM_CLICK, IDC_LIST4, &CMainDlg::OnNMClickList4)
 END_MESSAGE_MAP()
 
 
@@ -95,13 +96,13 @@ BOOL CMainDlg::OnInitDialog()
 	m_userlist.InsertColumn(0, _T(""), LVCFMT_LEFT, 0);
 	m_userlist.InsertColumn(1, _T("用户名"), LVCFMT_LEFT, 100);        // 插入第2列的列名  
 	
-	CString userName;
-	for (int i = 0; i <= 7; i++) {
-		userName.Format(_T("用户%d"), i);
-		m_userlist.InsertItem(i, _T(""));                          // 插入行  
-		m_userlist.SetItemText(i, 1, userName);                     // 设置第2列(姓名)  
-		
-	}
+	//CString userName;
+	//for (int i = 0; i <= 7; i++) {
+	//	userName.Format(_T("用户%d"), i);
+	//	m_userlist.InsertItem(i, _T(""));                          // 插入行  
+	//	m_userlist.SetItemText(i, 1, userName);                     // 设置第2列(姓名)  
+	//	
+	//}
 
 	mSerCtrl = new SerCtrl(this);
 	LSocket = new LstnSocket(*mSerCtrl);
@@ -115,4 +116,20 @@ BOOL CMainDlg::OnInitDialog()
 void CMainDlg::OnBnClickedButton3()
 {
 	ShowJPEG(nullptr, 0);
+}
+
+
+// 用户列表框单击事件
+void CMainDlg::OnNMClickList4(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	int n = m_userlist.GetSelectionMark();
+
+	CString name = m_userlist.GetItemText(n, 0);
+
+	LSocket->Activate(name);
+	
+
+	*pResult = 0;
 }

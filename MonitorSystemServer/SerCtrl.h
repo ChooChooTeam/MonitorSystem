@@ -2,8 +2,8 @@
 #include "IControler.h"
 
 class CMainDlg;
-class SerCtrl :
-	public IControler
+
+class SerCtrl : public IControler
 {
 public:
 	SerCtrl(CMainDlg* dlg);

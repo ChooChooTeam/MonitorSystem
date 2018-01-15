@@ -144,6 +144,10 @@ void WrkSocket::OnReceive(int nErrorCode)
 		msgR->buff[msgR->mSize] = '\0';
 		msgR->buff[msgR->mSize + 1] = '\0';
 		this->name.Format(_T("%s"), msgR->buff);
+
+		if (pParent != nullptr) {
+			pParent->NewOnLine();
+		}
 	}
 	else if (op == USER_INFO) {
 
@@ -163,6 +167,19 @@ void WrkSocket::SendUserInfo(CString name, CString pwdMD5)
 	//SendControl(USER_INFO);
 	//Send(name, name.GetLength() * sizeof(TCHAR));
 	//Send(pwdMD5, pwdMD5.GetLength() * sizeof(TCHAR));
+}
+
+void WrkSocket::SendControl(WsOp op)
+{
+	msgS->op = op;
+	int n = Send(msgS, sizeof(InfoPack));
+
+	if (n == SOCKET_ERROR) {
+		int err = GetLastError();
+		CString ss;
+		ss.Format(_T("err = %d\n"), err);
+		OutputDebugString(ss);
+	}
 }
 
 //void WrkSocket::SendControl(WsOp op)
