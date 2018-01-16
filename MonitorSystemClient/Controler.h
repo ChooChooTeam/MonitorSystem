@@ -1,12 +1,12 @@
 #pragma once
 #include "../MonitorSystemServer/IControler.h"
 #include "../MonitorSystemServer/WrkSocket.h"
-#include "BScreenM.h"
+#include "DIALOG1.h"
 class Controler :public IControler{
 	WrkSocket * socket;
-	BScreenM *ptrMBScreen = NULL;
+	CDIALOG1 * dlg;
 	public:
-	Controler();
+	Controler(CDIALOG1 *dlg);
 	void setSocket(WrkSocket * socket) {
 		this->socket = socket;
 	}

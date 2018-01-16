@@ -7,8 +7,11 @@
 #pragma comment(lib, "KeyboardHook.lib")
 _declspec(dllimport) void SetHook(void);
 _declspec(dllimport)	void UnHook(void);
-Controler::Controler()
+
+
+Controler::Controler(CDIALOG1 * dlg)
 {
+	this->dlg = dlg;
 }
 
 void Controler::DoCmd(WsOp op)
@@ -30,11 +33,14 @@ void Controler::DoCmd(WsOp op)
 		MessageBox(NULL, TEXT("你已经被管理员解锁！"), TEXT("警告!"), MB_ICONWARNING | MB_SYSTEMMODAL);
 		break;
 	case STOP:
-		if (ptrMBScreen != NULL) {
-			ptrMBScreen->stopThreading();
-		}
+		dlg->stopJpeg();
+		//if (ptrMBScreen != NULL) {
+		//	ptrMBScreen->stopThreading();
+		//}
+		
 		break;
 	case RESUME:
+		dlg->startJpeg();
 		//ptrMBScreen = new BScreenM(this->socket);
 		//ptrMBScreen->runThreading();
 		break;
