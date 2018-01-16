@@ -128,7 +128,7 @@ BOOL CMainDlg::OnInitDialog()
 	char* localIP = inet_ntoa(*(struct in_addr *)*phost->h_addr_list);
 	sockaddr_in addr;
 	addr.sin_family = AF_INET;
-	addr.sin_addr.S_un.S_addr = inet_addr(localIP);
+	addr.sin_addr.S_un.S_addr = inet_addr("192.168.1.101");
 	addr.sin_port = htons(5002);
 	//创建套接字
 	m_Socket = socket(AF_INET, SOCK_DGRAM, 0);
@@ -165,6 +165,10 @@ BOOL CMainDlg::OnInitDialog()
 
 afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 {
+	CString ss;
+	ss.Format(_T("消息: 回调一次\n"));
+	OutputDebugString(ss);
+
 	//接收数据
 	BYTE* buffer = new BYTE[MAX_BUFF];
 
