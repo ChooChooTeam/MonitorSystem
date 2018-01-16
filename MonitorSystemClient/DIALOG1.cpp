@@ -25,6 +25,7 @@ CDIALOG1::CDIALOG1(CWnd* pParent /*=NULL*/)
 
 CDIALOG1::~CDIALOG1()
 {
+
 }
 
 void CDIALOG1::DoDataExchange(CDataExchange* pDX)
@@ -32,24 +33,6 @@ void CDIALOG1::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 }
 
-void CDIALOG1::OnTimer(UINT nIDEvent)
-{
-	if (!m_Received)
-	{
-		m_Counter++;
-		if (m_Counter>5)
-		{
-			m_Counter = 0;
-			OnOK();  //超过5秒没有收到服务器的应答信息,重发数据
-		}
-	}
-	else
-	{
-		m_Received = FALSE;
-		m_Counter = 0;
-	}
-	CDialog::OnTimer(nIDEvent);
-}
 
 
 BEGIN_MESSAGE_MAP(CDIALOG1, CDialogEx)
@@ -61,6 +44,8 @@ BEGIN_MESSAGE_MAP(CDIALOG1, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CDIALOG1::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON6, &CDIALOG1::OnBnClickedButton6)
 	ON_BN_CLICKED(IDC_BUTTON8, &CDIALOG1::OnBnClickedButton8)
+	ON_MESSAGE(CM_RECEIVED, &CDIALOG1::OnReceived)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -159,6 +144,7 @@ void CDIALOG1::ShowJPEG(void* pData, int DataSize)
 
 void CDIALOG1::OnOK()
 {
+	
 	CDC* pDeskDC = GetDesktopWindow()->GetDC();		//获取桌面画布对象
 	CRect rc;
 	GetDesktopWindow()->GetClientRect(rc);				//获取屏幕的客户区域
@@ -214,8 +200,8 @@ void CDIALOG1::OnOK()
 	GetHGlobalFromStream(pOutStream, &hOutGlobal);
 	LPBYTE lpData = (LPBYTE)GlobalLock(hOutGlobal);
 	 m_JpegSize = GlobalSize(lpData);
-	char *pBuffer = new char[m_JpegSize];
-	memcpy(pBuffer, lpData, m_JpegSize);
+	//char *pBuffer = new char[m_JpegSize];
+	//memcpy(pBuffer, lpData, m_JpegSize);
 
 
 	m_Addr.sin_family = AF_INET;
@@ -228,11 +214,23 @@ void CDIALOG1::OnOK()
 	m_Mod = m_JpegSize % GraphSize;
 	if (m_Mod != 0)
 		m_Count += 1;
-	m_FrameIndex = 0;
+
 	memcpy(m_pSendBuf, lpData, m_JpegSize);
-	int ret = SendData(m_FrameIndex, m_Mod, GraphSize, m_JpegSize, m_Count, m_pSendBuf, m_Addr);
+//	for (int m_FrameIndex = 0; m_FrameIndex <= m_Count; m_FrameIndex++) {
+	 int ret = SendData(m_FrameIndex, m_Mod, GraphSize, m_JpegSize, m_Count, m_pSendBuf, m_Addr);
 
+//	}
 
+	GlobalUnlock(hOutGlobal);
+	memDC.DeleteDC();
+	pDeskDC->DeleteDC();
+	delete[] pData;
+	//delete[] pBuffer;
+	pOutStream->Release();
+	LocalFree(pBInfo);
+	GlobalFree(hOutGlobal);
+	bmp.DeleteObject();
+	img.Destroy();
 	
 }
 
@@ -267,8 +265,7 @@ void CDIALOG1::OnOK()
 		delete[] pPackage;
 		return ret;
 	}
-
-	void CDIALOG1::OnReceived()
+	afx_msg LRESULT CDIALOG1::OnReceived(WPARAM wParam, LPARAM lParam)
 	{
 		char* pData = new char[sizeof(DataPackage)];
 		memset(pData, 0, sizeof(DataPackage));
@@ -287,8 +284,11 @@ void CDIALOG1::OnOK()
 				m_FrameIndex += 1;
 				if (m_FrameIndex < m_Count)
 					SendData(m_FrameIndex, m_Mod, m_Bmpsize, m_JpegSize, m_Count, m_pSendBuf, m_Addr);
-				else
+				else {
+					m_FrameIndex = 0;
 					OnOK();
+
+				}
 			}
 			else if (Package.MsgType == CT_HideDesk)	//隐藏桌面操作
 			{
@@ -327,46 +327,14 @@ void CDIALOG1::OnOK()
 		{
 			delete[]pData;
 		}
+		return true;
 	}
 
 #include "../MonitorSystemServer/IControler.h"
 void CDIALOG1::OnBnClickedButton1()
 {
 	//获取本机IP
-	hostent* phost = gethostbyname("");
-	char* localIP = inet_ntoa(*(struct in_addr *)*phost->h_addr_list);
-	sockaddr_in addr;
-	addr.sin_family = AF_INET;
-	addr.sin_addr.S_un.S_addr = inet_addr(localIP);
-	addr.sin_port = htons(5001);
-	//创建套接字
-	m_Socket = socket(AF_INET, SOCK_DGRAM, 0);
-	if (m_Socket == INVALID_SOCKET)
-	{
-		MessageBox(_T("套接字创建失败!"));
-	}
-	char* len = "9999";
-	if (setsockopt(m_Socket, SOL_SOCKET, SO_SNDBUF, len, 4) != 0)
-	{
-		MessageBox(_T("设置失败!"));
-	}
-
-	//绑定套接字
-	if (bind(m_Socket, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR)
-	{
-		MessageBox(_T("套接字绑定失败!"));
-	}
-	m_ServerIP = "127.0.0.1";
-	GetPrivateProfileString(_T("ServerInfo"), _T("IP"), _T("127.0.0.1"), m_ServerIP.GetBuffer(0), MAX_PATH, _T("./Server.ini"));
-	m_pSendBuf = new char[1024 * 1024];
-	m_pHeader = m_pSendBuf;
-	WSAAsyncSelect(m_Socket, m_hWnd, CM_RECEIVED, FD_READ);
-	m_Confirm = TRUE;
-	OnOK();
-	m_Received = FALSE;
-	m_Counter = 0;
-	SetTimer(1, 1000, NULL);
-
+	
 
 
 
@@ -402,4 +370,76 @@ void CDIALOG1::OnBnClickedButton8()
 	MessageBox(TEXT("你已经被管理员锁定！请联系管理员 /f8 解锁！"), TEXT("警告!"), MB_ICONWARNING | MB_SYSTEMMODAL);
 	
 	// TODO: 在此添加控件通知处理程序代码
+}
+
+
+BOOL CDIALOG1::OnInitDialog()
+{
+	CDialogEx::OnInitDialog();
+
+	hostent* phost = gethostbyname("");
+	char* localIP = inet_ntoa(*(struct in_addr *)*phost->h_addr_list);
+	sockaddr_in addr;
+	addr.sin_family = AF_INET;
+	addr.sin_addr.S_un.S_addr = inet_addr(localIP);
+	addr.sin_port = htons(5001);
+	//创建套接字
+	m_Socket = socket(AF_INET, SOCK_DGRAM, 0);
+	if (m_Socket == INVALID_SOCKET)
+	{
+		MessageBox(_T("套接字创建失败!"));
+	}
+	char* len = "9999";
+	
+	if (setsockopt(m_Socket, SOL_SOCKET, SO_SNDBUF, len, 4) != 0)
+	{
+		MessageBox(_T("设置失败!"));
+	}
+
+	//绑定套接字
+	if (bind(m_Socket, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR)
+	{
+		MessageBox(_T("套接字绑定失败!"));
+	}
+	
+	m_ServerIP =_T( "127.0.0.1        ");
+	//注意溢出
+	GetPrivateProfileString(_T("ServerInfo"), _T("IP"), _T("127.0.0.1"), m_ServerIP.GetBuffer(0), MAX_PATH, _T("./Server.ini"));
+	_ASSERTE(_CrtCheckMemory());
+	m_pSendBuf = new char[1024 * 1024];
+	
+	m_pHeader = m_pSendBuf;
+	WSAAsyncSelect(m_Socket, m_hWnd, CM_RECEIVED, FD_READ);
+	m_Confirm = TRUE;
+
+	OnOK();
+	m_Received = FALSE;
+	m_Counter = 0;
+	SetTimer(1, 200, NULL);
+
+	// TODO:  在此添加额外的初始化
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+				  // 异常: OCX 属性页应返回 FALSE
+}
+
+
+void CDIALOG1::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (!m_Received)
+	{
+		m_Counter++;
+		if (m_Counter >= 2)
+		{
+			m_Counter = 0;
+			OnOK();  //超过5秒没有收到服务器的应答信息,重发数据
+		}
+	}
+	else
+	{
+		m_Received = FALSE;
+		m_Counter = 0;
+	}
+	CDialog::OnTimer(nIDEvent);
 }

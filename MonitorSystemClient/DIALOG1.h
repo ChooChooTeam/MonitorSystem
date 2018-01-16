@@ -23,7 +23,7 @@ class CDIALOG1 : public CDialogEx
 	void OnOK();
 	//for jpeg
 	int  SendData(UINT index, int mod, int bmpsize, int totalsize, int frames, char *pSendBuf, sockaddr_in &addr);
-	void OnReceived();
+	afx_msg LRESULT OnReceived(WPARAM wParam, LPARAM lParam);
 	SOCKET  m_Socket;		//客户端套接字
 	CString		m_ServerIP;		//服务器IP
 	BOOL	m_Confirm;		//确认信息
@@ -49,7 +49,7 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-	afx_msg void OnTimer(UINT nIDEvent);
+	
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButton2();
@@ -60,4 +60,6 @@ public:
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton6();
 	afx_msg void OnBnClickedButton8();
+	virtual BOOL OnInitDialog();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
