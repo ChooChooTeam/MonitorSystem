@@ -20,8 +20,8 @@ Adosql::~Adosql()
 
 void Adosql::OnInitADOConn()
 {
-	AfxOleInit();
-	//::CoInitialize(NULL);
+	
+	::CoInitialize(NULL);
 	try
 	{
 		m_pConnection.CreateInstance("ADODB.Connection");
