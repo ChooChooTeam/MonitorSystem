@@ -28,6 +28,9 @@ public:
 	WINDOWPLACEMENT m_OldPlacement;		//原来的窗口模式
 	CRect m_FullScreenRect;				//全屏显示区域
 	sockaddr_in m_Addr;
+
+	void setCurrIP(CString currIP);
+
 private:
 	IStream * m_pStm;
 	Bitmap *m_pNewBmp;
@@ -54,4 +57,6 @@ public:
 	afx_msg void OnBnClickedButton3();
 	afx_msg void OnNMClickList4(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	// 显示当前的用户
+	CString CurrUserName;
 };

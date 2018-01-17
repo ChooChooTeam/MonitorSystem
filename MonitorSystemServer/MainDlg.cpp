@@ -25,6 +25,7 @@ typedef struct DataPackage
 
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_MAIN_DIALOG, pParent)
+	, CurrUserName(_T(""))
 {
 
 }
@@ -61,11 +62,17 @@ CMainDlg::~CMainDlg()
 {
 }
 
+void CMainDlg::setCurrIP(CString currIP)
+{
+	m_ClientIP = currIP;
+}
+
 void CMainDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST2, m_list);
 	DDX_Control(pDX, IDC_LIST4, m_userlist);
+	DDX_Text(pDX, IDC_STATIC4, CurrUserName);
 }
 
 //界面框放大后的操作
@@ -105,7 +112,7 @@ void CMainDlg::reSize()
 			TLPoint.y = long(OldTLPoint.y);
 			OldBRPoint = Rect.BottomRight();   //控件右下角
 			BRPoint.x = long(OldBRPoint.x);//新控件中右下角位置
-			BRPoint.y = long(OldBRPoint.y *1.8);
+			BRPoint.y = long(OldBRPoint.y *1.7);
 		}
 		else if (woc == IDC_PIC) {//长度宽度都增加
 			OldTLPoint = Rect.TopLeft();  //控件左上角
@@ -113,7 +120,7 @@ void CMainDlg::reSize()
 			TLPoint.y = long(OldTLPoint.y);
 			OldBRPoint = Rect.BottomRight();   //控件右下角
 			BRPoint.x = long(OldBRPoint.x *fsp[0]);//新控件中右下角位置
-			BRPoint.y = long(OldBRPoint.y *1.8);
+			BRPoint.y = long(OldBRPoint.y *1.7);
 		}
 		else if (woc == IDC_STATIC4) {
 			OldTLPoint = Rect.TopLeft();  //控件左上角
@@ -304,13 +311,6 @@ BOOL CMainDlg::OnInitDialog()
 	m_BmpSize = 0;
 	m_RecSize = 0;
 	m_ClientPort = 0;
-	WCHAR IP[MAX_PATH] = { 0 };
-	GetPrivateProfileString(_T("ClientInfo"),_T( "IP"),_T( "127.0.0.1"), IP, MAX_PATH, _T("./Client.ini"));
-	m_ClientIP = IP;
-
-
-
-
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE

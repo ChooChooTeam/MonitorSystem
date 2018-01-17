@@ -31,6 +31,7 @@ void Register::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(Register, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_REGISTER, &Register::OnBnClickedButtonRegister)
 	ON_BN_CLICKED(IDC_BUTTON_CANCEL, &Register::OnBnClickedButtonCancel)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -41,8 +42,8 @@ void Register::OnBnClickedButtonRegister()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	//判断数据库中是否有相同的用户名：
 
+	 
 
 	//获得控件的值
 	CEdit* pass = (CEdit*)GetDlgItem(IDC_EDIT2);
@@ -75,13 +76,37 @@ void Register::OnBnClickedButtonRegister()
 	//MessageBox(username);
 	//MessageBox( password);
     //MessageBox( type);
+	//判断数据库中是否有相同的用户名：
 
-	if (type == _T("用户"))
-	//	MessageBox(_T("用户"));
-		sql.insertClient(username, password);
+
+	if (type == _T("用户"))  //	MessageBox(_T("用户"));
+		
+	{
+		if (!sql.queryClient(username, password))
+		{
+			sql.insertClient(username, password);
+			MessageBox(_T("注册成功！"));
+		}
+			
+
+		else
+		{
+			MessageBox(_T("用户名已存在,请重新输入用户名"));
+			return;
+		}
+	}
 	else
 		//MessageBox(_T("管理员u"));
-	sql.insertAdmin(username, password);
+	{
+		if (!sql.queryAdmin(username, password))
+			sql.insertAdmin(username, password);
+		else
+		{
+			MessageBox(_T("用户名已存在,请重新输入用户名"));
+			return;
+		}
+
+	}
 	  
 
 
@@ -216,4 +241,11 @@ void Register::OnBnClickedButtonCancel()
 	dpass->SetWindowText(_T(""));
 	user->SetWindowText(_T(""));
 
+}
+
+
+void Register::OnClose()
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CDialogEx::OnClose();
 }
