@@ -7,9 +7,9 @@ public:
 	Adosql();
 	~Adosql();
 
-	_ConnectionPtr m_pConnection; //数据库
-	_RecordsetPtr m_pRecordset; //记录
-	_CommandPtr m_pCommand; // 命令
+	_ConnectionPtr m_pConnection = NULL; //数据库
+	_RecordsetPtr m_pRecordset = NULL; //记录
+	_CommandPtr m_pCommand = NULL;// 命令
 	void OnInitADOConn();
 	void ExitConnect();
 	bool queryAdmin(CString str1, CString str2);

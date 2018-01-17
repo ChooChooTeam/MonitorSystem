@@ -1,4 +1,5 @@
 #pragma once
+#include"Adosql.h"
 
 
 // RegisterDlg 对话框
@@ -22,4 +23,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButtonRegister();
+	// 管理员名
+	CString m_edit_AdminName;
+
+	// 管理员密码
+	CString m_edit_AdminPwd;
+	// 确认密码
+	CString m_edit_AdminEndPwd;
+
+	Adosql sql;
 };
