@@ -36,6 +36,7 @@ bool SerCtrl::DoQuary(CString name, CString pwd)
 {
 	if (mAdo == nullptr) {
 		mAdo = new Adosql;
+		mAdo->OnInitADOConn();
 	}
 
 	return mAdo->queryClient(name, pwd);
