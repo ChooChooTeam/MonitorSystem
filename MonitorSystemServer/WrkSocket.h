@@ -59,6 +59,7 @@ public:
 	void SendProgress(ProgressInfo p[], int num);
 
 	const CString& GetName();
+	SOCKADDR mIP;				// 套接字对应的(客户端的)IP
 
 private:
 	CString name;			// 套接字对应的用户名
