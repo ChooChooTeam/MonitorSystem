@@ -73,10 +73,10 @@ void CMainDlg::reSize()
 {
 	float fsp[2];//记录长宽比
 	POINT Newp; //获取现在对话框的长、宽 
-	CRect recta;//新窗口
-	GetClientRect(&recta);     //放大后窗口大小    
-	Newp.x = recta.right - recta.left;   //新窗口长
-	Newp.y = recta.bottom - recta.top;   //新窗口宽
+	CRect new_rect;//新窗口
+	GetClientRect(&new_rect);     //放大后窗口大小    
+	Newp.x = new_rect.right - new_rect.left;   //新窗口长
+	Newp.y = new_rect.bottom - new_rect.top;   //新窗口宽
 	fsp[0] = (float)Newp.x / old.x;    //新旧窗口长之比
 	fsp[1] = (float)Newp.y / old.y;    //新旧窗口宽之比
 	
@@ -90,28 +90,57 @@ void CMainDlg::reSize()
 	{
 		
 		woc = ::GetDlgCtrlID(hwndChild);//取得控件ID  
-		if (woc == IDC_STATIC1 || woc == IDC_STATIC2 || woc == IDC_STATIC3) {
+		if (woc == IDC_STATIC1 || woc == IDC_STATIC2 || woc == IDC_STATIC3 ) {
 			hwndChild = ::GetWindow(hwndChild, GW_HWNDNEXT);
 			continue;//不改变这些控件的位置，直接跳过
 		}
+
+
 		GetDlgItem(woc)->GetWindowRect(Rect);  //取得控件区域
 		ScreenToClient(Rect);   //转换坐标
 
-		if (woc == IDC_LIST4 || woc == IDC_LIST2) {
+		if (woc == IDC_LIST4 || woc == IDC_LIST2) {//长度增加，宽度不变
 			OldTLPoint = Rect.TopLeft();  //控件左上角
 			TLPoint.x = long(OldTLPoint.x);   //新控件中左上角位置
 			TLPoint.y = long(OldTLPoint.y);
 			OldBRPoint = Rect.BottomRight();   //控件右下角
 			BRPoint.x = long(OldBRPoint.x);//新控件中右下角位置
-			BRPoint.y = long(OldBRPoint.y *fsp[1]);
+			BRPoint.y = long(OldBRPoint.y *1.8);
 		}
-		else if (woc == IDC_PIC) {
+		else if (woc == IDC_PIC) {//长度宽度都增加
 			OldTLPoint = Rect.TopLeft();  //控件左上角
 			TLPoint.x = long(OldTLPoint.x);   //新控件中左上角位置
 			TLPoint.y = long(OldTLPoint.y);
 			OldBRPoint = Rect.BottomRight();   //控件右下角
 			BRPoint.x = long(OldBRPoint.x *fsp[0]);//新控件中右下角位置
-			BRPoint.y = long(OldBRPoint.y *fsp[1]);
+			BRPoint.y = long(OldBRPoint.y *1.8);
+		}
+		else if (woc == IDC_STATIC4) {
+			OldTLPoint = Rect.TopLeft();  //控件左上角
+			TLPoint.x = long(OldTLPoint.x *fsp[0]);   //新控件中左上角位置
+			TLPoint.y = long(OldTLPoint.y);
+			OldBRPoint = Rect.BottomRight();   //控件右下角
+			BRPoint.x = long(OldBRPoint.x *fsp[0]);//新控件中右下角位置
+			BRPoint.y = long(OldBRPoint.y );
+		}
+		else if (woc == IDC_BUTTON1 || woc == IDC_BUTTON2 || woc == IDC_BUTTON3
+			|| woc == IDC_BUTTON4 || woc == IDC_BUTTON5 ) {
+			OldTLPoint = Rect.TopLeft();  //控件左上角
+			TLPoint.x = long(OldTLPoint.x);   //新控件中左上角位置
+			//新控件中top位置(保持和原控件距底部距离相等)
+			TLPoint.y = long(new_rect.bottom-(old.y-old_bt1.top));
+			OldBRPoint = Rect.BottomRight();   //控件右下角
+			BRPoint.x = long(OldBRPoint.x );//新控件中右下角位置
+			BRPoint.y = long(new_rect.bottom - (old.y - old_bt1.bottom));
+		}
+		else if (woc == IDC_STATIC5) {
+			OldTLPoint = Rect.TopLeft();  //控件左上角
+			TLPoint.x = long(OldTLPoint.x);   //新控件中左上角位置
+											  //新控件中top位置(保持和原控件距底部距离相等)
+			TLPoint.y = long(new_rect.bottom - (old.y - old_static5.top));
+			OldBRPoint = Rect.BottomRight();   //控件右下角
+			BRPoint.x = long(OldBRPoint.x);//新控件中右下角位置
+			BRPoint.y = long(new_rect.bottom - (old.y - old_static5.bottom));
 		}
 		else {
 			OldTLPoint = Rect.TopLeft();  //控件左上角
@@ -169,9 +198,15 @@ BOOL CMainDlg::OnInitDialog()
 
 	//获取窗口原始长、宽
 	CRect rect;
-	GetClientRect(&rect);     //取客户区大小    
-	old.x = rect.right - rect.left;
-	old.y = rect.bottom - rect.top;
+	GetClientRect(&rect);     //取原窗口大小    
+	old.x = rect.right - rect.left;  //原窗口长
+	old.y = rect.bottom - rect.top;  //原窗口宽
+
+	GetDlgItem(IDC_BUTTON1)->GetWindowRect(&old_bt1);
+	ScreenToClient(&old_bt1);
+
+	GetDlgItem(IDC_STATIC5)->GetWindowRect(&old_static5);
+	ScreenToClient(&old_static5);
 
 	//设置字体
 	CFont *fo;
@@ -180,12 +215,13 @@ BOOL CMainDlg::OnInitDialog()
 	GetDlgItem(IDC_STATIC1)->SetFont(fo);
 	GetDlgItem(IDC_STATIC2)->SetFont(fo);
 	GetDlgItem(IDC_STATIC3)->SetFont(fo);
+	GetDlgItem(IDC_STATIC4)->SetFont(fo);
 
 
 	//初始化用户信息列表
 	m_userlist.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);      // 整行选择、网格线  
 	m_userlist.InsertColumn(0, _T("用户名"), LVCFMT_LEFT, 70);        // 插入列
-	m_userlist.InsertColumn(1, _T("IP地址"), LVCFMT_LEFT, 90);        
+	m_userlist.InsertColumn(1, _T("IP地址"), LVCFMT_LEFT, 120);        
 
 	CFont *font1;
 	font1 = new CFont();
@@ -196,7 +232,7 @@ BOOL CMainDlg::OnInitDialog()
 	for (int i = 0; i <= 7; i++) {
 		//strName.Format(_T("进程%d"), i);
 		strUserName.Format(_T("username"));//18个字符
-		strIP.Format(_T("192.168.1.1"));
+		strIP.Format(_T("192.168.001.001"));
 		//strAge.Format(_T("%d"), 20 + i);
 		m_userlist.InsertItem(i, _T(""));                          // 插入行  
 		m_userlist.SetItemText(i, 0, strUserName);                     // 设置第2列 
@@ -205,8 +241,8 @@ BOOL CMainDlg::OnInitDialog()
 
 	//初始化进程信息列表
 	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);      // 整行选择、网格线  
-	m_list.InsertColumn(0, _T("进程名"), LVCFMT_LEFT, 140);       //插入列
-	m_list.InsertColumn(1, _T("进程ID"), LVCFMT_LEFT, 80); 
+	m_list.InsertColumn(0, _T("进程名"), LVCFMT_LEFT, 150);       //插入列
+	m_list.InsertColumn(1, _T("进程ID"), LVCFMT_LEFT, 78); 
 
 	CFont *font2;
 	font2 = new CFont();
