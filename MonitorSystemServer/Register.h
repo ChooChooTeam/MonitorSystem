@@ -1,6 +1,6 @@
 #pragma once
 #include "afxwin.h"
-
+#include "Adosql.h"
 
 // Register 对话框
 
@@ -28,4 +28,5 @@ public:
 	afx_msg void OnBnClickedButtonCancel();
 	// 选择用户还是管理员的下拉框
 	CComboBox combox;
+	Adosql sql;
 };
