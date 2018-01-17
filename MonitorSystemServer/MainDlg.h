@@ -35,6 +35,8 @@ private:
 	SerCtrl* mSerCtrl;
 	LstnSocket* LSocket;
 	POINT old;//原始客户端长、宽
+	CRect old_bt1;
+	CRect old_static5;
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_MAIN_DIALOG };
