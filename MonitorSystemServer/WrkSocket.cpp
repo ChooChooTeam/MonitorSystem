@@ -146,9 +146,7 @@ void WrkSocket::OnReceive(int nErrorCode)
 		UserInfoStr* info = (UserInfoStr*)msgR->buff;
 		msgS->op = USER_RETURN;
 		msgS->mSize = 4;
-		// MyTODO: ÐÞ¸Ä
-		//msgS->buff[0] = ctrler.DoQuary(CString(info->name), CString(info->pwd));
-		msgS->buff[0] = 1;
+		msgS->buff[0] = ctrler.DoQuary(CString(info->name), CString(info->pwd));
 		Send(msgS, sizeof(InfoPack));
 
 	}

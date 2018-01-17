@@ -23,7 +23,6 @@ void Adosql::OnInitADOConn()
 		m_pConnection.CreateInstance("ADODB.Connection");
 		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=UserInfo;Data Source=LAPTOP-LTK0NPPQ";
 		m_pConnection->Open(strConnect, "", "", adModeUnknown);
-		AfxMessageBox(_T("数据库连接成功"));
 	}
 	catch (_com_error e)
 	{

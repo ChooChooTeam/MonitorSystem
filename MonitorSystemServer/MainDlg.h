@@ -59,4 +59,5 @@ public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	// 显示当前的用户
 	CString CurrUserName;
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

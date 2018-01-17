@@ -188,6 +188,7 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
 	ON_NOTIFY(NM_CLICK, IDC_LIST4, &CMainDlg::OnNMClickList4)
 	ON_MESSAGE(CM_RECEIVED, &CMainDlg::OnReceived)
 	ON_WM_SIZE()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -273,6 +274,7 @@ BOOL CMainDlg::OnInitDialog()
 	LSocket = new LstnSocket(*mSerCtrl);
 	LSocket->Listen(8848);
 
+	SetTimer(1, 5000, nullptr);
 
 	//获取本机IP
 	//hostent* phost = gethostbyname("");
@@ -318,9 +320,9 @@ BOOL CMainDlg::OnInitDialog()
 
 afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 {
-	CString ss;
-	ss.Format(_T("消息: 回调一次\n"));
-	OutputDebugString(ss);
+	//CString ss;
+	//ss.Format(_T("消息: 回调一次\n"));
+	//OutputDebugString(ss);
 
 	//接收数据
 	BYTE* buffer = new BYTE[MAX_BUFF];
@@ -388,7 +390,8 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 
 void CMainDlg::OnBnClickedButton3()
 {
-	
+	// 刷新速度 >= 3s
+	LSocket->SendControl(LSocket->GetCurrName(), PROGRESS);
 }
 
 
@@ -420,3 +423,12 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 }
 
 
+
+
+void CMainDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	if (!CurrUserName.IsEmpty()) {
+		// LSocket->SendControl(CurrUserName, PROGRESS);
+	}
+	CDialogEx::OnTimer(nIDEvent);
+}

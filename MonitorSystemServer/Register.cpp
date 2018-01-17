@@ -98,8 +98,11 @@ void Register::OnBnClickedButtonRegister()
 	else
 		//MessageBox(_T("管理员u"));
 	{
-		if (!sql.queryAdmin(username, password))
+		if (!sql.queryAdmin(username, password)) {
 			sql.insertAdmin(username, password);
+			MessageBox(_T("注册成功！"));
+		}
+			
 		else
 		{
 			MessageBox(_T("用户名已存在,请重新输入用户名"));
