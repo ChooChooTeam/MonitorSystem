@@ -191,6 +191,7 @@
     <ClInclude Include="BPowerM.h" />
     <ClInclude Include="BProcessM.h" />
     <ClInclude Include="Controler.h" />
+    <ClInclude Include="Dbctrl.h" />
     <ClInclude Include="DIALOG1.h" />
     <ClInclude Include="MonitorSystemClient.h" />
     <ClInclude Include="MonitorSystemClientDlg.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="BPowerM.cpp" />
     <ClCompile Include="BProcessM.cpp" />
     <ClCompile Include="Controler.cpp" />
+    <ClCompile Include="Dbctrl.cpp" />
     <ClCompile Include="DIALOG1.cpp" />
     <ClCompile Include="MonitorSystemClient.cpp" />
     <ClCompile Include="MonitorSystemClientDlg.cpp" />

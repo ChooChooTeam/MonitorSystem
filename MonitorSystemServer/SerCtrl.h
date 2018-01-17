@@ -14,6 +14,7 @@ public:
 	void DoOffLine(std::vector<CString> nameList, CString offlineName);
 	bool DoQuary(CString name, CString pwd);
 	void DoQuaryReturn(bool rtn);
+	void DoProgress(CString name[], short PID[], int num);
 	virtual ~SerCtrl();
 private:
 	CMainDlg * dlg;

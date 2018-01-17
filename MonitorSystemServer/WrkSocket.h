@@ -18,6 +18,7 @@ enum WsOp
 	USER_INFO = 0x21,	// 将要发送用户信息(用户名和密码)
 	USER_RETURN = 0x22,	// 将要发送用户信息核对结果(客户端登录)
 	PROGRESS = 0x23,	// 将要发送进程信息
+	PROGRESS_RTN = 0x25,// 返回进程信息
 	JPGE = 0x24,		// 将要发送图片信息
 };
 
@@ -44,10 +45,9 @@ struct ProgressInfo {
 class WrkSocket : public CAsyncSocket
 {
 public:
-	// 客户端构造函数
-	WrkSocket(IControler& con,CString username);
-	// 服务器端构造函数
-	WrkSocket(IControler& con, CString username, LstnSocket* parent);
+	
+	WrkSocket(IControler& con,CString username); // 客户端构造函数
+	WrkSocket(IControler& con, CString username, LstnSocket* parent); // 服务器端构造函数
 	void Connect(CString sIp, int nPort);	// 连接
 	virtual ~WrkSocket();
 	virtual void OnClose(int nErrorCode);
@@ -57,18 +57,20 @@ public:
 	void SendUserInfo(CString name, CString pwdMD5);
 	void SendControl(WsOp op);			// 发送控制信息
 	void SendProgress(ProgressInfo p[], int num);
-	//void SendJPGE(char* jpg, int size);	// 发送图片信息
 
 	const CString& GetName();
 
 private:
-	CString name;		//套接字对应的用户名
-	IControler & ctrler;
-	LstnSocket* pParent;
+	CString name;			// 套接字对应的用户名
+	IControler & ctrler;	// 回调控制器
+	LstnSocket* pParent;	// 服务器套接字
 
-	int jpgBeg = 0;
-	InfoPack* msgS;
-	InfoPack* msgR;
-	char* jpgBuf;
+	InfoPack* msgS;			// 发送缓冲区
+	InfoPack* msgR;			// 接受缓冲区
+
+	ProgressInfo* progressBuff;	// 进程信息缓冲区
+	CString* names;				// 进程用户名
+	short* PIDs;				// 进程PID
+	
 };
 
