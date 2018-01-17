@@ -244,7 +244,7 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 
 void CMainDlg::OnBnClickedButton3()
 {
-	
+	LSocket->SendControl(LSocket->GetCurrName(), PROGRESS);
 }
 
 
