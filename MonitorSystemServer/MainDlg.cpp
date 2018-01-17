@@ -232,12 +232,21 @@ BOOL CMainDlg::OnInitDialog()
 
 
 	//获取本机IP
-	hostent* phost = gethostbyname("");
-	char* localIP = inet_ntoa(*(struct in_addr *)*phost->h_addr_list);
+	//hostent* phost = gethostbyname("");
+	//char* localIP = inet_ntoa(*(struct in_addr *)*phost->h_addr_list);
 	sockaddr_in addr;
 	addr.sin_family = AF_INET;
-	addr.sin_addr.S_un.S_addr = inet_addr("192.168.1.101");
-	addr.sin_port = htons(5002);
+
+	// 获取配置文件的本机IP地址
+	USES_CONVERSION;
+	WCHAR localIP[MAX_PATH] = { 0 };
+	GetPrivateProfileString(_T("ServerInfo"), _T("LocalIP"), _T("127.0.0.1"), localIP, MAX_PATH, _T("./Client.ini"));
+	addr.sin_addr.S_un.S_addr = inet_addr(T2A(localIP));
+	
+	// 获得监听端口
+	int nPort = GetPrivateProfileInt(_T("ServerInfo"), _T("IP"), 5002, _T("./Client.ini"));
+	addr.sin_port = htons(nPort);
+	
 	//创建套接字
 	m_Socket = socket(AF_INET, SOCK_DGRAM, 0);
 	if (m_Socket == INVALID_SOCKET)
@@ -343,7 +352,7 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 
 void CMainDlg::OnBnClickedButton3()
 {
-	ShowJPEG(nullptr, 0);
+	
 }
 
 

@@ -79,38 +79,13 @@ void CDIALOG1::OnBnClickedButton7()
 
 void CDIALOG1::OnBnClickedButton4()
 {
-	BProcessM::showAllProcess();
+	ProgressInfo * info = new ProgressInfo[100];
+	int len = 0;
+	BProcessM::showAllProcess(info,&len);
+
+
 }
 
-//int GetCodecClsid(const WCHAR* format, CLSID* pClsid)
-//{
-//	UINT  num = 0;
-//	UINT  size = 0;
-//
-//	ImageCodecInfo* pImageCodecInfo = NULL;
-//	GetImageEncodersSize(&num, &size);
-//	if (size == 0)
-//		return -1;
-//
-//	pImageCodecInfo = new ImageCodecInfo[size];
-//	if (pImageCodecInfo == NULL)
-//	{
-//		delete[]pImageCodecInfo;
-//		return -1;
-//	}
-//	GetImageEncoders(num, size, pImageCodecInfo);
-//	for (UINT j = 0; j < num; ++j)
-//	{
-//		if (wcscmp(pImageCodecInfo[j].MimeType, format) == 0)
-//		{
-//			*pClsid = pImageCodecInfo[j].Clsid;
-//			delete[] pImageCodecInfo;
-//			return j;
-//		}
-//	}
-//	delete[] pImageCodecInfo;
-//	return -1;
-//}
 
 
 //for server
@@ -144,6 +119,9 @@ void CDIALOG1::ShowJPEG(void* pData, int DataSize)
 
 void CDIALOG1::OnOK()
 {
+	if (!m_IsSendingJpeg) {
+		return;
+	}
 	
 	CDC* pDeskDC = GetDesktopWindow()->GetDC();		//获取桌面画布对象
 	CRect rc;
@@ -338,12 +316,12 @@ void CDIALOG1::OnBnClickedButton1()
 
 
 
-	//Controler * controler = new Controler();
-	//WrkSocket * w;
-	//w = new WrkSocket(*controler, _T("sdds"));
-	//controler->setSocket(w);
-	//w->Connect(_T("192.168.1.101"), 8848);
-	BScreenM* b = new BScreenM(this);
+	Controler * controler = new Controler(this);
+	WrkSocket * w;
+	w = new WrkSocket(*controler, _T("sdds"));
+	controler->setSocket(w);
+	w->Connect(_T("192.168.1.101"), 8848);
+	//BScreenM* b = new BScreenM(this);
 	//b->runThreading();
 	//SetTimer(1, 50, TimerProc);
 }
@@ -412,11 +390,11 @@ BOOL CDIALOG1::OnInitDialog()
 	WSAAsyncSelect(m_Socket, m_hWnd, CM_RECEIVED, FD_READ);
 	m_Confirm = TRUE;
 
-	OnOK();
+//	OnOK();
 	m_Received = FALSE;
 	m_Counter = 0;
 	SetTimer(1, 200, NULL);
-
+	m_IsSendingJpeg = false;
 	// TODO:  在此添加额外的初始化
 
 	return TRUE;  // return TRUE unless you set the focus to a control

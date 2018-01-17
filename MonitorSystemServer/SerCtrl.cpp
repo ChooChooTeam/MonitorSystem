@@ -38,7 +38,22 @@ void SerCtrl::DoOffLine(std::vector<CString> nameList, CString offlineName)
 	}
 }
 
+bool SerCtrl::DoQuary(CString name, CString pwd)
+{
+	if (mAdo == nullptr) {
+		mAdo = new Adosql;
+	}
+
+	return mAdo->queryClient(name, pwd);
+}
+
+void SerCtrl::DoQuaryReturn(bool rtn)
+{
+	// 此处执行返回结果
+}
+
 
 SerCtrl::~SerCtrl()
 {
+	delete mAdo;
 }

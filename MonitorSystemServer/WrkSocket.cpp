@@ -150,6 +150,12 @@ void WrkSocket::OnReceive(int nErrorCode)
 		}
 	}
 	else if (op == USER_INFO) {
+		UserInfoStr* info = (UserInfoStr*)msgR->buff;
+		msgS->op = USER_RETURN;
+		msgS->mSize = 4;
+		msgS->buff[0] = ctrler.DoQuary(CString(info->name), CString(info->pwd));
+
+		Send(msgS, sizeof(InfoPack));
 
 	}
 	else if (op == USER_RETURN) {
@@ -162,11 +168,19 @@ void WrkSocket::OnReceive(int nErrorCode)
 	CAsyncSocket::OnReceive(nErrorCode);
 }
 
-void WrkSocket::SendUserInfo(CString name, CString pwdMD5)
+void WrkSocket::SendUserInfo(CString name, CString pwd)
 {
-	//SendControl(USER_INFO);
-	//Send(name, name.GetLength() * sizeof(TCHAR));
-	//Send(pwdMD5, pwdMD5.GetLength() * sizeof(TCHAR));
+	msgS->op = USER_INFO;
+	msgS->mSize = sizeof(UserInfoStr);
+	UserInfoStr* info = (UserInfoStr*) msgS->buff;
+
+	USES_CONVERSION;
+	memcpy(info->name, T2A(name), sizeof(info->name));
+	info->name[sizeof(info->name)] = '\0';
+	memcpy(info->pwd, T2A(pwd), sizeof(info->pwd));
+	info->pwd[sizeof(info->pwd)] = '\0';
+
+	Send(msgS, sizeof(InfoPack));
 }
 
 void WrkSocket::SendControl(WsOp op)
@@ -182,51 +196,61 @@ void WrkSocket::SendControl(WsOp op)
 	}
 }
 
-//void WrkSocket::SendControl(WsOp op)
-//{
-//	Send(&op, sizeof(WsOp));
-//}
-#define SLEEPT 100
-void WrkSocket::SendJPGE(char * jpg, int size)
+void WrkSocket::SendProgress(ProgressInfo p[], int num)
 {
-	const int maxSize = _JPGE_MAX_SIZE_;
-	msgS->op = JPGE;
-	msgS->mSize = maxSize;
-	int jpgBeg = 0;
-	while (size > maxSize)
-	{
-		msgS->isEnd = false;
-		memcpy(msgS->buff, jpg+jpgBeg, maxSize);
-		Sleep(SLEEPT);
-		int n = Send(msgS, sizeof(InfoPack));
-		CString ss;
-		while (n == -1) {
-			Sleep(50);
-			int err = GetLastError();
-			ss.Format(_T("err = %d\n"),err);
-			n = Send(msgS, sizeof(InfoPack));
-			OutputDebugString(ss);
-		}
-		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
-		OutputDebugString(ss);
+	int size = num * sizeof(ProgressInfo);
+	int max = size > _JPGE_MAX_SIZE_ ? _JPGE_MAX_SIZE_ : size;
 
-		size = size - maxSize;
-		jpgBeg += maxSize;
-	}
+	memcpy(msgS->buff, p, max);
+	msgS->op = PROGRESS;
+	msgS->mSize = max;
 
-	if (size != 0) {
-		Sleep(SLEEPT);
-		msgS->isEnd = true;
-		msgS->mSize = size;
-		memcpy(msgS->buff, jpg + jpgBeg, size);
-		int n = Send(msgS, sizeof(InfoPack));
-	
-		CString ss;
-		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
-		OutputDebugString(ss);
-	}
-	delete jpg;
+	Send(msgS, sizeof(InfoPack));
+
 }
+
+
+//#define SLEEPT 100
+//void WrkSocket::SendJPGE(char * jpg, int size)
+//{
+//	const int maxSize = _JPGE_MAX_SIZE_;
+//	msgS->op = JPGE;
+//	msgS->mSize = maxSize;
+//	int jpgBeg = 0;
+//	while (size > maxSize)
+//	{
+//		msgS->isEnd = false;
+//		memcpy(msgS->buff, jpg+jpgBeg, maxSize);
+//		Sleep(SLEEPT);
+//		int n = Send(msgS, sizeof(InfoPack));
+//		CString ss;
+//		while (n == -1) {
+//			Sleep(50);
+//			int err = GetLastError();
+//			ss.Format(_T("err = %d\n"),err);
+//			n = Send(msgS, sizeof(InfoPack));
+//			OutputDebugString(ss);
+//		}
+//		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
+//		OutputDebugString(ss);
+//
+//		size = size - maxSize;
+//		jpgBeg += maxSize;
+//	}
+//
+//	if (size != 0) {
+//		Sleep(SLEEPT);
+//		msgS->isEnd = true;
+//		msgS->mSize = size;
+//		memcpy(msgS->buff, jpg + jpgBeg, size);
+//		int n = Send(msgS, sizeof(InfoPack));
+//	
+//		CString ss;
+//		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
+//		OutputDebugString(ss);
+//	}
+//	delete jpg;
+//}
 
 const CString& WrkSocket::GetName()
 {

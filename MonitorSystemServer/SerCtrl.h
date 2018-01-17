@@ -1,5 +1,6 @@
 #pragma once
 #include "IControler.h"
+#include "Adosql.h"
 
 class CMainDlg;
 
@@ -11,8 +12,11 @@ public:
 	void DoJPG(char* jpg, int size);  // Ö´ÐÐÍ¼Æ¬
 	void DoOnLine(std::vector<CString> nameList);
 	void DoOffLine(std::vector<CString> nameList, CString offlineName);
+	bool DoQuary(CString name, CString pwd);
+	void DoQuaryReturn(bool rtn);
 	virtual ~SerCtrl();
 private:
 	CMainDlg * dlg;
+	Adosql* mAdo;
 };
 
