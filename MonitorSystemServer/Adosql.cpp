@@ -145,13 +145,13 @@ bool Adosql::insertAdmin(CString str1, CString str2)
 	}
 	catch (_com_error &e)
 	{
-		CString str;
+		/*CString str;
 		str.Format(e.Description());
-		AfxMessageBox((str));
+		AfxMessageBox((str));*/
 		
 		m_pRecordset->Close();
 		m_pRecordset->Release();
-		AfxMessageBox(e.Description());
+		/*AfxMessageBox(e.Description());*/
 		return false;
 	}
 	

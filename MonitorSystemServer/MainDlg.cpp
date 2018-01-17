@@ -174,12 +174,12 @@ BOOL CMainDlg::OnInitDialog()
 	old.y = rect.bottom - rect.top;
 
 	//设置字体
-	CFont *fo;
+	/*CFont *fo;
 	fo = new CFont();
 	fo->CreatePointFont(90, _T("Times New Roman"));
 	GetDlgItem(IDC_STATIC1)->SetFont(fo);
 	GetDlgItem(IDC_STATIC2)->SetFont(fo);
-	GetDlgItem(IDC_STATIC3)->SetFont(fo);
+	GetDlgItem(IDC_STATIC3)->SetFont(fo);*/
 
 
 	//初始化用户信息列表
