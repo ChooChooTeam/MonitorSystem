@@ -29,4 +29,5 @@ public:
 	// 选择用户还是管理员的下拉框
 	CComboBox combox;
 	Adosql sql;
+	afx_msg void OnClose();
 };

@@ -7,19 +7,9 @@ SerCtrl::SerCtrl(CMainDlg * dlg)
 	this->dlg = dlg;
 }
 
-void SerCtrl::DoCmd(WsOp op)
-{
-}
 
-void SerCtrl::DoJPG(char * jpg, int size)
+void SerCtrl::DoOnLine(std::vector<CString> nameList, std::vector<CString> IPList)
 {
-	OutputDebugString(_T("Get jpg"));
-	dlg->ShowJPEG(jpg, size);
-}
-
-void SerCtrl::DoOnLine(std::vector<CString> nameList, std::vector<SOCKADDR> IPList)
-{
-	//MyTODO: 注意,上线的同时还要通知更新当前UI
 	dlg->m_userlist.DeleteAllItems();
 	
 	for (unsigned int i = 0; i < nameList.size(); i++) {
@@ -27,7 +17,7 @@ void SerCtrl::DoOnLine(std::vector<CString> nameList, std::vector<SOCKADDR> IPLi
 		if (nameList[i].Compare(_T("db")) != 0) {
 			dlg->m_userlist.InsertItem(i, nameList[i]);
 			dlg->m_userlist.SetItemText(i, 0, nameList[i]);
-			dlg->m_userlist.SetItemText(i, 1, CString(IPList[i].sa_data));
+			dlg->m_userlist.SetItemText(i, 1, IPList[i]);
 		}
 	}
 }
@@ -51,11 +41,6 @@ bool SerCtrl::DoQuary(CString name, CString pwd)
 	return mAdo->queryClient(name, pwd);
 }
 
-void SerCtrl::DoQuaryReturn(bool rtn)
-{
-	// 此处执行返回结果
-}
-
 void SerCtrl::DoProgress(CString name[], short PID[], int num)
 {
 	dlg->m_list.DeleteAllItems();
@@ -68,6 +53,12 @@ void SerCtrl::DoProgress(CString name[], short PID[], int num)
 	}
 }
 
+void SerCtrl::DoActivate(CString name, CString IP)
+{
+	dlg->setCurrIP(IP);
+	dlg->CurrUserName = name;
+	dlg->UpdateData(FALSE);
+}
 
 SerCtrl::~SerCtrl()
 {
