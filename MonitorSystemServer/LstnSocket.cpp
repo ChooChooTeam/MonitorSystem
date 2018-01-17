@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "LstnSocket.h"
 #include "IControler.h"
+#include "SerCtrl.h"
 
-LstnSocket::LstnSocket(IControler& con):
+LstnSocket::LstnSocket(IControler & con):
 	ctrler(con)
 {
 
@@ -106,16 +107,20 @@ void LstnSocket::SendControl(CString name, WsOp op)
 bool LstnSocket::Activate(CString name)
 {
 	currName = name;
+	CString IP;
 	bool done = false;
 	for (auto&w : vecWrk) {
 		if (w->GetName() == currName) {
 			w->SendControl(RESUME);
+			IP = w->mIP;
 			done = true;
 		}
 		else {
 			w->SendControl(STOP);
 		}
 	}
+
+	ctrler.DoActivate(name,IP);
 
 	return done;
 }

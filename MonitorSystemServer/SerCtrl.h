@@ -15,9 +15,11 @@ public:
 	bool DoQuary(CString name, CString pwd);
 	void DoQuaryReturn(bool rtn) {};
 	void DoProgress(CString name[], short PID[], int num);
+	void DoActivate(CString name, CString IP);
 	virtual ~SerCtrl();
-private:
+
 	CMainDlg * dlg;
+private:
 	Adosql* mAdo;
 };
 

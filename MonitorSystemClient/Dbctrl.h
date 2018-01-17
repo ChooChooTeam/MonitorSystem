@@ -1,5 +1,5 @@
 #pragma once
-//#include "stdafx.h"
+#include "stdafx.h"
 #include "..\MonitorSystemServer\IControler.h"
 #include "DIALOG1.h"
 class CMonitorSystemClientDlg;
@@ -7,7 +7,7 @@ class Dbctrl :
 	public IControler
 {
 public:
-	//Dbctrl();
+	
 	Dbctrl(CMonitorSystemClientDlg * p);
 	~Dbctrl();
 	void DoCmd(WsOp op) { };
@@ -17,6 +17,7 @@ public:
 	bool DoQuary(CString name, CString pwd) { return true; };		
 	void DoQuaryReturn(bool rtn);
 	virtual void DoProgress(CString name[], short PID[], int num)  {};
+	void DoActivate(CString name, CString IP) {};
 
 private:
 	CMonitorSystemClientDlg * mscd;

@@ -10,7 +10,6 @@ SerCtrl::SerCtrl(CMainDlg * dlg)
 
 void SerCtrl::DoOnLine(std::vector<CString> nameList, std::vector<CString> IPList)
 {
-	//MyTODO: 注意,上线的同时还要通知更新当前UI
 	dlg->m_userlist.DeleteAllItems();
 	
 	for (unsigned int i = 0; i < nameList.size(); i++) {
@@ -54,6 +53,12 @@ void SerCtrl::DoProgress(CString name[], short PID[], int num)
 	}
 }
 
+void SerCtrl::DoActivate(CString name, CString IP)
+{
+	dlg->setCurrIP(IP);
+	dlg->CurrUserName = name;
+	dlg->UpdateData(FALSE);
+}
 
 SerCtrl::~SerCtrl()
 {
