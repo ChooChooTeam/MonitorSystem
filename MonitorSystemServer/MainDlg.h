@@ -48,7 +48,7 @@ private:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 	DECLARE_MESSAGE_MAP()
-	void reSize();
+	void maxSize();
 public:
 	CListCtrl m_list;
 	virtual BOOL OnInitDialog();
