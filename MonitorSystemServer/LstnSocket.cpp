@@ -28,16 +28,16 @@ void LstnSocket::OnAccept(int nErrorCode)
 {
 	SOCKADDR_IN sockaddr_in;
 	int sockaddr_in_len = sizeof(sockaddr_in);
-	CString tmpIP;
-
+	
 	WrkSocket* wrk = new WrkSocket(ctrler,nullptr,this);
 	vecWrk.push_back(wrk);
-	// MyTODO: 修改接口
+	
 	Accept(*wrk, (SOCKADDR*)&sockaddr_in,&sockaddr_in_len);
-	tmpIP.Format(_T("%d.%d.%d.%d"), sockaddr_in.sin_addr.S_un.S_un_b.s_b1,
+	wrk->mIP.Format(_T("%d.%d.%d.%d"), sockaddr_in.sin_addr.S_un.S_un_b.s_b1,
 		sockaddr_in.sin_addr.S_un.S_un_b.s_b2,
 		sockaddr_in.sin_addr.S_un.S_un_b.s_b3,
 		sockaddr_in.sin_addr.S_un.S_un_b.s_b4);
+
 	CAsyncSocket::OnAccept(nErrorCode);
 }
 
@@ -53,7 +53,7 @@ void LstnSocket::OnClose(int nErrorCode)
 void LstnSocket::NewOnLine()
 {
 	std::vector<CString> vecName;
-	std::vector<SOCKADDR> vecIP;
+	std::vector<CString> vecIP;
 	for (auto&w : vecWrk) {
 		// 只放入已经有名字的Socket
 		if (w->GetName().Compare(_T("")) != 0) {
@@ -61,7 +61,7 @@ void LstnSocket::NewOnLine()
 			vecIP.push_back(w->mIP);
 		}
 	}
-	//ctrler.DoOnLine(vecName,vecIP);
+	ctrler.DoOnLine(vecName,vecIP);
 }
 
 void LstnSocket::NewOffLine(CString name)

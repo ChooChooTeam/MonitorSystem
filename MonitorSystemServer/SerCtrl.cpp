@@ -7,15 +7,6 @@ SerCtrl::SerCtrl(CMainDlg * dlg)
 	this->dlg = dlg;
 }
 
-void SerCtrl::DoCmd(WsOp op)
-{
-}
-
-void SerCtrl::DoJPG(char * jpg, int size)
-{
-	OutputDebugString(_T("Get jpg"));
-	dlg->ShowJPEG(jpg, size);
-}
 
 void SerCtrl::DoOnLine(std::vector<CString> nameList, std::vector<CString> IPList)
 {
@@ -27,7 +18,7 @@ void SerCtrl::DoOnLine(std::vector<CString> nameList, std::vector<CString> IPLis
 		if (nameList[i].Compare(_T("db")) != 0) {
 			dlg->m_userlist.InsertItem(i, nameList[i]);
 			dlg->m_userlist.SetItemText(i, 0, nameList[i]);
-			//dlg->m_userlist.SetItemText(i, 1, CString(IPList[i].sa_data));
+			dlg->m_userlist.SetItemText(i, 1, IPList[i]);
 		}
 	}
 }
@@ -49,11 +40,6 @@ bool SerCtrl::DoQuary(CString name, CString pwd)
 	}
 
 	return mAdo->queryClient(name, pwd);
-}
-
-void SerCtrl::DoQuaryReturn(bool rtn)
-{
-	// 此处执行返回结果
 }
 
 void SerCtrl::DoProgress(CString name[], short PID[], int num)
