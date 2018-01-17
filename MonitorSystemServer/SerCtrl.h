@@ -10,7 +10,7 @@ public:
 	SerCtrl(CMainDlg* dlg);
 	void DoCmd(WsOp op);		// 执行控制指令	
 	void DoJPG(char* jpg, int size);  // 执行图片
-	virtual void DoOnLine(std::vector<CString> nameList, std::vector<SOCKADDR> IPList);
+	virtual void DoOnLine(std::vector<CString> nameList, std::vector<CString> IPList);
 	void DoOffLine(std::vector<CString> nameList, CString offlineName);
 	bool DoQuary(CString name, CString pwd);
 	void DoQuaryReturn(bool rtn);

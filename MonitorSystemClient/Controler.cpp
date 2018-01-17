@@ -58,7 +58,7 @@ void Controler::DoJPG(char * jpg, int size)
 {
 }
 
-void Controler::DoOnLine(std::vector<CString> nameList, std::vector<SOCKADDR> IPList)
+void Controler::DoOnLine(std::vector<CString> nameList, std::vector<CString> IPList)
 {
 }
 
