@@ -2,7 +2,7 @@
 class IControler;
 class LstnSocket;
 
-#define _JPGE_MAX_SIZE_  4*1024 - 4*3
+#define _JPGE_MAX_SIZE_  (2*1024 - 4*3)
 
 enum WsOp
 {
@@ -34,6 +34,11 @@ struct UserInfoStr {
 	char pwd[33];
 };
 
+struct ProgressInfo {
+	char name[18];
+	short ID;
+};
+
 // 工作Socket
 // 客户端可使用此Socket向服务器端通讯
 class WrkSocket : public CAsyncSocket
@@ -51,7 +56,8 @@ public:
 
 	void SendUserInfo(CString name, CString pwdMD5);
 	void SendControl(WsOp op);			// 发送控制信息
-	void SendJPGE(char* jpg, int size);	// 发送图片信息
+	void SendProgress(ProgressInfo p[], int num);
+	//void SendJPGE(char* jpg, int size);	// 发送图片信息
 
 	const CString& GetName();
 
@@ -60,14 +66,9 @@ private:
 	IControler & ctrler;
 	LstnSocket* pParent;
 
-	//int mSize;
-	//char* jpgBuff;
-
 	int jpgBeg = 0;
-
 	InfoPack* msgS;
 	InfoPack* msgR;
-
 	char* jpgBuf;
 };
 
