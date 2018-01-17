@@ -26,9 +26,18 @@ LstnSocket::~LstnSocket()
 
 void LstnSocket::OnAccept(int nErrorCode)
 {
+	SOCKADDR_IN sockaddr_in;
+	int sockaddr_in_len = sizeof(sockaddr_in);
+	CString tmpIP;
+
 	WrkSocket* wrk = new WrkSocket(ctrler,nullptr,this);
 	vecWrk.push_back(wrk);
-	Accept(*wrk,&(wrk->mIP));
+	// MyTODO: ÐÞ¸Ä½Ó¿Ú
+	Accept(*wrk, (SOCKADDR*)&sockaddr_in,&sockaddr_in_len);
+	tmpIP.Format(_T("%d.%d.%d.%d"), sockaddr_in.sin_addr.S_un.S_un_b.s_b1,
+		sockaddr_in.sin_addr.S_un.S_un_b.s_b2,
+		sockaddr_in.sin_addr.S_un.S_un_b.s_b3,
+		sockaddr_in.sin_addr.S_un.S_un_b.s_b4);
 	CAsyncSocket::OnAccept(nErrorCode);
 }
 
@@ -52,7 +61,7 @@ void LstnSocket::NewOnLine()
 			vecIP.push_back(w->mIP);
 		}
 	}
-	ctrler.DoOnLine(vecName,vecIP);
+	//ctrler.DoOnLine(vecName,vecIP);
 }
 
 void LstnSocket::NewOffLine(CString name)
