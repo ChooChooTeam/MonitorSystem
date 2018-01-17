@@ -105,7 +105,7 @@ void CMainDlg::reSize()
 			TLPoint.y = long(OldTLPoint.y);
 			OldBRPoint = Rect.BottomRight();   //控件右下角
 			BRPoint.x = long(OldBRPoint.x);//新控件中右下角位置
-			BRPoint.y = long(OldBRPoint.y *1.8);
+			BRPoint.y = long(OldBRPoint.y *1.7);
 		}
 		else if (woc == IDC_PIC) {//长度宽度都增加
 			OldTLPoint = Rect.TopLeft();  //控件左上角
@@ -113,7 +113,7 @@ void CMainDlg::reSize()
 			TLPoint.y = long(OldTLPoint.y);
 			OldBRPoint = Rect.BottomRight();   //控件右下角
 			BRPoint.x = long(OldBRPoint.x *fsp[0]);//新控件中右下角位置
-			BRPoint.y = long(OldBRPoint.y *1.8);
+			BRPoint.y = long(OldBRPoint.y *1.7);
 		}
 		else if (woc == IDC_STATIC4) {
 			OldTLPoint = Rect.TopLeft();  //控件左上角
