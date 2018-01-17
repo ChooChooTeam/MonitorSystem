@@ -37,8 +37,16 @@ class CDIALOG1 : public CDialogEx
 	BOOL    m_Received;		//是否接收到服务器发来的确认信息
 	int     m_Counter;		//记数器
 	DWORD	m_JpegSize;		//JPEG数据总大小
-
+	int m_IsSendingJpeg;
 public:
+	void startJpeg() {
+		m_IsSendingJpeg = true;
+		OnOK();
+
+	}
+	void stopJpeg() {
+		m_IsSendingJpeg = false;
+	}
 	CDIALOG1(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CDIALOG1();
 
