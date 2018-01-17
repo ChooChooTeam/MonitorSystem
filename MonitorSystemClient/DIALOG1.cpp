@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(CDIALOG1, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON8, &CDIALOG1::OnBnClickedButton8)
 	ON_MESSAGE(CM_RECEIVED, &CDIALOG1::OnReceived)
 	ON_WM_TIMER()
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -312,10 +313,6 @@ void CDIALOG1::OnOK()
 void CDIALOG1::OnBnClickedButton1()
 {
 	//获取本机IP
-	
-
-
-
 	Controler * controler = new Controler(this);
 	WrkSocket * w;
 	WCHAR username[20];
@@ -401,7 +398,16 @@ BOOL CDIALOG1::OnInitDialog()
 	SetTimer(1, 200, NULL);
 	m_IsSendingJpeg = false;
 	// TODO:  在此添加额外的初始化
-
+	Controler * controler = new Controler(this);
+	
+	WCHAR username[20];
+	GetPrivateProfileString(_T("UserInfo"), _T("Name"), _T("noName"), username, 20, _T("./Server.ini"));
+	w = new WrkSocket(*controler, username);
+	controler->setSocket(w);
+	WCHAR ServerIP[20];
+	GetPrivateProfileString(_T("ServerInfo"), _T("IP"), _T("127.0.0.1"), ServerIP, MAX_PATH, _T("./Server.ini"));
+	int ServerPort = GetPrivateProfileInt(_T("ServerInfo"), _T("Port"), 5002, _T("./Server.ini"));
+	w->Connect(ServerIP, ServerPort);
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE
 }
@@ -425,4 +431,14 @@ void CDIALOG1::OnTimer(UINT_PTR nIDEvent)
 		m_Counter = 0;
 	}
 	CDialog::OnTimer(nIDEvent);
+}
+
+
+void CDIALOG1::OnClose()
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	w->Close();
+	exit(0);
+	CDialogEx::OnClose();
 }

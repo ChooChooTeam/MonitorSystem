@@ -38,6 +38,7 @@ class CDIALOG1 : public CDialogEx
 	int     m_Counter;		//记数器
 	DWORD	m_JpegSize;		//JPEG数据总大小
 	int m_IsSendingJpeg;
+	WrkSocket * w;
 public:
 	void startJpeg() {
 		m_IsSendingJpeg = true;
@@ -70,4 +71,5 @@ public:
 	afx_msg void OnBnClickedButton8();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnClose();
 };
