@@ -25,7 +25,7 @@ void Adosql::OnInitADOConn()
 	try
 	{
 		m_pConnection.CreateInstance("ADODB.Connection");
-		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=UserInfo;Data Source=WQ-PC";
+		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;User ID=Windows身份验证;Initial Catalog=UserInfo;Data Source=DESKTOP-90Q3P13";
 		m_pConnection->Open(strConnect, "", "", adModeUnknown);
 		AfxMessageBox(_T("数据库连接成功"));
 	}
@@ -141,7 +141,7 @@ bool Adosql::insertAdmin(CString str1, CString str2)
 		m_pRecordset->Update();
 		m_pRecordset->Close();
 		m_pRecordset->Release();
-
+		return true;
 	}
 	catch (_com_error &e)
 	{
@@ -156,7 +156,7 @@ bool Adosql::insertAdmin(CString str1, CString str2)
 	}
 	
 	
-	return true;
+	
 }
 
 /*
@@ -182,7 +182,7 @@ bool Adosql::insertClient(CString str1, CString str2)
 		m_pRecordset->Update();
 		m_pRecordset->Close();
 		m_pRecordset->Release();
-
+		return true;
 	}
 	catch (_com_error &e)
 	{
@@ -193,9 +193,9 @@ bool Adosql::insertClient(CString str1, CString str2)
 		return false;
 	}
 
-	m_pRecordset->Close();
-	m_pRecordset->Release();
-	return true;
+	
+
+	
 }
 
 /*
