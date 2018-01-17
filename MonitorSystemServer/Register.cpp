@@ -5,7 +5,7 @@
 #include "MonitorSystemServer.h"
 #include "Register.h"
 #include "afxdialogex.h"
-
+#include "Adosql.h"
 
 // Register 对话框
 
@@ -75,7 +75,11 @@ void Register::OnBnClickedButtonRegister()
 	//MessageBox( password);
     //MessageBox( type);
 
-
+	if (type = _T("用户"))
+		sql.insertClient(username, password);
+	else
+	sql.insertAdmin(username, password);
+	  
 
 
 }
@@ -155,6 +159,8 @@ BOOL Register::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	// TODO:  在此添加额外的初始化
+
+	sql.OnInitADOConn();
 
 	CEdit * name = ((CEdit*)GetDlgItem(IDC_EDIT1));
 	name->SetLimitText(16);  //最多十六个字符
