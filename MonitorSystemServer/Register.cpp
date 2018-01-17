@@ -80,20 +80,31 @@ void Register::OnBnClickedButtonRegister()
 
 
 	if (type == _T("用户"))  //	MessageBox(_T("用户"));
-		
+
 	{
-		
-			sql.insertClient(username, password);
+
+		if (sql.insertClient(username, password))
 			MessageBox(_T("注册成功！"));
-		
+		else
+		{
+			MessageBox(_T("注册失败，请重新输入用户名！"));
+			return;
+
+		}
 	}
 	else
 		//MessageBox(_T("管理员u"));
 	{
-		
-			sql.insertAdmin(username, password);
+
+		if (sql.insertAdmin(username, password))
 			MessageBox(_T("注册成功！"));
+		else
+		{
+			MessageBox(_T("注册失败，请重新输入用户名！"));
+			return;
+		}
 	}
+
 	  
 
 
