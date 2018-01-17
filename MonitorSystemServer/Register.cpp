@@ -75,10 +75,10 @@ void Register::OnBnClickedButtonRegister()
 	//MessageBox( password);
     //MessageBox( type);
 
-	//if (type = _T("用户"))
+	if (type = _T("用户"))
 		sql.insertClient(username, password);
-	//else
-		//sql.insertAdmin(username, password);
+	else
+	sql.insertAdmin(username, password);
 	  
 
 
