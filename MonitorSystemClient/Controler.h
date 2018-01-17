@@ -17,6 +17,7 @@ class Controler :public IControler{
 	 void DoOffLine(std::vector<CString> nameList, CString offlineName) ;
 	 virtual bool DoQuary(CString name, CString pwd) { return true; };		// 执行查询操作
 	 virtual void DoQuaryReturn(bool rtn) {};					// 执行查询返回操作
+	 virtual void DoProgress(CString name[], short PID[], int num) {};
 	~Controler();
 };
 

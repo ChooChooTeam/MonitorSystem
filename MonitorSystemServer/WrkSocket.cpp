@@ -4,17 +4,14 @@
 #include "LstnSocket.h"
 #include <Winsock2.h>
 
-//#include "Adosql.h"
-
-//const char ran[] = "0123456789";
 WrkSocket::WrkSocket(IControler& con, CString username) :
 	ctrler(con),name(username)
 {
 	msgS = new InfoPack;
 	msgR = new InfoPack;
-	jpgBuf = new char[256 * 1024];
-	//srand(time(NULL));
-	//name = name + CString(ran[rand() % 10]) + CString(ran[rand() % 10]);
+	progressBuff = new ProgressInfo[100];
+	names = new CString[100];
+	PIDs = new short[100];
 }
 
 WrkSocket::WrkSocket(IControler & con, CString username, LstnSocket * parent) :
@@ -22,7 +19,9 @@ WrkSocket::WrkSocket(IControler & con, CString username, LstnSocket * parent) :
 {
 	msgS = new InfoPack;
 	msgR = new InfoPack;
-	jpgBuf = new char[256 * 1024];
+	progressBuff = new ProgressInfo[100];
+	names = new CString[100];
+	PIDs = new short[100];
 }
 
 void WrkSocket::Connect(CString sIp, int nPort)
@@ -37,7 +36,9 @@ WrkSocket::~WrkSocket()
 {
 	delete msgS;
 	delete msgR;
-	delete jpgBuf;
+	delete[] progressBuff;
+	delete[] names;
+	delete[] PIDs;
 }
 
 void WrkSocket::OnClose(int nErrorCode)
@@ -56,7 +57,6 @@ void WrkSocket::OnConnect(int nErrorCode)
 	msgS->op = USER_NAME;
 	msgS->mSize = name.GetLength() * sizeof(TCHAR);
 	memcpy(msgS->buff, name.GetBuffer(),34);
-	//int n = sizeof(WsOp) + sizeof(int) + msgS->mSize;
 	Send(msgS, sizeof(InfoPack));
 	
 	CAsyncSocket::OnConnect(nErrorCode);
@@ -118,27 +118,20 @@ void WrkSocket::OnReceive(int nErrorCode)
 	
 	WsOp op = msgR->op;
 	if (op == SHUTDOWN || op == REBOOT || op == LOOK ||
-		op == UNLOOK || op == STOP || op == RESUME) {
+		op == UNLOOK || op == STOP || op == RESUME ||
+		op == PROGRESS) {
 		ctrler.DoCmd(op);
 	}
-	else if (op == JPGE) {
-		if (msgR->isEnd == false) {
-			memcpy(jpgBuf + jpgBeg, msgR->buff, msgR->mSize);
-			jpgBeg += msgR->mSize;
-			//FILE* f;
-			//fopen_s(&f, "a.bin", "a");
-			//fwrite(msgR, sizeof(InfoPack), 1, f);
-			//fclose(f);
-			//OutputDebugString(_T("写入\n"));
+	else if (op == PROGRESS_RTN) {
+		int size = msgR->mSize;
+		ProgressInfo* pInfo = (ProgressInfo*)msgR->buff;
+		
+		for (int i = 0; i < size; i++) {
+			names[i] = pInfo[i].name;
+			PIDs[i] = pInfo[i].ID;
 		}
-		else {
-			memcpy(jpgBuf + jpgBeg, msgR->buff, msgR->mSize);
-			ctrler.DoJPG(jpgBuf, jpgBeg+ msgR->mSize);
-			jpgBeg = 0;
-		}
-	}
-	else if (op == PROGRESS) {
-		//TODO: 后续的进程信息读取
+
+		ctrler.DoProgress(names, PIDs, size);		
 	}
 	else if (op == USER_NAME) {
 		msgR->buff[msgR->mSize] = '\0';
@@ -159,7 +152,7 @@ void WrkSocket::OnReceive(int nErrorCode)
 
 	}
 	else if (op == USER_RETURN) {
-
+		// 不会出现,不需要任何操作
 	}
 	else {
 		OutputDebugString(_T("未定义的指令"));
@@ -198,59 +191,16 @@ void WrkSocket::SendControl(WsOp op)
 
 void WrkSocket::SendProgress(ProgressInfo p[], int num)
 {
-	int size = num * sizeof(ProgressInfo);
-	int max = size > _JPGE_MAX_SIZE_ ? _JPGE_MAX_SIZE_ : size;
+	int max = _JPGE_MAX_SIZE_ % sizeof(ProgressInfo);
+	max = num > max ? max : num;
 
-	memcpy(msgS->buff, p, max);
-	msgS->op = PROGRESS;
+	memcpy(msgS->buff, p, max * sizeof(ProgressInfo));
+	msgS->op = PROGRESS_RTN;
 	msgS->mSize = max;
 
 	Send(msgS, sizeof(InfoPack));
 
 }
-
-
-//#define SLEEPT 100
-//void WrkSocket::SendJPGE(char * jpg, int size)
-//{
-//	const int maxSize = _JPGE_MAX_SIZE_;
-//	msgS->op = JPGE;
-//	msgS->mSize = maxSize;
-//	int jpgBeg = 0;
-//	while (size > maxSize)
-//	{
-//		msgS->isEnd = false;
-//		memcpy(msgS->buff, jpg+jpgBeg, maxSize);
-//		Sleep(SLEEPT);
-//		int n = Send(msgS, sizeof(InfoPack));
-//		CString ss;
-//		while (n == -1) {
-//			Sleep(50);
-//			int err = GetLastError();
-//			ss.Format(_T("err = %d\n"),err);
-//			n = Send(msgS, sizeof(InfoPack));
-//			OutputDebugString(ss);
-//		}
-//		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
-//		OutputDebugString(ss);
-//
-//		size = size - maxSize;
-//		jpgBeg += maxSize;
-//	}
-//
-//	if (size != 0) {
-//		Sleep(SLEEPT);
-//		msgS->isEnd = true;
-//		msgS->mSize = size;
-//		memcpy(msgS->buff, jpg + jpgBeg, size);
-//		int n = Send(msgS, sizeof(InfoPack));
-//	
-//		CString ss;
-//		ss.Format(_T("发送: 指令为%d 长度为%d 实际发送长度为%d\n"), msgS->op, msgS->mSize, n);
-//		OutputDebugString(ss);
-//	}
-//	delete jpg;
-//}
 
 const CString& WrkSocket::GetName()
 {

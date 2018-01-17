@@ -50,6 +50,7 @@ void Controler::DoCmd(WsOp op)
 	default:
 		break;
 	}
+	delete []info;
 
 }
 
