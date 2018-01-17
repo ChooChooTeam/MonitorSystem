@@ -17,8 +17,9 @@ void Dbctrl::DoCmd(WsOp op)
 void Dbctrl::DoJPG(char* jpg, int size)
 {
 }
-void Dbctrl::DoOnLine(std::vector<CString> nameList)
+void Dbctrl::DoOnLine(std::vector<CString> nameList, std::vector<SOCKADDR> IPList)
 {
+
 }
 
 void Dbctrl::DoOffLine(std::vector<CString> nameList, CString offlineName)
@@ -33,6 +34,7 @@ void  Dbctrl::DoQuaryReturn(bool rtn)
 	{
 		
 		mscd->ShowWindow(SW_HIDE);
+		mscd->worksocket->Close();
 		CDIALOG1 cd;
 		cd.DoModal();
 	}

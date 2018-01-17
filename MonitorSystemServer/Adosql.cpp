@@ -12,15 +12,20 @@ Adosql::Adosql()
 
 Adosql::~Adosql()
 {
+	if (m_pRecordset != NULL)
+		m_pRecordset->Close();
+	m_pConnection->Close();
+	::CoUninitialize();
 }
 
 void Adosql::OnInitADOConn()
 {
+	
 	::CoInitialize(NULL);
 	try
 	{
 		m_pConnection.CreateInstance("ADODB.Connection");
-		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;User ID=Windows身份验证;Initial Catalog=UserInfo;Data Source=LAPTOP-LTK0NPPQ";
+		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=UserInfo;Data Source=WQ-PC";
 		m_pConnection->Open(strConnect, "", "", adModeUnknown);
 		AfxMessageBox(_T("数据库连接成功"));
 	}
@@ -31,10 +36,6 @@ void Adosql::OnInitADOConn()
 }
 void Adosql::ExitConnect()
 {
-	if (m_pRecordset != NULL)
-		m_pRecordset->Close();
-	m_pConnection->Close();
-	::CoUninitialize();
 }
 
 /*
@@ -46,10 +47,9 @@ void Adosql::ExitConnect()
 bool Adosql::queryAdmin(CString str1,CString str2)
 {
 	m_pCommand.CreateInstance(__uuidof(Command));
-	m_pRecordset.CreateInstance(__uuidof(Record));
-	m_pCommand->State;
+	m_pRecordset.CreateInstance(__uuidof(Recordset));
 	m_pCommand->ActiveConnection = m_pConnection;
-	m_pCommand->State;
+
 	USES_CONVERSION;
 	sprintf(strsql, "SELECT * FROM Admin WHERE AdminName = '%s'",T2A(str1));
 	m_pCommand->CommandText = strsql; //通过pCmd对象访问数据库
@@ -57,14 +57,20 @@ bool Adosql::queryAdmin(CString str1,CString str2)
 	m_pRecordset = m_pCommand->Execute(NULL, NULL, adCmdText);
 	while (!m_pRecordset->adoEOF)
 	{
-		if (strcmp(T2A(str2), (char*)(_bstr_t)(m_pRecordset->GetCollect("AdminPWord"))));
+		if (str2.Compare(CString(m_pRecordset->GetCollect("AdminPWord")).TrimRight())==0)
 		{
+			m_pCommand.Release();
+			m_pRecordset->Close();
+			m_pRecordset.Release();
 			return true;
 		}
+		
 
 		m_pRecordset->MoveNext(); //下移一个
 	}
-	
+	m_pCommand.Release();
+	m_pRecordset->Close();
+	m_pRecordset.Release();
 	return false;
 }
 
@@ -78,9 +84,8 @@ bool Adosql::queryClient(CString str1, CString str2)
 {
 	m_pCommand.CreateInstance(__uuidof(Command));
 	m_pRecordset.CreateInstance(__uuidof(Record));
-	m_pCommand->State;
 	m_pCommand->ActiveConnection = m_pConnection;
-	m_pCommand->State;
+
 	USES_CONVERSION;
 	sprintf(strsql, "SELECT * FROM Client WHERE UserName = '%s'", T2A(str1));
 	m_pCommand->CommandText = strsql; //通过pCmd对象访问数据库
@@ -88,13 +93,20 @@ bool Adosql::queryClient(CString str1, CString str2)
 	m_pRecordset = m_pCommand->Execute(NULL, NULL, adCmdText);
 	while (!m_pRecordset->adoEOF)
 	{
-		if (strcmp(T2A(str2), (char*)(_bstr_t)(m_pRecordset->GetCollect("ClientPWd"))));
+		if (str2.Compare(CString(m_pRecordset->GetCollect("ClientPwd")).TrimRight()) == 0)
 		{
+			
+			m_pCommand.Release();
+			m_pRecordset->Close();
+			m_pRecordset.Release();
 			return true;
 		}
 
 		m_pRecordset->MoveNext(); //下移一个
 	}
+	m_pCommand.Release();
+	m_pRecordset->Close();
+	m_pRecordset.Release();
 	return false;
 }
 
@@ -106,31 +118,44 @@ bool Adosql::queryClient(CString str1, CString str2)
 */
 bool Adosql::insertAdmin(CString str1, CString str2)
 {
-	CoInitialize(NULL); //初始化COM组件
-	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
-	_RecordsetPtr pRst(__uuidof(Recordset)); //实例化一个Recordset对象pRst
-	_variant_t RecordsAffected; //申请一个_variant_t类型的的变量
-
-	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
-	pConn->Open("", "", "", adConnectUnspecified);
-	sprintf(strsql, "INSERT INTO Admin  VALUES('%s', '%s')", (char*)str1.GetBuffer(),(char*)str2.GetBuffer());
+	USES_CONVERSION;
 	try
 	{
-		pRst = pConn->Execute(strsql, &RecordsAffected, adCmdText);
+
+		m_pRecordset->Open("SELECT * FROM Admin ", m_pConnection.GetInterfacePtr(), adOpenKeyset, adLockPessimistic, adCmdText);
+	}
+	catch(_com_error &e)
+	{
+		CString str;
+		str.Format(e.Description());
+		AfxMessageBox((str));
+	}
+	
+	try
+	{
+		m_pRecordset->AddNew();
+		m_pRecordset->PutCollect("AdminName", T2A(str1));
+		m_pRecordset->PutCollect("AdminPword", T2A(str2));
+
+
+		m_pRecordset->Update();
+		m_pRecordset->Close();
+		m_pRecordset->Release();
+
 	}
 	catch (_com_error &e)
 	{
-		pConn->Close();
-		pRst.Release();
-		pConn.Release();
-		CoUninitialize();
+		/*CString str;
+		str.Format(e.Description());
+		AfxMessageBox((str));*/
+		
+		m_pRecordset->Close();
+		m_pRecordset->Release();
+		/*AfxMessageBox(e.Description());*/
 		return false;
 	}
 	
-	pConn->Close();
-	pRst.Release();
-	pConn.Release();
-	CoUninitialize();
+	
 	return true;
 }
 
@@ -142,31 +167,34 @@ bool Adosql::insertAdmin(CString str1, CString str2)
 */
 bool Adosql::insertClient(CString str1, CString str2)
 {
-	CoInitialize(NULL); //初始化COM组件
-	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
-	_RecordsetPtr pRst(__uuidof(Recordset)); //实例化一个Recordset对象pRst
-	_variant_t RecordsAffected; //申请一个_variant_t类型的的变量
+	USES_CONVERSION;
+	m_pRecordset.CreateInstance(__uuidof(Recordset));
 
-	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
-	pConn->Open("", "", "", adConnectUnspecified);
-	sprintf(strsql, "INSERT INTO  Client VALUES('%s', '%s')", (char*)str1.GetBuffer(), (char*)str2.GetBuffer());
+
+	m_pRecordset->Open("SELECT * FROM Client ", m_pConnection.GetInterfacePtr(), adOpenKeyset, adLockPessimistic, adCmdText);
+
+
 	try
 	{
-		pRst = pConn->Execute(strsql, &RecordsAffected, adCmdText);
+		m_pRecordset->AddNew();
+		m_pRecordset->PutCollect("ClientName", T2A(str1));
+		m_pRecordset->PutCollect("ClientPword", T2A(str2));
+		m_pRecordset->Update();
+		m_pRecordset->Close();
+		m_pRecordset->Release();
+
 	}
 	catch (_com_error &e)
 	{
-		pConn->Close();
-		pRst.Release();
-		pConn.Release();
-		CoUninitialize();
+
+
+		m_pRecordset->Close();
+		m_pRecordset->Release();
 		return false;
 	}
 
-	pConn->Close();
-	pRst.Release();
-	pConn.Release();
-	CoUninitialize();
+	m_pRecordset->Close();
+	m_pRecordset->Release();
 	return true;
 }
 
@@ -178,32 +206,31 @@ bool Adosql::insertClient(CString str1, CString str2)
 */
 bool Adosql::updateAdmin(CString str1,CString str2)
 {
-	CoInitialize(NULL); //初始化COM组件
-	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
-	_RecordsetPtr pRst(__uuidof(Recordset)); //实例化一个Recordset对象pRst
-	_variant_t RecordsAffected; //申请一个_variant_t类型的的变量
+	USES_CONVERSION;
+	m_pRecordset.CreateInstance(__uuidof(Recordset));
 
-	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
-	pConn->Open("", "", "", adConnectUnspecified);
-	sprintf(strsql, "UPDATE Admin SET AdminPWord='%s' WHERE AdminName='%s'", (char*)str2.GetBuffer(), (char*)str1.GetBuffer());
-	try
+	m_pRecordset->Open("SELECT * FROM Admin ", m_pConnection.GetInterfacePtr(), adOpenKeyset, adLockPessimistic, adCmdText);
+
+	while (!m_pRecordset->adoEOF)
 	{
-		pRst = pConn->Execute(strsql, &RecordsAffected, adCmdText);
-	}
-	catch (_com_error &e)
-	{
-		pConn->Close();
-		pRst.Release();
-		pConn.Release();
-		CoUninitialize();
-		return false;
+		if (str1.Compare(CString(m_pRecordset->GetCollect("AdminName")).TrimRight()) == 0)
+		{
+			m_pRecordset->PutCollect("AdminPword", T2A(str2));
+			m_pRecordset->Update();
+
+
+			m_pRecordset->Close();
+			m_pRecordset->Release();
+			
+			return true;
+		}
+
+		m_pRecordset->MoveNext(); //下移一个
 	}
 
-	pConn->Close();
-	pRst.Release();
-	pConn.Release();
-	CoUninitialize();
-	return true;
+	m_pRecordset->Close();
+	m_pRecordset->Release();
+	return false;
 }
 
 /*
@@ -214,32 +241,29 @@ bool Adosql::updateAdmin(CString str1,CString str2)
 */
 bool Adosql::updateClient(CString str1, CString str2)
 {
-	CoInitialize(NULL); //初始化COM组件
-	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
-	_RecordsetPtr pRst(__uuidof(Recordset)); //实例化一个Recordset对象pRst
-	_variant_t RecordsAffected; //申请一个_variant_t类型的的变量
+	USES_CONVERSION;
+	m_pRecordset.CreateInstance(__uuidof(Recordset));
 
-	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
-	pConn->Open("", "", "", adConnectUnspecified);
-	sprintf(strsql, "UPDATE Admin SET ClientPwd='%s' WHERE ClientName='%s'", (char*)str2.GetBuffer(), (char*)str1.GetBuffer());
-	try
+	m_pRecordset->Open("SELECT * FROM Client ", m_pConnection.GetInterfacePtr(), adOpenKeyset, adLockPessimistic, adCmdText);
+
+	while (!m_pRecordset->adoEOF)
 	{
-		pRst = pConn->Execute(strsql, &RecordsAffected, adCmdText);
-	}
-	catch (_com_error &e)
-	{
-		pConn->Close();
-		pRst.Release();
-		pConn.Release();
-		CoUninitialize();
-		return false;
+		if (str1.Compare(CString(m_pRecordset->GetCollect("ClientName")).TrimRight()) == 0)
+		{
+			m_pRecordset->PutCollect("ClientPwd", T2A(str2));
+			m_pRecordset->Update();
+			m_pRecordset->Close();
+			m_pRecordset->Release();
+
+			return true;
+		}
+
+		m_pRecordset->MoveNext(); //下移一个
 	}
 
-	pConn->Close();
-	pRst.Release();
-	pConn.Release();
-	CoUninitialize();
-	return true;
+	m_pRecordset->Close();
+	m_pRecordset->Release();
+	return false;
 }
 
 
@@ -250,33 +274,30 @@ bool Adosql::updateClient(CString str1, CString str2)
 */
 bool Adosql::deleteAdmin(CString str)
 {
-	CoInitialize(NULL); //初始化COM组件
-	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
-	_RecordsetPtr pRst(__uuidof(Recordset)); //实例化一个Recordset对象pRst
-	_variant_t RecordsAffected; //申请一个_variant_t类型的的变量
+	USES_CONVERSION;
+	m_pRecordset.CreateInstance(__uuidof(Recordset));
 
-	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
-	pConn->Open("", "", "", adConnectUnspecified);
-	sprintf(strsql, "DELETE FROM Admin WHERE AdminName='%s'", (char*)str.GetBuffer());
-
-	try
+	m_pRecordset->Open("SELECT * FROM Admin ", m_pConnection.GetInterfacePtr(), adOpenKeyset, adLockPessimistic, adCmdText);
+	while (!m_pRecordset->adoEOF)
 	{
-		pRst = pConn->Execute(strsql, &RecordsAffected, adCmdText);
-	}
-	catch (_com_error &e)
-	{
-		pConn->Close();
-		pRst.Release();
-		pConn.Release();
-		CoUninitialize();
-		return false;
+		if (str.Compare(CString(m_pRecordset->GetCollect("AdminName")).TrimRight()) == 0)
+		{
+			m_pRecordset->Delete(adAffectCurrent);
+			m_pRecordset->Update();
+
+
+			m_pRecordset->Close();
+			m_pRecordset->Release();
+
+			return true;
+		}
+
+		m_pRecordset->MoveNext(); //下移一个
 	}
 
-	pConn->Close();
-	pRst.Release();
-	pConn.Release();
-	CoUninitialize();
-	return true;
+	m_pRecordset->Close();
+	m_pRecordset->Release();
+	return false;
 }
 
 
@@ -287,31 +308,28 @@ bool Adosql::deleteAdmin(CString str)
 */
 bool Adosql::deleteClient(CString str)
 {
-	CoInitialize(NULL); //初始化COM组件
-	_ConnectionPtr pConn(__uuidof(Connection)); //实例化一个connection对象pConn
-	_RecordsetPtr pRst(__uuidof(Recordset)); //实例化一个Recordset对象pRst
-	_variant_t RecordsAffected; //申请一个_variant_t类型的的变量
+	USES_CONVERSION;
+	m_pRecordset.CreateInstance(__uuidof(Recordset));
 
-	pConn->ConnectionString = "Provider=MIcrosoft.Jet.OLEDB.4.0;Data source=UserInfo.mdb";
-	pConn->Open("", "", "", adConnectUnspecified);
-	sprintf(strsql, "DELETE FROM Client WHERE AdminName='%s'", (char*)str.GetBuffer());
-
-	try
+	m_pRecordset->Open("SELECT * FROM Client ", m_pConnection.GetInterfacePtr(), adOpenKeyset, adLockPessimistic, adCmdText);
+	while (!m_pRecordset->adoEOF)
 	{
-		pRst = pConn->Execute(strsql, &RecordsAffected, adCmdText);
-	}
-	catch (_com_error &e)
-	{
-		pConn->Close();
-		pRst.Release();
-		pConn.Release();
-		CoUninitialize();
-		return false;
+		if (str.Compare(CString(m_pRecordset->GetCollect("ClientName")).TrimRight()) == 0)
+		{
+			m_pRecordset->Delete(adAffectCurrent);
+			m_pRecordset->Update();
+
+
+			m_pRecordset->Close();
+			m_pRecordset->Release();
+
+			return true;
+		}
+
+		m_pRecordset->MoveNext(); //下移一个
 	}
 
-	pConn->Close();
-	pRst.Release();
-	pConn.Release();
-	CoUninitialize();
-	return true;
+	m_pRecordset->Close();
+	m_pRecordset->Release();
+	return false;
 }

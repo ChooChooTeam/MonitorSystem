@@ -50,6 +50,7 @@ void Controler::DoCmd(WsOp op)
 	default:
 		break;
 	}
+	delete []info;
 
 }
 
@@ -57,7 +58,7 @@ void Controler::DoJPG(char * jpg, int size)
 {
 }
 
-void Controler::DoOnLine(std::vector<CString> nameList)
+void Controler::DoOnLine(std::vector<CString> nameList, std::vector<SOCKADDR> IPList)
 {
 }
 

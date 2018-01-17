@@ -28,8 +28,7 @@ void LstnSocket::OnAccept(int nErrorCode)
 {
 	WrkSocket* wrk = new WrkSocket(ctrler,nullptr,this);
 	vecWrk.push_back(wrk);
-	Accept(*wrk);
-
+	Accept(*wrk,&(wrk->mIP));
 	CAsyncSocket::OnAccept(nErrorCode);
 }
 
@@ -45,13 +44,15 @@ void LstnSocket::OnClose(int nErrorCode)
 void LstnSocket::NewOnLine()
 {
 	std::vector<CString> vecName;
+	std::vector<SOCKADDR> vecIP;
 	for (auto&w : vecWrk) {
 		// 只放入已经有名字的Socket
 		if (w->GetName().Compare(_T("")) != 0) {
 			vecName.push_back(w->GetName());
+			vecIP.push_back(w->mIP);
 		}
 	}
-	ctrler.DoOnLine(vecName);
+	ctrler.DoOnLine(vecName,vecIP);
 }
 
 void LstnSocket::NewOffLine(CString name)

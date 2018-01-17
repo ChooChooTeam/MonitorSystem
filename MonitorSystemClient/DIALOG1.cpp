@@ -320,7 +320,7 @@ void CDIALOG1::OnBnClickedButton1()
 	WrkSocket * w;
 	w = new WrkSocket(*controler, _T("sdds"));
 	controler->setSocket(w);
-	w->Connect(_T("192.168.1.101"), 8848);
+	w->Connect(_T("10.138.83.168"), 8848);
 	//BScreenM* b = new BScreenM(this);
 	//b->runThreading();
 	//SetTimer(1, 50, TimerProc);
