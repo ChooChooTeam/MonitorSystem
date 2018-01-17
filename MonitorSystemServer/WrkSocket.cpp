@@ -153,7 +153,8 @@ void WrkSocket::OnReceive(int nErrorCode)
 
 	}
 	else if (op == USER_RETURN) {
-		// 不会出现,不需要任何操作
+		bool r = msgR->buff[0];
+		ctrler.DoQuaryReturn(r);
 	}
 	else {
 		OutputDebugString(_T("未定义的指令"));
