@@ -57,7 +57,7 @@ void SerCtrl::DoProgress(CString name[], short PID[], int num)
 void SerCtrl::DoActivate(CString name, CString IP)
 {
 	dlg->setCurrIP(IP);
-	dlg->CurrUserName = name;
+	dlg->CurrUserName = CString("当前用户:") + name;
 	dlg->UpdateData(FALSE);
 }
 
