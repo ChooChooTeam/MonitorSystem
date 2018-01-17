@@ -20,7 +20,8 @@ class BScreenM
 	}
 	
 public:
-	WrkSocket * socket = NULL;
+	void runOnce();
+	CDIALOG1 * dlg = NULL;
 	static bool getrunAble() {
 		bool b;
 		//请求获得一个互斥量锁
@@ -30,8 +31,8 @@ public:
 		ReleaseMutex(g_hMutex);
 		return b;
 	}
-	BScreenM(WrkSocket *socket) {
-		this->socket = socket;
+	BScreenM(CDIALOG1 *dlg) {
+		this->dlg = dlg;
 		speed = 30;
 		g_hMutex = CreateMutex(NULL, FALSE, NULL);
 		setrunAble(true);

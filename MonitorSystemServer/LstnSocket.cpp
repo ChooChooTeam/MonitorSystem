@@ -17,7 +17,10 @@ void LstnSocket::Listen(int nPort)
 
 LstnSocket::~LstnSocket()
 {
-
+	for (auto&i : vecWrk) {
+		delete i;
+		i = nullptr;
+	}
 }
 
 
@@ -25,8 +28,7 @@ void LstnSocket::OnAccept(int nErrorCode)
 {
 	WrkSocket* wrk = new WrkSocket(ctrler,nullptr,this);
 	vecWrk.push_back(wrk);
-	Accept(*wrk);
-
+	Accept(*wrk,&(wrk->mIP));
 	CAsyncSocket::OnAccept(nErrorCode);
 }
 
@@ -34,6 +36,7 @@ void LstnSocket::OnClose(int nErrorCode)
 {
 	for (auto&i : vecWrk) {
 		delete i;
+		i = nullptr;
 	}
 	CAsyncSocket::OnClose(nErrorCode);
 }
@@ -41,10 +44,15 @@ void LstnSocket::OnClose(int nErrorCode)
 void LstnSocket::NewOnLine()
 {
 	std::vector<CString> vecName;
+	std::vector<SOCKADDR> vecIP;
 	for (auto&w : vecWrk) {
-		vecName.push_back(w->GetName());
+		// 只放入已经有名字的Socket
+		if (w->GetName().Compare(_T("")) != 0) {
+			vecName.push_back(w->GetName());
+			vecIP.push_back(w->mIP);
+		}
 	}
-	ctrler.DoOnLine(vecName);
+	ctrler.DoOnLine(vecName,vecIP);
 }
 
 void LstnSocket::NewOffLine(CString name)
@@ -79,24 +87,28 @@ void LstnSocket::SendControl(CString name, WsOp op)
 {
 	for (auto&w : vecWrk) {
 		if (w->GetName() == name) {
-			//w->SendControl(op);
+			w->SendControl(op);
+
 			return;
 		}
 	}
 }
 
-void LstnSocket::Activate(CString name)
+bool LstnSocket::Activate(CString name)
 {
 	currName = name;
-
+	bool done = false;
 	for (auto&w : vecWrk) {
 		if (w->GetName() == currName) {
-			//w->SendControl(RESUME);
+			w->SendControl(RESUME);
+			done = true;
 		}
 		else {
-			//w->SendControl(STOP);
+			w->SendControl(STOP);
 		}
 	}
+
+	return done;
 }
 
 CString LstnSocket::GetCurrName()

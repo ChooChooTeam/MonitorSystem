@@ -69,8 +69,8 @@ void  sendScreenData(para* p) {
 		pDeskDC->DeleteDC();
 
 		//send data
-
-		p->M->socket->SendJPGE(pBuffer, mJpegSize);
+			
+		//p->M->dlg->SendData((m_FrameIndex, m_Mod, GraphSize, m_JpegSize, m_Count, m_pSendBuf, m_Addr));
 
 		delete[] pData;
 		//delete[] pBuffer;
@@ -87,7 +87,7 @@ void  sendScreenData(para* p) {
 		DWORD  runTime = end - start;
 		if (runTime) {
 	
-			Sleep(20000000000- runTime);
+			Sleep(500- runTime);
 		
 		}
 	}
@@ -134,6 +134,12 @@ void  sendScreenData(para* p) {
 }
 HANDLE BScreenM::g_hMutex=NULL;
 bool BScreenM::runAble = 1;
+void BScreenM::runOnce()
+{
+	para* p = new para;
+	p->M = this;
+	sendScreenData(p);
+}
 HANDLE BScreenM::runThreading()
 {
 	

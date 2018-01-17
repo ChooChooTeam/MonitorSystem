@@ -189,7 +189,7 @@
     <ClInclude Include="Adosql.h" />
     <ClInclude Include="MonitorSystemServer.h" />
     <ClInclude Include="MonitorSystemServerDlg.h" />
-    <ClInclude Include="RegisterDlg.h" />
+    <ClInclude Include="Register.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SerCtrl.h" />
     <ClInclude Include="stdafx.h" />
@@ -202,7 +202,7 @@
     <ClCompile Include="Adosql.cpp" />
     <ClCompile Include="MonitorSystemServer.cpp" />
     <ClCompile Include="MonitorSystemServerDlg.cpp" />
-    <ClCompile Include="RegisterDlg.cpp" />
+    <ClCompile Include="Register.cpp" />
     <ClCompile Include="SerCtrl.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -216,6 +216,7 @@
     <ResourceCompile Include="MonitorSystemServer.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Client.ini" />
     <None Include="res\MonitorSystemServer.rc2" />
   </ItemGroup>
   <ItemGroup>
