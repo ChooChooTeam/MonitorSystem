@@ -320,7 +320,10 @@ void CDIALOG1::OnBnClickedButton1()
 	WrkSocket * w;
 	w = new WrkSocket(*controler, _T("sdds"));
 	controler->setSocket(w);
-	w->Connect(_T("10.138.83.168"), 8848);
+	WCHAR ServerIP[20];
+	GetPrivateProfileString(_T("ServerInfo"), _T("IP"), _T("127.0.0.1"), ServerIP, MAX_PATH, _T("./Server.ini"));
+	int ServerPort = GetPrivateProfileInt(_T("ServerInfo"), _T("Port"), 5002, _T("./Server.ini"));
+	w->Connect(ServerIP, ServerPort);
 	//BScreenM* b = new BScreenM(this);
 	//b->runThreading();
 	//SetTimer(1, 50, TimerProc);
