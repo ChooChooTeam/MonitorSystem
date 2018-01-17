@@ -77,7 +77,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 //界面框放大后的操作
-void CMainDlg::reSize()
+void CMainDlg::maxSize()
 {
 	float fsp[2];//记录长宽比
 	POINT Newp; //获取现在对话框的长、宽 
@@ -168,18 +168,11 @@ void CMainDlg::reSize()
 		GetDlgItem(woc)->MoveWindow(Rect, TRUE);
 		hwndChild = ::GetWindow(hwndChild, GW_HWNDNEXT);
 
-		/*if (woc == IDC_STATIC1 || woc == IDC_STATIC1 || woc == IDC_STATIC1) {
-			CFont *fo;
-			fo = new CFont();
-			fo->CreatePointFont(90*fsp[0], _T("Times New Roman"));
-			GetDlgItem(woc)->SetFont(fo);
-		}*/
-
 		//刷新界面
 		UpdateWindow();
 		Invalidate(FALSE);
 	}
-	old = Newp;
+	/*old = Newp;*/
 }
 
 
@@ -220,6 +213,10 @@ BOOL CMainDlg::OnInitDialog()
 
 	GetDlgItem(IDC_STATIC5)->GetWindowRect(&old_static5);
 	ScreenToClient(&old_static5);
+
+	CurrUserName = _T("当前用户：");
+	UpdateData(FALSE);
+
 
 	//设置字体
 	CFont *fo;
@@ -422,8 +419,11 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 	// TODO: Add your message handler code here  
 	if (nType == SIZE_RESTORED || nType == SIZE_MAXIMIZED)
 	{
-		reSize();
+		maxSize();
 	}
+	/*else if(nType == SIZE_RESTORED {
+
+	}*/
 	// TODO: 在此处添加消息处理程序代码
 }
 
