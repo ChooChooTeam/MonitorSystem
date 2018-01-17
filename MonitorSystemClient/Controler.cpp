@@ -34,26 +34,15 @@ void Controler::DoCmd(WsOp op)
 		break;
 	case STOP:
 		dlg->stopJpeg();
-		//if (ptrMBScreen != NULL) {
-		//	ptrMBScreen->stopThreading();
-		//}
-		
 		break;
 	case RESUME:
 		dlg->startJpeg();
-		//ptrMBScreen = new BScreenM(this->socket);
-		//ptrMBScreen->runThreading();
 		break;
 	case USER_INFO://´ı¶¨
 
 		break;
 	case PROGRESS://´ı¶¨
 
-		break;
-	case JPGE:
-	//	ptrMBScreen = new BScreenM(this->socket);
-		//ptrMBScreen->runThreading();
-		
 		break;
 	default:
 		break;

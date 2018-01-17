@@ -19,7 +19,8 @@ public:
 		}
 		
 
-		PROCESSENTRY32 pe32;
+
+		PROCESSENTRY32W pe32;
 		pe32.dwSize = sizeof(pe32);
 		HANDLE hProcessSnap = ::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 		if (hProcessSnap == INVALID_HANDLE_VALUE)

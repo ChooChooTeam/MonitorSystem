@@ -15,6 +15,8 @@ class Controler :public IControler{
 	 void DoJPG(char* jpg, int size);  // 执行图片
 	 void DoOnLine(std::vector<CString> nameList);
 	 void DoOffLine(std::vector<CString> nameList, CString offlineName) ;
+	 virtual bool DoQuary(CString name, CString pwd) { return true; };		// 执行查询操作
+	 virtual void DoQuaryReturn(bool rtn) {};					// 执行查询返回操作
 	~Controler();
 };
 
