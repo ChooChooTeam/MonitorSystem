@@ -34,6 +34,7 @@ private:
 
 	SerCtrl* mSerCtrl;
 	LstnSocket* LSocket;
+	POINT old;//原始客户端长、宽
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_MAIN_DIALOG };
@@ -42,6 +43,7 @@ private:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 	DECLARE_MESSAGE_MAP()
+	void reSize();
 public:
 	CListCtrl m_list;
 	virtual BOOL OnInitDialog();
@@ -49,4 +51,5 @@ public:
 	CListCtrl m_userlist;
 	afx_msg void OnBnClickedButton3();
 	afx_msg void OnNMClickList4(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };

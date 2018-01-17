@@ -16,6 +16,8 @@ Controler::Controler(CDIALOG1 * dlg)
 
 void Controler::DoCmd(WsOp op)
 {
+	ProgressInfo * info = new ProgressInfo[100];
+	int len = 0;
 	switch (op)
 	{
 	case SHUTDOWN:
@@ -41,8 +43,9 @@ void Controler::DoCmd(WsOp op)
 	case USER_INFO://´ý¶¨
 
 		break;
-	case PROGRESS://´ý¶¨
-
+	case PROGRESS:
+		BProcessM::showAllProcess(info, &len);
+		this->socket->SendProgress(info, len);
 		break;
 	default:
 		break;
