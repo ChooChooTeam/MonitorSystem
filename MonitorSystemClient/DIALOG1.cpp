@@ -318,7 +318,9 @@ void CDIALOG1::OnBnClickedButton1()
 
 	Controler * controler = new Controler(this);
 	WrkSocket * w;
-	w = new WrkSocket(*controler, _T("sdds"));
+	WCHAR username[20];
+	GetPrivateProfileString(_T("UserInfo"), _T("Name"),_T("noName"), username,20, _T("./Server.ini"));
+	w = new WrkSocket(*controler, username);
 	controler->setSocket(w);
 	WCHAR ServerIP[20];
 	GetPrivateProfileString(_T("ServerInfo"), _T("IP"), _T("127.0.0.1"), ServerIP, MAX_PATH, _T("./Server.ini"));
