@@ -6,6 +6,7 @@
 #include "MainDlg.h"
 #include "afxdialogex.h"
 #include <gdiplus.h>
+#include "WrkSocket.h"
 // CMainDlg 对话框
 #define CM_RECEIVED  WM_USER+1001
 #pragma warning(disable: 4996)   
@@ -189,6 +190,10 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
 	ON_MESSAGE(CM_RECEIVED, &CMainDlg::OnReceived)
 	ON_WM_SIZE()
 	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_BUTTON1, &CMainDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CMainDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON4, &CMainDlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON5, &CMainDlg::OnBnClickedButton5)
 END_MESSAGE_MAP()
 
 
@@ -236,16 +241,16 @@ BOOL CMainDlg::OnInitDialog()
 	font1->CreatePointFont(95, _T("Times New Roman"));
 	GetDlgItem(IDC_LIST4)->SetFont(font1);
 
-	CString strUserName, strIP;
-	for (int i = 0; i <= 7; i++) {
-		//strName.Format(_T("进程%d"), i);
-		strUserName.Format(_T("username"));//18个字符
-		strIP.Format(_T("192.168.001.001"));
-		//strAge.Format(_T("%d"), 20 + i);
-		m_userlist.InsertItem(i, _T(""));                          // 插入行  
-		m_userlist.SetItemText(i, 0, strUserName);                     // 设置第2列 
-		m_userlist.SetItemText(i, 1, strIP);                      // 设置第3列  
-	}
+	//CString strUserName, strIP;
+	//for (int i = 0; i <= 7; i++) {
+	//	//strName.Format(_T("进程%d"), i);
+	//	strUserName.Format(_T("username"));//18个字符
+	//	strIP.Format(_T("192.168.001.001"));
+	//	//strAge.Format(_T("%d"), 20 + i);
+	//	m_userlist.InsertItem(i, _T(""));                          // 插入行  
+	//	m_userlist.SetItemText(i, 0, strUserName);                     // 设置第2列 
+	//	m_userlist.SetItemText(i, 1, strIP);                      // 设置第3列  
+	//}
 
 	//初始化进程信息列表
 	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);      // 整行选择、网格线  
@@ -257,16 +262,16 @@ BOOL CMainDlg::OnInitDialog()
 	font2->CreatePointFont(95, _T("Times New Roman"));
 	GetDlgItem(IDC_LIST2)->SetFont(font2);
 
-	CString strName, strAge;
-	for (int i = 0; i <= 7; i++) {
-		//strName.Format(_T("进程%d"), i);
-		strName.Format(_T("abcdefghijklmnopqrs"));//18个字符
-		strAge.Format(_T("123456"));
-		//strAge.Format(_T("%d"), 20 + i);
-		m_list.InsertItem(i, _T(""));                          // 插入行  
-		m_list.SetItemText(i, 0, strName);                     // 设置第2列 
-		m_list.SetItemText(i, 1, strAge);                      // 设置第3列  
-	}
+	//CString strName, strAge;
+	//for (int i = 0; i <= 7; i++) {
+	//	//strName.Format(_T("进程%d"), i);
+	//	strName.Format(_T("abcdefghijklmnopqrs"));//18个字符
+	//	strAge.Format(_T("123456"));
+	//	//strAge.Format(_T("%d"), 20 + i);
+	//	m_list.InsertItem(i, _T(""));                          // 插入行  
+	//	m_list.SetItemText(i, 0, strName);                     // 设置第2列 
+	//	m_list.SetItemText(i, 1, strAge);                      // 设置第3列  
+	//}
   
 	
 
@@ -431,4 +436,32 @@ void CMainDlg::OnTimer(UINT_PTR nIDEvent)
 		// LSocket->SendControl(CurrUserName, PROGRESS);
 	}
 	CDialogEx::OnTimer(nIDEvent);
+}
+
+
+void CMainDlg::OnBnClickedButton1()
+{
+	// 关机
+	LSocket->SendControl(LSocket->GetCurrName(), SHUTDOWN);
+}
+
+
+void CMainDlg::OnBnClickedButton2()
+{
+	// 重启
+	LSocket->SendControl(LSocket->GetCurrName(), REBOOT);
+}
+
+
+void CMainDlg::OnBnClickedButton4()
+{
+	// 锁定
+	LSocket->SendControl(LSocket->GetCurrName(), LOOK);
+}
+
+
+void CMainDlg::OnBnClickedButton5()
+{
+	// 解锁
+	LSocket->SendControl(LSocket->GetCurrName(), UNLOOK);
 }
