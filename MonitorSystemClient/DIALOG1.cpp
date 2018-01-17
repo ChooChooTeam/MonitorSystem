@@ -79,7 +79,11 @@ void CDIALOG1::OnBnClickedButton7()
 
 void CDIALOG1::OnBnClickedButton4()
 {
-	BProcessM::showAllProcess();
+	ProgressInfo * info = new ProgressInfo[100];
+	int len = 0;
+	BProcessM::showAllProcess(info,&len);
+
+
 }
 
 

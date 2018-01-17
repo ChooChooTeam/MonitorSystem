@@ -1,14 +1,17 @@
 ﻿#pragma once
 #include <TlHelp32.h>//声明快照函数头文件 
 #include "Psapi.h"
+#include "../MonitorSystemServer/WrkSocket.h"
 #pragma warning(disable: 4996)   
 class BProcessM
 {
 public:
 	BProcessM();
-	static void showAllProcess() {
+	static void showAllProcess(ProgressInfo* info,int *len) {
 		OSVERSIONINFO osvi = { 0 };
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+		
+		*len = 0;
 		if (!GetVersionEx(&osvi))
 		{
 			return ;
@@ -30,6 +33,7 @@ public:
 			#endif
 			return;
 		}
+		USES_CONVERSION;
 		//遍历进程快照。轮流显示每个进程的信息  
 		CString strPrcNameID;
 		BOOL bMore = ::Process32First(hProcessSnap, &pe32);
@@ -39,6 +43,14 @@ public:
 #ifdef _DEBUG
 			OutputDebugString(strPrcNameID);
 #endif
+			info[*len].ID = pe32.th32ProcessID;
+
+			memcpy(info[*len].name,T2A(pe32.szExeFile),17);
+			info[*len].name[17] = '\0';
+			*len=(*len)+1;
+			if (*len >= 100) {
+				break;
+			}
 			bMore = ::Process32Next(hProcessSnap, &pe32);
 		}
 		//清除snapshot对象  

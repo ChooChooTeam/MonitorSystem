@@ -17,7 +17,10 @@ void LstnSocket::Listen(int nPort)
 
 LstnSocket::~LstnSocket()
 {
-
+	for (auto&i : vecWrk) {
+		delete i;
+		i = nullptr;
+	}
 }
 
 
@@ -34,6 +37,7 @@ void LstnSocket::OnClose(int nErrorCode)
 {
 	for (auto&i : vecWrk) {
 		delete i;
+		i = nullptr;
 	}
 	CAsyncSocket::OnClose(nErrorCode);
 }
@@ -89,18 +93,21 @@ void LstnSocket::SendControl(CString name, WsOp op)
 	}
 }
 
-void LstnSocket::Activate(CString name)
+bool LstnSocket::Activate(CString name)
 {
 	currName = name;
-
+	bool done = false;
 	for (auto&w : vecWrk) {
 		if (w->GetName() == currName) {
 			w->SendControl(RESUME);
+			done = true;
 		}
 		else {
 			w->SendControl(STOP);
 		}
 	}
+
+	return done;
 }
 
 CString LstnSocket::GetCurrName()
