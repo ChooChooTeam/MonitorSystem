@@ -177,8 +177,8 @@ bool Adosql::insertClient(CString str1, CString str2)
 	try
 	{
 		m_pRecordset->AddNew();
-		m_pRecordset->PutCollect("ClientName", T2A(str1));
-		m_pRecordset->PutCollect("ClientPword", T2A(str2));
+		m_pRecordset->PutCollect("UserName", T2A(str1));
+		m_pRecordset->PutCollect("ClientPwd", T2A(str2));
 		m_pRecordset->Update();
 		m_pRecordset->Close();
 		m_pRecordset->Release();
