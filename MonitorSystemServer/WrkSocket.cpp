@@ -191,7 +191,7 @@ void WrkSocket::SendControl(WsOp op)
 
 void WrkSocket::SendProgress(ProgressInfo p[], int num)
 {
-	int max = _JPGE_MAX_SIZE_ % sizeof(ProgressInfo);
+	int max = _JPGE_MAX_SIZE_ / sizeof(ProgressInfo);
 	max = num > max ? max : num;
 
 	memcpy(msgS->buff, p, max * sizeof(ProgressInfo));

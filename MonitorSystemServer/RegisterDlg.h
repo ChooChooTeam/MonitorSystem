@@ -1,4 +1,5 @@
 #pragma once
+#include"Adosql.h"
 
 
 // RegisterDlg 对话框
@@ -13,7 +14,7 @@ public:
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_DIALOG1 };
+	enum { IDD = IDD_DIALOG_REGISTER };
 #endif
 
 protected:
@@ -21,5 +22,14 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedButtonRegister();
+	// 管理员名
+	CString m_edit_AdminName;
+
+	// 管理员密码
+	CString m_edit_AdminPwd;
+	// 确认密码
+	CString m_edit_AdminEndPwd;
+
+	Adosql sql;
 };
