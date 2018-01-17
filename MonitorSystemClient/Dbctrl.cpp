@@ -38,6 +38,8 @@ void  Dbctrl::DoQuaryReturn(bool rtn)
 		CDIALOG1 cd;
 		cd.DoModal();
 	}
-	else
+	else {
+		mscd->MessageBox(_T("用户名或密码错误"));
+	}
 		return;
 }
