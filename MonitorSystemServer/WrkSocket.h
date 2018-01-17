@@ -28,6 +28,12 @@ struct InfoPack {
 	char buff[_JPGE_MAX_SIZE_];
 };
 
+
+struct UserInfoStr {
+	char name[33];
+	char pwd[33];
+};
+
 // 工作Socket
 // 客户端可使用此Socket向服务器端通讯
 class WrkSocket : public CAsyncSocket

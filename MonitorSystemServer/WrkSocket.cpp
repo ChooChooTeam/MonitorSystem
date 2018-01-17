@@ -150,6 +150,12 @@ void WrkSocket::OnReceive(int nErrorCode)
 		}
 	}
 	else if (op == USER_INFO) {
+		UserInfoStr* info = (UserInfoStr*)msgR->buff;
+		msgS->op = USER_RETURN;
+		msgS->mSize = 4;
+		msgS->buff[0] = ctrler.DoQuary(CString(info->name), CString(info->pwd));
+
+		Send(msgS, sizeof(InfoPack));
 
 	}
 	else if (op == USER_RETURN) {
@@ -162,11 +168,19 @@ void WrkSocket::OnReceive(int nErrorCode)
 	CAsyncSocket::OnReceive(nErrorCode);
 }
 
-void WrkSocket::SendUserInfo(CString name, CString pwdMD5)
+void WrkSocket::SendUserInfo(CString name, CString pwd)
 {
-	//SendControl(USER_INFO);
-	//Send(name, name.GetLength() * sizeof(TCHAR));
-	//Send(pwdMD5, pwdMD5.GetLength() * sizeof(TCHAR));
+	msgS->op = USER_INFO;
+	msgS->mSize = sizeof(UserInfoStr);
+	UserInfoStr* info = (UserInfoStr*) msgS->buff;
+
+	USES_CONVERSION;
+	memcpy(info->name, T2A(name), sizeof(info->name));
+	info->name[sizeof(info->name)] = '\0';
+	memcpy(info->pwd, T2A(pwd), sizeof(info->pwd));
+	info->pwd[sizeof(info->pwd)] = '\0';
+
+	Send(msgS, sizeof(InfoPack));
 }
 
 void WrkSocket::SendControl(WsOp op)
@@ -182,10 +196,7 @@ void WrkSocket::SendControl(WsOp op)
 	}
 }
 
-//void WrkSocket::SendControl(WsOp op)
-//{
-//	Send(&op, sizeof(WsOp));
-//}
+
 #define SLEEPT 100
 void WrkSocket::SendJPGE(char * jpg, int size)
 {
