@@ -49,6 +49,7 @@ void Register::OnBnClickedButtonRegister()
 	CEdit* dpass = (CEdit*)GetDlgItem(IDC_EDIT3);
 	CEdit* user = (CEdit *)GetDlgItem(IDC_EDIT1);
 	CComboBox * box= (CComboBox *)GetDlgItem(IDC_TYPE);
+	//combox.add
 
 	int len;
 	CString username, password, dpassword, type; //名字、密码、身份
@@ -76,9 +77,11 @@ void Register::OnBnClickedButtonRegister()
     //MessageBox( type);
 
 	if (type = _T("用户"))
-		sql.insertClient(username, password);
+		MessageBox(_T("用户"));
+		//sql.insertClient(username, password);
 	else
-	sql.insertAdmin(username, password);
+		MessageBox(_T("管理员u"));
+	//sql.insertAdmin(username, password);
 	  
 
 
