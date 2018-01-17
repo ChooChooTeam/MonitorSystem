@@ -31,6 +31,7 @@ void Register::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(Register, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_REGISTER, &Register::OnBnClickedButtonRegister)
 	ON_BN_CLICKED(IDC_BUTTON_CANCEL, &Register::OnBnClickedButtonCancel)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -82,7 +83,12 @@ void Register::OnBnClickedButtonRegister()
 		
 	{
 		if (!sql.queryClient(username, password))
+		{
 			sql.insertClient(username, password);
+			MessageBox(_T("注册成功！"));
+		}
+			
+
 		else
 		{
 			MessageBox(_T("用户名已存在,请重新输入用户名"));
@@ -235,4 +241,11 @@ void Register::OnBnClickedButtonCancel()
 	dpass->SetWindowText(_T(""));
 	user->SetWindowText(_T(""));
 
+}
+
+
+void Register::OnClose()
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CDialogEx::OnClose();
 }
