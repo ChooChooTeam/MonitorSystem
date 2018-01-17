@@ -65,7 +65,7 @@ void WrkSocket::OnConnect(int nErrorCode)
 
 void WrkSocket::OnReceive(int nErrorCode)
 {
-	Sleep(10);
+	//Sleep(10);
 	static int lastLen = 0;
 	static bool isLess;
 	int n;
@@ -146,8 +146,9 @@ void WrkSocket::OnReceive(int nErrorCode)
 		UserInfoStr* info = (UserInfoStr*)msgR->buff;
 		msgS->op = USER_RETURN;
 		msgS->mSize = 4;
-		msgS->buff[0] = ctrler.DoQuary(CString(info->name), CString(info->pwd));
-
+		// MyTODO: ÐÞ¸Ä
+		//msgS->buff[0] = ctrler.DoQuary(CString(info->name), CString(info->pwd));
+		msgS->buff[0] = 1;
 		Send(msgS, sizeof(InfoPack));
 
 	}
