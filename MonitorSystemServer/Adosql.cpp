@@ -12,10 +12,6 @@ Adosql::Adosql()
 
 Adosql::~Adosql()
 {
-	if (m_pRecordset != NULL)
-		m_pRecordset->Close();
-	m_pConnection->Close();
-	::CoUninitialize();
 }
 
 void Adosql::OnInitADOConn()
@@ -25,7 +21,7 @@ void Adosql::OnInitADOConn()
 	try
 	{
 		m_pConnection.CreateInstance("ADODB.Connection");
-		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=UserInfo;Data Source=LAPTOP-LTK0NPPQ";
+		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;User ID=Windows身份验证;Initial Catalog=UserInfo;Data Source=DESKTOP-90Q3P13";
 		m_pConnection->Open(strConnect, "", "", adModeUnknown);
 		AfxMessageBox(_T("数据库连接成功"));
 	}
@@ -59,18 +55,14 @@ bool Adosql::queryAdmin(CString str1,CString str2)
 	{
 		if (str2.Compare(CString(m_pRecordset->GetCollect("AdminPWord")).TrimRight())==0)
 		{
-			m_pCommand.Release();
 			m_pRecordset->Close();
-			m_pRecordset.Release();
 			return true;
 		}
 		
 
 		m_pRecordset->MoveNext(); //下移一个
 	}
-	m_pCommand.Release();
 	m_pRecordset->Close();
-	m_pRecordset.Release();
 	return false;
 }
 
@@ -96,17 +88,13 @@ bool Adosql::queryClient(CString str1, CString str2)
 		if (str2.Compare(CString(m_pRecordset->GetCollect("ClientPwd")).TrimRight()) == 0)
 		{
 			
-			m_pCommand.Release();
 			m_pRecordset->Close();
-			m_pRecordset.Release();
 			return true;
 		}
 
 		m_pRecordset->MoveNext(); //下移一个
 	}
-	m_pCommand.Release();
 	m_pRecordset->Close();
-	m_pRecordset.Release();
 	return false;
 }
 
@@ -140,7 +128,7 @@ bool Adosql::insertAdmin(CString str1, CString str2)
 
 		m_pRecordset->Update();
 		m_pRecordset->Close();
-		m_pRecordset->Release();
+		return true;
 
 	}
 	catch (_com_error &e)
@@ -150,13 +138,12 @@ bool Adosql::insertAdmin(CString str1, CString str2)
 		AfxMessageBox((str));*/
 		
 		m_pRecordset->Close();
-		m_pRecordset->Release();
 		/*AfxMessageBox(e.Description());*/
 		return false;
 	}
 	
 	
-	return true;
+	
 }
 
 /*
@@ -181,20 +168,14 @@ bool Adosql::insertClient(CString str1, CString str2)
 		m_pRecordset->PutCollect("ClientPwd", T2A(str2));
 		m_pRecordset->Update();
 		m_pRecordset->Close();
-		m_pRecordset->Release();
 
 	}
 	catch (_com_error &e)
 	{
-
-
 		m_pRecordset->Close();
-		m_pRecordset->Release();
 		return false;
 	}
 
-	m_pRecordset->Close();
-	m_pRecordset->Release();
 	return true;
 }
 
@@ -220,7 +201,6 @@ bool Adosql::updateAdmin(CString str1,CString str2)
 
 
 			m_pRecordset->Close();
-			m_pRecordset->Release();
 			
 			return true;
 		}
@@ -229,7 +209,6 @@ bool Adosql::updateAdmin(CString str1,CString str2)
 	}
 
 	m_pRecordset->Close();
-	m_pRecordset->Release();
 	return false;
 }
 
@@ -253,7 +232,6 @@ bool Adosql::updateClient(CString str1, CString str2)
 			m_pRecordset->PutCollect("ClientPwd", T2A(str2));
 			m_pRecordset->Update();
 			m_pRecordset->Close();
-			m_pRecordset->Release();
 
 			return true;
 		}
@@ -262,7 +240,6 @@ bool Adosql::updateClient(CString str1, CString str2)
 	}
 
 	m_pRecordset->Close();
-	m_pRecordset->Release();
 	return false;
 }
 
@@ -287,7 +264,6 @@ bool Adosql::deleteAdmin(CString str)
 
 
 			m_pRecordset->Close();
-			m_pRecordset->Release();
 
 			return true;
 		}
@@ -296,7 +272,6 @@ bool Adosql::deleteAdmin(CString str)
 	}
 
 	m_pRecordset->Close();
-	m_pRecordset->Release();
 	return false;
 }
 
@@ -321,7 +296,6 @@ bool Adosql::deleteClient(CString str)
 
 
 			m_pRecordset->Close();
-			m_pRecordset->Release();
 
 			return true;
 		}
@@ -330,6 +304,5 @@ bool Adosql::deleteClient(CString str)
 	}
 
 	m_pRecordset->Close();
-	m_pRecordset->Release();
 	return false;
 }
