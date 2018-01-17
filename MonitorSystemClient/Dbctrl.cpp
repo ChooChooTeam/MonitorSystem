@@ -33,6 +33,7 @@ void  Dbctrl::DoQuaryReturn(bool rtn)
 	{
 		
 		mscd->ShowWindow(SW_HIDE);
+		mscd->worksocket->Close();
 		CDIALOG1 cd;
 		cd.DoModal();
 	}

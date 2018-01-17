@@ -57,10 +57,10 @@ void SerCtrl::DoProgress(CString name[], short PID[], int num)
 	dlg->m_list.DeleteAllItems();
 
 	for (int i = 0; i < num; i++) {
-		dlg->m_userlist.InsertItem(i, _T(""));
-		dlg->m_userlist.SetItemText(i, 1, name[i]);
+		dlg->m_list.InsertItem(i, _T(""));
+		dlg->m_list.SetItemText(i, 0, name[i]);
 		CString ss; ss.Format(_T("%d"), PID[i]);
-		dlg->m_userlist.SetItemText(i, 2, ss);
+		dlg->m_list.SetItemText(i, 1, ss);
 	}
 }
 
