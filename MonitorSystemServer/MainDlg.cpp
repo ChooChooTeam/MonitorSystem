@@ -8,7 +8,7 @@
 #include <gdiplus.h>
 #include "WrkSocket.h"
 #include "Register.h"
-
+#include "InfoSaver.h"
 // CMainDlg ¶Ô»°¿ò
 #define CM_RECEIVED  WM_USER+1001
 #pragma warning(disable: 4996)   
@@ -504,10 +504,20 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 			m_JPGSize = *(int*)&buffer[ret - 8];
 			memset(m_TempData, 0, 1024 * 1024 * 2);
 			memcpy(m_TempData, m_Header, 1024 * 1024);
+
 			if (save) {
+				SelectPath();
+				char szCurrentDateTime[32];
+				CTime nowtime;
+				nowtime  = CTime::GetCurrentTime();
 
-
-
+				sprintf(szCurrentDateTime, "M-%.2d-%.2d %.2d:%.2d:%.2d",
+					nowtime.GetYear(), nowtime.GetMonth(), nowtime.GetDay(),
+					nowtime.GetHour(), nowtime.GetMinute(), nowtime.GetSecond());
+				CString n = this->CurrUserName;
+				fileName +=(n += szCurrentDateTime) +=".jpeg";
+				InfoSaver::SaveJPEG(m_TempData, m_JPGSize,fileName);
+				save = !save;
 			}
 			ShowJPEG(m_TempData, m_JPGSize);
 			m_RecSize = 0;
