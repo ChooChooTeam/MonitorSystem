@@ -86,6 +86,9 @@
     <ClCompile Include="InfoSaver.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\MonitorSystemClient\CSecureEdit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MonitorSystemServer.rc">
