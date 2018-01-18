@@ -60,6 +60,15 @@
     <ClInclude Include="Dbctrl.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="resource2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="resource3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CSecureEdit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MonitorSystemClient.cpp">
@@ -95,12 +104,21 @@
     <ClCompile Include="Dbctrl.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CSecureEdit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MonitorSystemClient.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
     <ResourceCompile Include="MonitorSystemClient1.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="MonitorSystemClient2.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="MonitorSystemClient3.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>
