@@ -21,7 +21,7 @@ void Adosql::OnInitADOConn()
 	try
 	{
 		m_pConnection.CreateInstance("ADODB.Connection");
-		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=UserInfo;Data Source=LAPTOP-LTK0NPPQ";
+		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;User ID=Windows身份验证;Initial Catalog=UserInfo;Data Source=DESKTOP-90Q3P13";
 		m_pConnection->Open(strConnect, "", "", adModeUnknown);
 	}
 	catch (_com_error e)
@@ -31,6 +31,8 @@ void Adosql::OnInitADOConn()
 }
 void Adosql::ExitConnect()
 {
+	
+	::CoUninitialize();
 }
 
 /*
@@ -106,17 +108,9 @@ bool Adosql::queryClient(CString str1, CString str2)
 bool Adosql::insertAdmin(CString str1, CString str2)
 {
 	USES_CONVERSION;
-	try
-	{
-
-		m_pRecordset->Open("SELECT * FROM Admin ", m_pConnection.GetInterfacePtr(), adOpenKeyset, adLockPessimistic, adCmdText);
-	}
-	catch(_com_error &e)
-	{
-		CString str;
-		str.Format(e.Description());
-		AfxMessageBox((str));
-	}
+	m_pRecordset.CreateInstance(__uuidof(Recordset));
+	m_pRecordset->Open("SELECT * FROM Admin ", m_pConnection.GetInterfacePtr(), adOpenKeyset, adLockPessimistic, adCmdText);
+	
 	
 	try
 	{

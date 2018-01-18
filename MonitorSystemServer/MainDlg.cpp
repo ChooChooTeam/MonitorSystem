@@ -7,6 +7,8 @@
 #include "afxdialogex.h"
 #include <gdiplus.h>
 #include "WrkSocket.h"
+#include "Register.h"
+
 // CMainDlg 对话框
 #define CM_RECEIVED  WM_USER+1001
 #pragma warning(disable: 4996)   
@@ -130,8 +132,9 @@ void CMainDlg::maxSize()
 			BRPoint.x = long(OldBRPoint.x *fsp[0]);//新控件中右下角位置
 			BRPoint.y = long(OldBRPoint.y );
 		}
-		else if (woc == IDC_BUTTON1 || woc == IDC_BUTTON2 || woc == IDC_BUTTON3
-			|| woc == IDC_BUTTON4 || woc == IDC_BUTTON5 ) {
+		else if (woc == IDC_BUTTON1 || woc == IDC_BUTTON2 
+			|| woc == IDC_BUTTON3 || woc == IDC_BUTTON4 
+			|| woc == IDC_BUTTON5 || woc == IDC_BUTTON6) {
 			OldTLPoint = Rect.TopLeft();  //控件左上角
 			TLPoint.x = long(OldTLPoint.x);   //新控件中左上角位置
 			//新控件中top位置(保持和原控件距底部距离相等)
@@ -196,6 +199,10 @@ void CMainDlg::reSize() {
 			GetDlgItem(woc)->MoveWindow(old_bt5, TRUE);
 			break;
 		}
+		case IDC_BUTTON6: {
+			GetDlgItem(woc)->MoveWindow(old_bt6, TRUE);
+			break;
+		}
 		case IDC_STATIC1: {
 			GetDlgItem(woc)->MoveWindow(old_static1, TRUE);
 			break;
@@ -248,6 +255,7 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMainDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMainDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMainDlg::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON6, &CMainDlg::OnBnClickedButton6)
 END_MESSAGE_MAP()
 
 
@@ -280,6 +288,8 @@ BOOL CMainDlg::OnInitDialog()
 	ScreenToClient(&old_bt4);
 	GetDlgItem(IDC_BUTTON5)->GetWindowRect(&old_bt5);
 	ScreenToClient(&old_bt5);
+	GetDlgItem(IDC_BUTTON6)->GetWindowRect(&old_bt6);
+	ScreenToClient(&old_bt6);
 
 	GetDlgItem(IDC_STATIC1)->GetWindowRect(&old_static1);
 	ScreenToClient(&old_static1);
@@ -550,4 +560,12 @@ void CMainDlg::OnBnClickedButton5()
 {
 	// 解锁
 	LSocket->SendControl(LSocket->GetCurrName(), UNLOOK);
+}
+
+
+void CMainDlg::OnBnClickedButton6()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	Register rDlg;
+	rDlg.DoModal();
 }
