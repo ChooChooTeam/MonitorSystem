@@ -7,6 +7,8 @@
 #include "afxdialogex.h"
 #include <gdiplus.h>
 #include "WrkSocket.h"
+#include "Register.h"
+
 // CMainDlg 对话框
 #define CM_RECEIVED  WM_USER+1001
 #pragma warning(disable: 4996)   
@@ -77,7 +79,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 //界面框放大后的操作
-void CMainDlg::reSize()
+void CMainDlg::maxSize()
 {
 	float fsp[2];//记录长宽比
 	POINT Newp; //获取现在对话框的长、宽 
@@ -102,7 +104,6 @@ void CMainDlg::reSize()
 			hwndChild = ::GetWindow(hwndChild, GW_HWNDNEXT);
 			continue;//不改变这些控件的位置，直接跳过
 		}
-
 
 		GetDlgItem(woc)->GetWindowRect(Rect);  //取得控件区域
 		ScreenToClient(Rect);   //转换坐标
@@ -131,8 +132,9 @@ void CMainDlg::reSize()
 			BRPoint.x = long(OldBRPoint.x *fsp[0]);//新控件中右下角位置
 			BRPoint.y = long(OldBRPoint.y );
 		}
-		else if (woc == IDC_BUTTON1 || woc == IDC_BUTTON2 || woc == IDC_BUTTON3
-			|| woc == IDC_BUTTON4 || woc == IDC_BUTTON5 ) {
+		else if (woc == IDC_BUTTON1 || woc == IDC_BUTTON2 
+			|| woc == IDC_BUTTON3 || woc == IDC_BUTTON4 
+			|| woc == IDC_BUTTON5 || woc == IDC_BUTTON6) {
 			OldTLPoint = Rect.TopLeft();  //控件左上角
 			TLPoint.x = long(OldTLPoint.x);   //新控件中左上角位置
 			//新控件中top位置(保持和原控件距底部距离相等)
@@ -159,29 +161,88 @@ void CMainDlg::reSize()
 			BRPoint.y = long(OldBRPoint.y *fsp[1]);
 		}
 
-		/*if (woc == IDC_LIST2) {
-			userListTLP = OldTLPoint;
-			userListBRP = OldBRPoint;
-		}*/
-
 		Rect.SetRect(TLPoint, BRPoint);
 		GetDlgItem(woc)->MoveWindow(Rect, TRUE);
 		hwndChild = ::GetWindow(hwndChild, GW_HWNDNEXT);
-
-		/*if (woc == IDC_STATIC1 || woc == IDC_STATIC1 || woc == IDC_STATIC1) {
-			CFont *fo;
-			fo = new CFont();
-			fo->CreatePointFont(90*fsp[0], _T("Times New Roman"));
-			GetDlgItem(woc)->SetFont(fo);
-		}*/
 
 		//刷新界面
 		UpdateWindow();
 		Invalidate(FALSE);
 	}
-	old = Newp;
+	/*old = Newp;*/
 }
 
+void CMainDlg::reSize() {
+	HWND  hwndChild = ::GetWindow(m_hWnd, GW_CHILD);  //列出所有控件
+	int woc;
+	while (hwndChild) {
+		woc = ::GetDlgCtrlID(hwndChild);//取得控件ID
+		switch (woc)
+		{
+		case IDC_BUTTON1:{
+			GetDlgItem(woc)->MoveWindow(old_bt1, TRUE);
+			break;
+		}
+		case IDC_BUTTON2: {
+			GetDlgItem(woc)->MoveWindow(old_bt2, TRUE);
+			break;
+		}
+		case IDC_BUTTON3: {
+			GetDlgItem(woc)->MoveWindow(old_bt3, TRUE);
+			break;
+		}
+		case IDC_BUTTON4: {
+			GetDlgItem(woc)->MoveWindow(old_bt4, TRUE);
+			break;
+		}
+		case IDC_BUTTON5: {
+			GetDlgItem(woc)->MoveWindow(old_bt5, TRUE);
+			break;
+		}
+		case IDC_BUTTON6: {
+			GetDlgItem(woc)->MoveWindow(old_bt6, TRUE);
+			break;
+		}
+		case IDC_STATIC1: {
+			GetDlgItem(woc)->MoveWindow(old_static1, TRUE);
+			break;
+		}
+		case IDC_STATIC2: {
+			GetDlgItem(woc)->MoveWindow(old_static2, TRUE);
+			break;
+		}
+		case IDC_STATIC3: {
+			GetDlgItem(woc)->MoveWindow(old_static3, TRUE);
+			break;
+		}
+		case IDC_STATIC4: {
+			GetDlgItem(woc)->MoveWindow(old_static4, TRUE);
+			break;
+		}
+		case IDC_STATIC5: {
+			GetDlgItem(woc)->MoveWindow(old_static5, TRUE);
+			break;
+		}
+		case IDC_LIST2: {
+			GetDlgItem(woc)->MoveWindow(old_list2, TRUE);
+			break;
+		}
+		case IDC_LIST4: {
+			GetDlgItem(woc)->MoveWindow(old_list4, TRUE);
+			break;
+		}
+		case IDC_PIC: {
+			GetDlgItem(woc)->MoveWindow(old_pic, TRUE);
+			break;
+		}
+		default:
+			break;
+		}
+		hwndChild = ::GetWindow(hwndChild, GW_HWNDNEXT);
+	}
+	UpdateWindow();
+	Invalidate(FALSE);
+}
 
 
 BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
@@ -194,6 +255,7 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMainDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMainDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMainDlg::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON6, &CMainDlg::OnBnClickedButton6)
 END_MESSAGE_MAP()
 
 
@@ -215,11 +277,42 @@ BOOL CMainDlg::OnInitDialog()
 	old.x = rect.right - rect.left;  //原窗口长
 	old.y = rect.bottom - rect.top;  //原窗口宽
 
+	//记录原始控件位置
 	GetDlgItem(IDC_BUTTON1)->GetWindowRect(&old_bt1);
 	ScreenToClient(&old_bt1);
+	GetDlgItem(IDC_BUTTON2)->GetWindowRect(&old_bt2);
+	ScreenToClient(&old_bt2);
+	GetDlgItem(IDC_BUTTON3)->GetWindowRect(&old_bt3);
+	ScreenToClient(&old_bt3);
+	GetDlgItem(IDC_BUTTON4)->GetWindowRect(&old_bt4);
+	ScreenToClient(&old_bt4);
+	GetDlgItem(IDC_BUTTON5)->GetWindowRect(&old_bt5);
+	ScreenToClient(&old_bt5);
+	GetDlgItem(IDC_BUTTON6)->GetWindowRect(&old_bt6);
+	ScreenToClient(&old_bt6);
 
+	GetDlgItem(IDC_STATIC1)->GetWindowRect(&old_static1);
+	ScreenToClient(&old_static1);
+	GetDlgItem(IDC_STATIC2)->GetWindowRect(&old_static2);
+	ScreenToClient(&old_static2);
+	GetDlgItem(IDC_STATIC3)->GetWindowRect(&old_static3);
+	ScreenToClient(&old_static3);
+	GetDlgItem(IDC_STATIC4)->GetWindowRect(&old_static4);
+	ScreenToClient(&old_static4);
 	GetDlgItem(IDC_STATIC5)->GetWindowRect(&old_static5);
 	ScreenToClient(&old_static5);
+
+	GetDlgItem(IDC_LIST2)->GetWindowRect(&old_list2);
+	ScreenToClient(&old_list2);
+	GetDlgItem(IDC_LIST4)->GetWindowRect(&old_list4);
+	ScreenToClient(&old_list4);
+	GetDlgItem(IDC_PIC)->GetWindowRect(&old_pic);
+	ScreenToClient(&old_pic);
+
+	//初始化当前用户string
+	CurrUserName = _T("当前用户：");
+	UpdateData(FALSE);
+
 
 	//设置字体
 	CFont *fo;
@@ -325,9 +418,9 @@ BOOL CMainDlg::OnInitDialog()
 
 afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 {
-	//CString ss;
-	//ss.Format(_T("消息: 回调一次\n"));
-	//OutputDebugString(ss);
+	CString ss;
+	ss.Format(_T("消息: 回调一次\n"));
+	OutputDebugString(ss);
 
 	//接收数据
 	BYTE* buffer = new BYTE[MAX_BUFF];
@@ -420,8 +513,11 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 	// TODO: Add your message handler code here  
-	if (nType == SIZE_RESTORED || nType == SIZE_MAXIMIZED)
+	if (/*nType == SIZE_RESTORED ||*/ nType == SIZE_MAXIMIZED)
 	{
+		maxSize();
+	}
+	else if(nType == SIZE_RESTORED) {
 		reSize();
 	}
 	// TODO: 在此处添加消息处理程序代码
@@ -464,4 +560,12 @@ void CMainDlg::OnBnClickedButton5()
 {
 	// 解锁
 	LSocket->SendControl(LSocket->GetCurrName(), UNLOOK);
+}
+
+
+void CMainDlg::OnBnClickedButton6()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	Register rDlg;
+	rDlg.DoModal();
 }

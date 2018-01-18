@@ -80,36 +80,31 @@ void Register::OnBnClickedButtonRegister()
 
 
 	if (type == _T("用户"))  //	MessageBox(_T("用户"));
-		
-	{
-		if (!sql.queryClient(username, password))
-		{
-			sql.insertClient(username, password);
-			MessageBox(_T("注册成功！"));
-		}
-			
 
+	{
+
+		if (sql.insertClient(username, password))
+			MessageBox(_T("注册成功！"));
 		else
 		{
-			MessageBox(_T("用户名已存在,请重新输入用户名"));
+			MessageBox(_T("注册失败，请重新输入用户名！"));
 			return;
+
 		}
 	}
 	else
 		//MessageBox(_T("管理员u"));
 	{
-		if (!sql.queryAdmin(username, password)) {
-			sql.insertAdmin(username, password);
+
+		if (sql.insertAdmin(username, password))
 			MessageBox(_T("注册成功！"));
-		}
-			
 		else
 		{
-			MessageBox(_T("用户名已存在,请重新输入用户名"));
+			MessageBox(_T("注册失败，请重新输入用户名！"));
 			return;
 		}
-
 	}
+
 	  
 
 
@@ -249,6 +244,7 @@ void Register::OnBnClickedButtonCancel()
 
 void Register::OnClose()
 {
+	sql.ExitConnect();
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	CDialogEx::OnClose();
 }

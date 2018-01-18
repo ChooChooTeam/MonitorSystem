@@ -31,6 +31,8 @@ void Adosql::OnInitADOConn()
 }
 void Adosql::ExitConnect()
 {
+	
+	::CoUninitialize();
 }
 
 /*
@@ -106,17 +108,9 @@ bool Adosql::queryClient(CString str1, CString str2)
 bool Adosql::insertAdmin(CString str1, CString str2)
 {
 	USES_CONVERSION;
-	try
-	{
-
-		m_pRecordset->Open("SELECT * FROM Admin ", m_pConnection.GetInterfacePtr(), adOpenKeyset, adLockPessimistic, adCmdText);
-	}
-	catch(_com_error &e)
-	{
-		CString str;
-		str.Format(e.Description());
-		AfxMessageBox((str));
-	}
+	m_pRecordset.CreateInstance(__uuidof(Recordset));
+	m_pRecordset->Open("SELECT * FROM Admin ", m_pConnection.GetInterfacePtr(), adOpenKeyset, adLockPessimistic, adCmdText);
+	
 	
 	try
 	{
@@ -135,7 +129,7 @@ bool Adosql::insertAdmin(CString str1, CString str2)
 		/*CString str;
 		str.Format(e.Description());
 		AfxMessageBox((str));*/
-		
+		m_pRecordset->CancelUpdate();
 		m_pRecordset->Close();
 		/*AfxMessageBox(e.Description());*/
 		return false;
@@ -171,6 +165,7 @@ bool Adosql::insertClient(CString str1, CString str2)
 	}
 	catch (_com_error &e)
 	{
+		m_pRecordset->CancelUpdate();
 		m_pRecordset->Close();
 		return false;
 	}
@@ -195,7 +190,7 @@ bool Adosql::updateAdmin(CString str1,CString str2)
 	{
 		if (str1.Compare(CString(m_pRecordset->GetCollect("AdminName")).TrimRight()) == 0)
 		{
-			m_pRecordset->PutCollect("AdminPword", T2A(str2));
+			m_pRecordset->PutCollect("AdminPWord", T2A(str2));
 			m_pRecordset->Update();
 
 
@@ -226,7 +221,7 @@ bool Adosql::updateClient(CString str1, CString str2)
 
 	while (!m_pRecordset->adoEOF)
 	{
-		if (str1.Compare(CString(m_pRecordset->GetCollect("ClientName")).TrimRight()) == 0)
+		if (str1.Compare(CString(m_pRecordset->GetCollect("UserName")).TrimRight()) == 0)
 		{
 			m_pRecordset->PutCollect("ClientPwd", T2A(str2));
 			m_pRecordset->Update();
