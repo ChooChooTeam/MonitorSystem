@@ -48,6 +48,7 @@ void CMainDlg::SelectPath()
 	bi.lParam  = 0;
 	bi.iImage  = 0;
 	pidl  = SHBrowseForFolder(&bi);//弹出对话框   
+	
 	if (pidl  == NULL)//点了取消，或者选择了无效的文件夹则返回NULL  
 		return;
 
@@ -506,6 +507,7 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 			memcpy(m_TempData, m_Header, 1024 * 1024);
 
 			if (save) {
+				save = false;
 				LSocket->SendControl(LSocket->GetCurrName(), STOP);
 				SelectPath();
 				char szCurrentDateTime[32];
@@ -520,7 +522,7 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 				n.Insert(0, '\\');
 				fileName +=(n += szCurrentDateTime) +=".jpeg";
 				InfoSaver::SaveJPEG(m_TempData, m_JPGSize,fileName);
-				save = !save;
+				
 				LSocket->SendControl(LSocket->GetCurrName(), RESUME);
 			}
 			ShowJPEG(m_TempData, m_JPGSize);
