@@ -48,6 +48,7 @@ void CMainDlg::SelectPath()
 	bi.lParam  = 0;
 	bi.iImage  = 0;
 	pidl  = SHBrowseForFolder(&bi);//弹出对话框   
+	
 	if (pidl  == NULL)//点了取消，或者选择了无效的文件夹则返回NULL  
 		return;
 
@@ -69,7 +70,31 @@ void CMainDlg::ShowJPEG(void * pData, int DataSize)
 
 	m_pNewBmp = Bitmap::FromStream(m_pStm);
 	CClientDC dc(this);
+	if (save) {
+		save = false;
+		LSocket->SendControl(LSocket->GetCurrName(), STOP);
+		SelectPath();
+		char szCurrentDateTime[32];
+		CTime nowtime;
+		nowtime = CTime::GetCurrentTime();
 
+		sprintf(szCurrentDateTime, "%.2d-%.2d-%.2d %.2d-%.2d-%.2d",
+			nowtime.GetYear(), nowtime.GetMonth(), nowtime.GetDay(),
+			nowtime.GetHour(), nowtime.GetMinute(), nowtime.GetSecond());
+		CString n = this->CurrUserName.Mid(5);
+		n.Insert(0, '\\');
+		fileName += (n += szCurrentDateTime) += ".png";
+		//Save to PNG
+		CLSID pngClsid;
+		CLSIDFromString(L"{557CF406-1A04-11D3-9A73-0000F81EF32E}", &pngClsid);
+		m_pNewBmp->Save(fileName, &pngClsid, NULL);
+	
+		//m_pNewBmp->Save(fileName);
+
+		//InfoSaver::SaveJPEG(m_TempData, m_JPGSize, fileName);
+
+		LSocket->SendControl(LSocket->GetCurrName(), RESUME);
+	}
 
 	CRect rc;
 	CStatic* pic = (CStatic*)GetDlgItem(IDC_PIC);
@@ -79,8 +104,12 @@ void CMainDlg::ShowJPEG(void * pData, int DataSize)
 	//Gdiplus::Graphics *graphics = Gdiplus::Graphics::FromHDC(hDC);
 	Gdiplus::Graphics graphics(hDC);
 	graphics.DrawImage(m_pNewBmp, 1, 1, rc.Width(), rc.Height());
-	m_pStm->Release();
-	m_pStm = NULL;
+
+	if (m_pStm != nullptr) {
+		m_pStm->Release();
+		m_pStm = nullptr;
+	}
+
 	//delete graphics;
 	GlobalFree(m_hMem1);
 	::ReleaseDC(m_hWnd, hDC);
@@ -505,24 +534,7 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 			memset(m_TempData, 0, 1024 * 1024 * 2);
 			memcpy(m_TempData, m_Header, 1024 * 1024);
 
-			if (save) {
-				LSocket->SendControl(LSocket->GetCurrName(), STOP);
-				SelectPath();
-				char szCurrentDateTime[32];
-				CTime nowtime;
-				nowtime  = CTime::GetCurrentTime();
-
-				sprintf(szCurrentDateTime, "%.2d-%.2d-%.2d %.2d-%.2d-%.2d",
-					nowtime.GetYear(), nowtime.GetMonth(), nowtime.GetDay(),
-					nowtime.GetHour(), nowtime.GetMinute(), nowtime.GetSecond());
-				CString n = this->CurrUserName;
-				n.Replace(_T(":"),_T("-"));
-				n.Insert(0, '\\');
-				fileName +=(n += szCurrentDateTime) +=".jpeg";
-				InfoSaver::SaveJPEG(m_TempData, m_JPGSize,fileName);
-				save = !save;
-				LSocket->SendControl(LSocket->GetCurrName(), RESUME);
-			}
+			
 			ShowJPEG(m_TempData, m_JPGSize);
 			m_RecSize = 0;
 		}
