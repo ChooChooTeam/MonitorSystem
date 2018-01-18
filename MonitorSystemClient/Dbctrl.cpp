@@ -24,6 +24,7 @@ void  Dbctrl::DoQuaryReturn(bool rtn)
 		cd.DoModal();
 	}
 	else {
+		mscd->worksocket->Close();
 		mscd->MessageBox(_T("用户名或密码错误"));
 	}
 		return;

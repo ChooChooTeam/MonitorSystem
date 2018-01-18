@@ -12,7 +12,6 @@ WrkSocket::WrkSocket(IControler& con, CString username) :
 	progressBuff = new ProgressInfo[100];
 	names = new CString[100];
 	PIDs = new short[100];
-	pParent = nullptr;
 }
 
 WrkSocket::WrkSocket(IControler & con, CString username, LstnSocket * parent) :

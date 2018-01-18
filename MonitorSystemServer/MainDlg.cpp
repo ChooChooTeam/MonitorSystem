@@ -418,9 +418,9 @@ BOOL CMainDlg::OnInitDialog()
 
 afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 {
-	//CString ss;
-	//ss.Format(_T("消息: 回调一次\n"));
-	//OutputDebugString(ss);
+	CString ss;
+	ss.Format(_T("消息: 回调一次\n"));
+	OutputDebugString(ss);
 
 	//接收数据
 	BYTE* buffer = new BYTE[MAX_BUFF];
