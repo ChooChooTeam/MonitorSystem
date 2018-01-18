@@ -38,7 +38,7 @@ private:
 	SerCtrl* mSerCtrl;
 	LstnSocket* LSocket;
 	POINT old;//原始客户端长、宽
-	CRect old_bt1,old_bt2, old_bt3, old_bt4, old_bt5;
+	CRect old_bt1, old_bt2, old_bt3, old_bt4, old_bt5, old_bt6;
 	CRect old_static1, old_static2, old_static3, old_static4,old_static5;
 	CRect old_list2, old_list4, old_pic;
 // 对话框数据
@@ -66,4 +66,5 @@ public:
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButton4();
 	afx_msg void OnBnClickedButton5();
+	afx_msg void OnBnClickedButton6();
 };
