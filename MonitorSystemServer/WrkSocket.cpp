@@ -91,20 +91,22 @@ void WrkSocket::OnReceive(int nErrorCode)
 			
 		}
 		else if(n == -1) {
-			int err = GetLastError();
-			CString ss;
-			ss.Format(_T("err1 = %d\n重置连接\n"), err);
-			OutputDebugString(ss);
+			AfxMessageBox(_T("网络异常,请重启服务器!"));
+			//int err = GetLastError();
+			//CString ss;
+			//ss.Format(_T("err1 = %d\n重置连接\n"), err);
+			//OutputDebugString(ss);
 		}
 	}
 	else {
 		n = Receive(msgR + lastLen, sizeof(InfoPack) - lastLen);
 
 		if (n == SOCKET_ERROR) {
-			int err = GetLastError();
-			CString ss;
-			ss.Format(_T("err2 = %d\n重置连接\n"), err);
-			OutputDebugString(ss);
+			AfxMessageBox(_T("网络异常,请重启服务器!"));
+			//int err = GetLastError();
+			//CString ss;
+			//ss.Format(_T("err2 = %d\n重置连接\n"), err);
+			//OutputDebugString(ss);
 		}
 
 		lastLen += n;
