@@ -21,7 +21,7 @@ void Adosql::OnInitADOConn()
 	try
 	{
 		m_pConnection.CreateInstance("ADODB.Connection");
-		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=UserInfo;Data Source=LAPTOP-LTK0NPPQ";
+		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;User ID=Windows身份验证;Initial Catalog=UserInfo;Data Source=DESKTOP-90Q3P13";
 		m_pConnection->Open(strConnect, "", "", adModeUnknown);
 	}
 	catch (_com_error e)
