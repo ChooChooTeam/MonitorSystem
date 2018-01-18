@@ -54,24 +54,31 @@ void WrkSocket::OnClose(int nErrorCode)
 
 void WrkSocket::OnConnect(int nErrorCode)
 {
-	// 连接成功后,立即发送用户名信息
-	msgS->op = USER_NAME;
-	msgS->mSize = name.GetLength() * sizeof(TCHAR);
-	memcpy(msgS->buff, name.GetBuffer(),34);
-	Send(msgS, sizeof(InfoPack));
-	
+	if (name != "db") {
+		// 连接成功后,立即发送用户名信息
+		msgS->op = USER_NAME;
+		msgS->mSize = name.GetLength() * sizeof(TCHAR);
+		memcpy(msgS->buff, name.GetBuffer(), 34);
+		Send(msgS, sizeof(InfoPack));
+	}
 	CAsyncSocket::OnConnect(nErrorCode);
-}
+} 
 
 
 void WrkSocket::OnReceive(int nErrorCode)
 {
-	//Sleep(10);
+	Sleep(10);
 	static int lastLen = 0;
 	static bool isLess;
 	int n;
 	if (!isLess) {
 		n = Receive(msgR, sizeof(InfoPack));
+		if (n == sizeof(InfoPack)) {
+			CString ss;
+			ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
+			OutputDebugString(ss);
+		}
+
 		if (n < sizeof(InfoPack)) {
 			lastLen = n; 
 			isLess = true;
@@ -79,13 +86,14 @@ void WrkSocket::OnReceive(int nErrorCode)
 			CString ss;
 			ss.Format(_T("拼接: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
 			OutputDebugString(ss);
-
+			CAsyncSocket::OnReceive(nErrorCode);
 			return;
 			
 		}
-		else {
+		else if(n == -1) {
+			int err = GetLastError();
 			CString ss;
-			ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
+			ss.Format(_T("err1 = %d\n重置连接\n"), err);
 			OutputDebugString(ss);
 		}
 	}
@@ -95,7 +103,7 @@ void WrkSocket::OnReceive(int nErrorCode)
 		if (n == SOCKET_ERROR) {
 			int err = GetLastError();
 			CString ss;
-			ss.Format(_T("err = %d\n"), err);
+			ss.Format(_T("err2 = %d\n重置连接\n"), err);
 			OutputDebugString(ss);
 		}
 
@@ -109,6 +117,7 @@ void WrkSocket::OnReceive(int nErrorCode)
 			isLess = false;
 		}
 		else {
+			CAsyncSocket::OnReceive(nErrorCode);
 			return;
 		}
 	}
@@ -174,7 +183,13 @@ void WrkSocket::SendUserInfo(CString name, CString pwd)
 	memcpy(info->pwd, T2A(pwd), sizeof(info->pwd));
 	info->pwd[sizeof(info->pwd)] = '\0';
 
-	Send(msgS, sizeof(InfoPack));
+	int err=Send(msgS, sizeof(InfoPack));
+	CString ss;
+	ss.Format(_T("fasonog:长度  %d\n"),err);
+	OutputDebugString(ss);
+
+	
+
 }
 
 void WrkSocket::SendControl(WsOp op)
