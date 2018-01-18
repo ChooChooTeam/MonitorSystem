@@ -54,14 +54,15 @@ void WrkSocket::OnClose(int nErrorCode)
 
 void WrkSocket::OnConnect(int nErrorCode)
 {
-	// 连接成功后,立即发送用户名信息
-	msgS->op = USER_NAME;
-	msgS->mSize = name.GetLength() * sizeof(TCHAR);
-	memcpy(msgS->buff, name.GetBuffer(),34);
-	Send(msgS, sizeof(InfoPack));
-	
+	if (name != "db") {
+		// 连接成功后,立即发送用户名信息
+		msgS->op = USER_NAME;
+		msgS->mSize = name.GetLength() * sizeof(TCHAR);
+		memcpy(msgS->buff, name.GetBuffer(), 34);
+		Send(msgS, sizeof(InfoPack));
+	}
 	CAsyncSocket::OnConnect(nErrorCode);
-}
+} 
 
 
 void WrkSocket::OnReceive(int nErrorCode)
@@ -182,7 +183,13 @@ void WrkSocket::SendUserInfo(CString name, CString pwd)
 	memcpy(info->pwd, T2A(pwd), sizeof(info->pwd));
 	info->pwd[sizeof(info->pwd)] = '\0';
 
-	Send(msgS, sizeof(InfoPack));
+	int err=Send(msgS, sizeof(InfoPack));
+	CString ss;
+	ss.Format(_T("fasonog:长度  %d\n"),err);
+	OutputDebugString(ss);
+
+	
+
 }
 
 void WrkSocket::SendControl(WsOp op)

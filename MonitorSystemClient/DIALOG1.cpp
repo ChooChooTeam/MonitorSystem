@@ -407,6 +407,7 @@ BOOL CDIALOG1::OnInitDialog()
 	WCHAR ServerIP[20];
 	GetPrivateProfileString(_T("ServerInfo"), _T("IP"), _T("127.0.0.1"), ServerIP, MAX_PATH, _T("./Server.ini"));
 	int ServerPort = GetPrivateProfileInt(_T("ServerInfo"), _T("Port"), 5002, _T("./Server.ini"));
+	Sleep(300);
 	w->Connect(ServerIP, ServerPort);
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 异常: OCX 属性页应返回 FALSE

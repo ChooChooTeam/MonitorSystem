@@ -122,7 +122,6 @@ bool Adosql::insertAdmin(CString str1, CString str2)
 		m_pRecordset->Update();
 		m_pRecordset->Close();
 		return true;
-
 	}
 	catch (_com_error &e)
 	{

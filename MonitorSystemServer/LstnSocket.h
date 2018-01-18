@@ -22,6 +22,7 @@ public:
 	void NewOffLine(CString name);
 
 private:
+
 	std::vector<WrkSocket*> vecWrk;
 	CString currName;
 	IControler& ctrler;
