@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="IControler.h" />
+    <ClInclude Include="InfoSaver.h" />
     <ClInclude Include="LstnSocket.h" />
     <ClInclude Include="MainDlg.h" />
     <ClInclude Include="Adosql.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="WrkSocket.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="InfoSaver.cpp" />
     <ClCompile Include="LstnSocket.cpp" />
     <ClCompile Include="MainDlg.cpp" />
     <ClCompile Include="Adosql.cpp" />
@@ -220,6 +222,7 @@
     <None Include="res\MonitorSystemServer.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bg_pic.bmp" />
     <Image Include="res\MonitorSystemServer.ico" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\Toolbar256.bmp" />

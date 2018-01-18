@@ -21,10 +21,10 @@ void Controler::DoCmd(WsOp op)
 	switch (op)
 	{
 	case SHUTDOWN:
-		//BPowerM::ReSetWindows(EWX_SHUTDOWN, true);//关机  
+		BPowerM::ReSetWindows(EWX_SHUTDOWN, true);//关机  
 		break;
 	case REBOOT:
-		//BPowerM::ReSetWindows(EWX_REBOOT, true);//重启  
+		BPowerM::ReSetWindows(EWX_REBOOT, true);//重启  
 		break;
 	case LOOK:
 		SetHook();
@@ -39,7 +39,7 @@ void Controler::DoCmd(WsOp op)
 		break;
 	case RESUME:
 		dlg->startJpeg();
-		break;
+		break;	
 	case USER_INFO://待定
 
 		break;

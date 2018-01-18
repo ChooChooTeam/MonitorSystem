@@ -32,9 +32,13 @@ public:
 	void setCurrIP(CString currIP);
 
 private:
+	//for save files
+	bool save = false;
+	CString fileName;
+	void SelectPath();
 	IStream * m_pStm;
 	Bitmap *m_pNewBmp;
-
+	;
 	SerCtrl* mSerCtrl;
 	LstnSocket* LSocket;
 	POINT old;//原始客户端长、宽
@@ -67,4 +71,5 @@ public:
 	afx_msg void OnBnClickedButton4();
 	afx_msg void OnBnClickedButton5();
 	afx_msg void OnBnClickedButton6();
+	afx_msg void OnBnClickedButton7();
 };

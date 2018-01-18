@@ -51,6 +51,9 @@
     <ClInclude Include="Register.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="InfoSaver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MonitorSystemServer.cpp">
@@ -80,6 +83,9 @@
     <ClCompile Include="Register.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="InfoSaver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MonitorSystemServer.rc">
@@ -102,6 +108,9 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="res\Toolbar256.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\bg_pic.bmp">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

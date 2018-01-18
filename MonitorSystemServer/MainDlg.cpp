@@ -8,7 +8,7 @@
 #include <gdiplus.h>
 #include "WrkSocket.h"
 #include "Register.h"
-
+#include "InfoSaver.h"
 // CMainDlg 对话框
 #define CM_RECEIVED  WM_USER+1001
 #pragma warning(disable: 4996)   
@@ -33,6 +33,32 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 
 }
 
+void CMainDlg::SelectPath()
+{
+	//选择输出路径  
+	TCHAR szDir[MAX_PATH];
+	BROWSEINFO bi;
+	ITEMIDLIST *pidl;
+	bi.hwndOwner  = this->m_hWnd;
+	bi.pidlRoot  = NULL;
+	bi.pszDisplayName  = szDir;//这个是输出缓冲区   
+	bi.lpszTitle  = _T("请选择截屏存储位置："); //标题  
+	bi.ulFlags  = BIF_NEWDIALOGSTYLE;//使用新的界面,在win7中效果较好//BIF_RETURNONLYFSDIRS;   
+	bi.lpfn  = NULL;
+	bi.lParam  = 0;
+	bi.iImage  = 0;
+	pidl  = SHBrowseForFolder(&bi);//弹出对话框   
+	
+	if (pidl  == NULL)//点了取消，或者选择了无效的文件夹则返回NULL  
+		return;
+
+	if (SHGetPathFromIDList(pidl, szDir)) {
+		this->fileName = szDir;
+	
+	}
+	 
+}
+
 void CMainDlg::ShowJPEG(void * pData, int DataSize)
 {
 
@@ -44,7 +70,31 @@ void CMainDlg::ShowJPEG(void * pData, int DataSize)
 
 	m_pNewBmp = Bitmap::FromStream(m_pStm);
 	CClientDC dc(this);
+	if (save) {
+		save = false;
+		LSocket->SendControl(LSocket->GetCurrName(), STOP);
+		SelectPath();
+		char szCurrentDateTime[32];
+		CTime nowtime;
+		nowtime = CTime::GetCurrentTime();
 
+		sprintf(szCurrentDateTime, "%.2d-%.2d-%.2d %.2d-%.2d-%.2d",
+			nowtime.GetYear(), nowtime.GetMonth(), nowtime.GetDay(),
+			nowtime.GetHour(), nowtime.GetMinute(), nowtime.GetSecond());
+		CString n = this->CurrUserName.Mid(5);
+		n.Insert(0, '\\');
+		fileName += (n += szCurrentDateTime) += ".png";
+		//Save to PNG
+		CLSID pngClsid;
+		CLSIDFromString(L"{557CF406-1A04-11D3-9A73-0000F81EF32E}", &pngClsid);
+		m_pNewBmp->Save(fileName, &pngClsid, NULL);
+	
+		//m_pNewBmp->Save(fileName);
+
+		//InfoSaver::SaveJPEG(m_TempData, m_JPGSize, fileName);
+
+		LSocket->SendControl(LSocket->GetCurrName(), RESUME);
+	}
 
 	CRect rc;
 	CStatic* pic = (CStatic*)GetDlgItem(IDC_PIC);
@@ -54,8 +104,12 @@ void CMainDlg::ShowJPEG(void * pData, int DataSize)
 	//Gdiplus::Graphics *graphics = Gdiplus::Graphics::FromHDC(hDC);
 	Gdiplus::Graphics graphics(hDC);
 	graphics.DrawImage(m_pNewBmp, 1, 1, rc.Width(), rc.Height());
-	m_pStm->Release();
-	m_pStm = NULL;
+
+	if (m_pStm != nullptr) {
+		m_pStm->Release();
+		m_pStm = nullptr;
+	}
+
 	//delete graphics;
 	GlobalFree(m_hMem1);
 	::ReleaseDC(m_hWnd, hDC);
@@ -256,6 +310,7 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMainDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMainDlg::OnBnClickedButton5)
 	ON_BN_CLICKED(IDC_BUTTON6, &CMainDlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &CMainDlg::OnBnClickedButton7)
 END_MESSAGE_MAP()
 
 
@@ -418,9 +473,9 @@ BOOL CMainDlg::OnInitDialog()
 
 afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 {
-	//CString ss;
-	//ss.Format(_T("消息: 回调一次\n"));
-	//OutputDebugString(ss);
+	CString ss;
+	ss.Format(_T("消息: 回调一次\n"));
+	OutputDebugString(ss);
 
 	//接收数据
 	BYTE* buffer = new BYTE[MAX_BUFF];
@@ -478,6 +533,8 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 			m_JPGSize = *(int*)&buffer[ret - 8];
 			memset(m_TempData, 0, 1024 * 1024 * 2);
 			memcpy(m_TempData, m_Header, 1024 * 1024);
+
+			
 			ShowJPEG(m_TempData, m_JPGSize);
 			m_RecSize = 0;
 		}
@@ -568,4 +625,11 @@ void CMainDlg::OnBnClickedButton6()
 	// TODO: 在此添加控件通知处理程序代码
 	Register rDlg;
 	rDlg.DoModal();
+}
+
+
+void CMainDlg::OnBnClickedButton7()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	this->save = true;
 }

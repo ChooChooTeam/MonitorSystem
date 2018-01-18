@@ -21,7 +21,7 @@ void Adosql::OnInitADOConn()
 	try
 	{
 		m_pConnection.CreateInstance("ADODB.Connection");
-		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=UserInfo;Data Source=WQ-PC";
+		_bstr_t strConnect = "Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=UserInfo;Data Source=LAPTOP-LTK0NPPQ";
 		m_pConnection->Open(strConnect, "", "", adModeUnknown);
 	}
 	catch (_com_error e)
@@ -31,7 +31,6 @@ void Adosql::OnInitADOConn()
 }
 void Adosql::ExitConnect()
 {
-	
 	::CoUninitialize();
 }
 
@@ -122,7 +121,6 @@ bool Adosql::insertAdmin(CString str1, CString str2)
 		m_pRecordset->Update();
 		m_pRecordset->Close();
 		return true;
-
 	}
 	catch (_com_error &e)
 	{
