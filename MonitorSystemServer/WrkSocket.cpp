@@ -66,7 +66,7 @@ void WrkSocket::OnConnect(int nErrorCode)
 
 void WrkSocket::OnReceive(int nErrorCode)
 {
-	//Sleep(10);
+	Sleep(10);
 	static int lastLen = 0;
 	static bool isLess;
 	int n;
@@ -90,15 +90,10 @@ void WrkSocket::OnReceive(int nErrorCode)
 			
 		}
 		else if(n == -1) {
+			int err = GetLastError();
 			CString ss;
-			ss.Format(_T("重置连接\n"));
+			ss.Format(_T("err1 = %d\n重置连接\n"), err);
 			OutputDebugString(ss);
-			this->Close();
-			if (this->pParent != nullptr) {
-				this->pParent->ResetAll();
-				return;
-			}
-			
 		}
 	}
 	else {
@@ -107,12 +102,8 @@ void WrkSocket::OnReceive(int nErrorCode)
 		if (n == SOCKET_ERROR) {
 			int err = GetLastError();
 			CString ss;
-			ss.Format(_T("err = %d\n重置连接\n"), err);
+			ss.Format(_T("err2 = %d\n重置连接\n"), err);
 			OutputDebugString(ss);
-			if (this->pParent != nullptr) {
-				this->pParent->ResetAll();
-				return;
-			}
 		}
 
 		lastLen += n;
