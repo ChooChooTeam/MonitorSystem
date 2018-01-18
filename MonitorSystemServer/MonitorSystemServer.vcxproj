@@ -220,6 +220,7 @@
     <None Include="res\MonitorSystemServer.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bg_pic.bmp" />
     <Image Include="res\MonitorSystemServer.ico" />
     <Image Include="res\Toolbar.bmp" />
     <Image Include="res\Toolbar256.bmp" />
