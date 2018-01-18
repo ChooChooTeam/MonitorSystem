@@ -33,9 +33,38 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 
 }
 
+void CMainDlg::SelectPath()
+{
+	//选择输出路径  
+	TCHAR szDir[MAX_PATH];
+	BROWSEINFO bi;
+	ITEMIDLIST *pidl;
+	bi.hwndOwner  = this->m_hWnd;
+	bi.pidlRoot  = NULL;
+	bi.pszDisplayName  = szDir;//这个是输出缓冲区   
+	bi.lpszTitle  = _T("选择输出文件夹："); //标题  
+	bi.ulFlags  = BIF_NEWDIALOGSTYLE;//使用新的界面,在win7中效果较好//BIF_RETURNONLYFSDIRS;   
+	bi.lpfn  = NULL;
+	bi.lParam  = 0;
+	bi.iImage  = 0;
+	pidl  = SHBrowseForFolder(&bi);//弹出对话框   
+	if (pidl  == NULL)//点了取消，或者选择了无效的文件夹则返回NULL  
+		return;
+
+	if (SHGetPathFromIDList(pidl, szDir)) {
+		this->fileName = szDir;
+	
+	}
+	 
+}
+
 void CMainDlg::ShowJPEG(void * pData, int DataSize)
 {
-
+	if (save) {
+	
+	
+	
+	}
 	HGLOBAL m_hMem1 = GlobalAlloc(GMEM_MOVEABLE, DataSize);
 	LPBYTE lpData1 = (LPBYTE)GlobalLock(m_hMem1);
 	memcpy(lpData1, pData, DataSize);
@@ -256,6 +285,7 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMainDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMainDlg::OnBnClickedButton5)
 	ON_BN_CLICKED(IDC_BUTTON6, &CMainDlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &CMainDlg::OnBnClickedButton7)
 END_MESSAGE_MAP()
 
 
@@ -568,4 +598,10 @@ void CMainDlg::OnBnClickedButton6()
 	// TODO: 在此添加控件通知处理程序代码
 	Register rDlg;
 	rDlg.DoModal();
+}
+
+
+void CMainDlg::OnBnClickedButton7()
+{
+	// TODO: 在此添加控件通知处理程序代码
 }
