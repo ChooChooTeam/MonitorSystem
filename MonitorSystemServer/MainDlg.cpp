@@ -511,10 +511,12 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 				CTime nowtime;
 				nowtime  = CTime::GetCurrentTime();
 
-				sprintf(szCurrentDateTime, "M-%.2d-%.2d %.2d:%.2d:%.2d",
+				sprintf(szCurrentDateTime, "%.2d-%.2d-%.2d %.2d-%.2d-%.2d",
 					nowtime.GetYear(), nowtime.GetMonth(), nowtime.GetDay(),
 					nowtime.GetHour(), nowtime.GetMinute(), nowtime.GetSecond());
 				CString n = this->CurrUserName;
+				n.Replace(_T(":"),_T("-"));
+				n.Insert(0, '\\');
 				fileName +=(n += szCurrentDateTime) +=".jpeg";
 				InfoSaver::SaveJPEG(m_TempData, m_JPGSize,fileName);
 				save = !save;
