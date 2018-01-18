@@ -1,12 +1,6 @@
 #include "stdafx.h"
 #include "InfoSaver.h"
 
-
-InfoSaver::InfoSaver()
-{
-
-}
-
 bool InfoSaver::SaveJPEG(char * jpeg, int len, CString filename)
 {
 	USES_CONVERSION;
@@ -20,7 +14,3 @@ bool InfoSaver::SaveJPEG(char * jpeg, int len, CString filename)
 	return (n == len);
 }
 
-
-InfoSaver::~InfoSaver()
-{
-}
