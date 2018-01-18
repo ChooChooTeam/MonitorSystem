@@ -256,6 +256,7 @@ BEGIN_MESSAGE_MAP(CMainDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMainDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMainDlg::OnBnClickedButton5)
 	ON_BN_CLICKED(IDC_BUTTON6, &CMainDlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON7, &CMainDlg::OnBnClickedButton7)
 END_MESSAGE_MAP()
 
 
@@ -568,4 +569,10 @@ void CMainDlg::OnBnClickedButton6()
 	// TODO: 在此添加控件通知处理程序代码
 	Register rDlg;
 	rDlg.DoModal();
+}
+
+
+void CMainDlg::OnBnClickedButton7()
+{
+	// TODO: 在此添加控件通知处理程序代码
 }
