@@ -22,13 +22,14 @@ void SerCtrl::DoOnLine(std::vector<CString> nameList, std::vector<CString> IPLis
 	}
 }
 
-void SerCtrl::DoOffLine(std::vector<CString> nameList, CString offlineName)
+void SerCtrl::DoOffLine(std::vector<CString> nameList, std::vector<CString> IPList)
 {
 	dlg->m_userlist.DeleteAllItems();
 
 	for (unsigned int i = 0; i < nameList.size(); i++) {
-		dlg->m_userlist.InsertItem(i, nameList[i]);
-		dlg->m_userlist.SetItemText(i, 1, nameList[i]);
+		dlg->m_userlist.InsertItem(i,_T(""));
+		dlg->m_userlist.SetItemText(i, 0, nameList[i]);
+		dlg->m_userlist.SetItemText(i, 1, IPList[i]);
 	}
 }
 

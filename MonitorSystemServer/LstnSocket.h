@@ -14,6 +14,8 @@ public:
 	bool Activate(CString name);				// 激活指定名的客户端
 	CString GetCurrName();						// 获得当前处于激活状态的Socket客户名
 	void ResetAll();
+	CString* GetProgressNames(CString name);
+	short* GetProgressPIDs(CString name);
 	virtual ~LstnSocket();
 	virtual void OnAccept(int nErrorCode);
 	virtual void OnClose(int nErrorCode);
