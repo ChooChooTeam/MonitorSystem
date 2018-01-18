@@ -404,7 +404,7 @@ BOOL CMainDlg::OnInitDialog()
 
 	//初始化进程信息列表
 	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);      // 整行选择、网格线  
-	m_list.InsertColumn(0, _T("进程名"), LVCFMT_LEFT, 150);       //插入列
+	m_list.InsertColumn(0, _T("进程名"), LVCFMT_LEFT, 130);       //插入列
 	m_list.InsertColumn(1, _T("进程ID"), LVCFMT_LEFT, 78); 
 
 	CFont *font2;

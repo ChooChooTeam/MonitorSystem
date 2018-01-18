@@ -198,6 +198,7 @@
     <ClInclude Include="WrkSocket.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\MonitorSystemClient\CSecureEdit.cpp" />
     <ClCompile Include="InfoSaver.cpp" />
     <ClCompile Include="LstnSocket.cpp" />
     <ClCompile Include="MainDlg.cpp" />
