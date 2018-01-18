@@ -70,7 +70,32 @@ void CMainDlg::ShowJPEG(void * pData, int DataSize)
 
 	m_pNewBmp = Bitmap::FromStream(m_pStm);
 	CClientDC dc(this);
+	if (save) {
+		save = false;
+		LSocket->SendControl(LSocket->GetCurrName(), STOP);
+		SelectPath();
+		char szCurrentDateTime[32];
+		CTime nowtime;
+		nowtime = CTime::GetCurrentTime();
 
+		sprintf(szCurrentDateTime, "%.2d-%.2d-%.2d %.2d-%.2d-%.2d",
+			nowtime.GetYear(), nowtime.GetMonth(), nowtime.GetDay(),
+			nowtime.GetHour(), nowtime.GetMinute(), nowtime.GetSecond());
+		CString n = this->CurrUserName;
+		n.Replace(_T(":"), _T("-"));
+		n.Insert(0, '\\');
+		fileName += (n += szCurrentDateTime) += ".png";
+		//Save to PNG
+		CLSID pngClsid;
+		CLSIDFromString(L"{557CF406-1A04-11D3-9A73-0000F81EF32E}", &pngClsid);
+		m_pNewBmp->Save(L"file.png", &pngClsid, NULL);
+	
+		//m_pNewBmp->Save(fileName);
+
+		//InfoSaver::SaveJPEG(m_TempData, m_JPGSize, fileName);
+
+		LSocket->SendControl(LSocket->GetCurrName(), RESUME);
+	}
 
 	CRect rc;
 	CStatic* pic = (CStatic*)GetDlgItem(IDC_PIC);
@@ -506,25 +531,7 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 			memset(m_TempData, 0, 1024 * 1024 * 2);
 			memcpy(m_TempData, m_Header, 1024 * 1024);
 
-			if (save) {
-				save = false;
-				LSocket->SendControl(LSocket->GetCurrName(), STOP);
-				SelectPath();
-				char szCurrentDateTime[32];
-				CTime nowtime;
-				nowtime  = CTime::GetCurrentTime();
-
-				sprintf(szCurrentDateTime, "%.2d-%.2d-%.2d %.2d-%.2d-%.2d",
-					nowtime.GetYear(), nowtime.GetMonth(), nowtime.GetDay(),
-					nowtime.GetHour(), nowtime.GetMinute(), nowtime.GetSecond());
-				CString n = this->CurrUserName;
-				n.Replace(_T(":"),_T("-"));
-				n.Insert(0, '\\');
-				fileName +=(n += szCurrentDateTime) +=".jpeg";
-				InfoSaver::SaveJPEG(m_TempData, m_JPGSize,fileName);
-				
-				LSocket->SendControl(LSocket->GetCurrName(), RESUME);
-			}
+			
 			ShowJPEG(m_TempData, m_JPGSize);
 			m_RecSize = 0;
 		}
