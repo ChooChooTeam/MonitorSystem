@@ -42,7 +42,7 @@ void CMainDlg::SelectPath()
 	bi.hwndOwner  = this->m_hWnd;
 	bi.pidlRoot  = NULL;
 	bi.pszDisplayName  = szDir;//这个是输出缓冲区   
-	bi.lpszTitle  = _T("选择输出文件夹："); //标题  
+	bi.lpszTitle  = _T("请选择截屏存储位置："); //标题  
 	bi.ulFlags  = BIF_NEWDIALOGSTYLE;//使用新的界面,在win7中效果较好//BIF_RETURNONLYFSDIRS;   
 	bi.lpfn  = NULL;
 	bi.lParam  = 0;
@@ -60,11 +60,7 @@ void CMainDlg::SelectPath()
 
 void CMainDlg::ShowJPEG(void * pData, int DataSize)
 {
-	if (save) {
-	
-	
-	
-	}
+
 	HGLOBAL m_hMem1 = GlobalAlloc(GMEM_MOVEABLE, DataSize);
 	LPBYTE lpData1 = (LPBYTE)GlobalLock(m_hMem1);
 	memcpy(lpData1, pData, DataSize);
@@ -508,6 +504,11 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 			m_JPGSize = *(int*)&buffer[ret - 8];
 			memset(m_TempData, 0, 1024 * 1024 * 2);
 			memcpy(m_TempData, m_Header, 1024 * 1024);
+			if (save) {
+
+
+
+			}
 			ShowJPEG(m_TempData, m_JPGSize);
 			m_RecSize = 0;
 		}
@@ -604,4 +605,5 @@ void CMainDlg::OnBnClickedButton6()
 void CMainDlg::OnBnClickedButton7()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	this->save = true;
 }
