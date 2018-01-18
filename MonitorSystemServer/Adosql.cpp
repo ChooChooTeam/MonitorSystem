@@ -31,7 +31,6 @@ void Adosql::OnInitADOConn()
 }
 void Adosql::ExitConnect()
 {
-	
 	::CoUninitialize();
 }
 
