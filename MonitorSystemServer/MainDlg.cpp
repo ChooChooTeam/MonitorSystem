@@ -506,6 +506,7 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 			memcpy(m_TempData, m_Header, 1024 * 1024);
 
 			if (save) {
+				LSocket->SendControl(LSocket->GetCurrName(), STOP);
 				SelectPath();
 				char szCurrentDateTime[32];
 				CTime nowtime;
@@ -518,6 +519,7 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 				fileName +=(n += szCurrentDateTime) +=".jpeg";
 				InfoSaver::SaveJPEG(m_TempData, m_JPGSize,fileName);
 				save = !save;
+				LSocket->SendControl(LSocket->GetCurrName(), RESUME);
 			}
 			ShowJPEG(m_TempData, m_JPGSize);
 			m_RecSize = 0;
