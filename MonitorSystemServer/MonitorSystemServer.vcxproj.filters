@@ -51,6 +51,9 @@
     <ClInclude Include="Register.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="InfoSaver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MonitorSystemServer.cpp">
@@ -78,6 +81,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Register.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoSaver.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

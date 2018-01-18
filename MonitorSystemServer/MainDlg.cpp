@@ -8,7 +8,7 @@
 #include <gdiplus.h>
 #include "WrkSocket.h"
 #include "Register.h"
-
+#include "InfoSaver.h"
 // CMainDlg 对话框
 #define CM_RECEIVED  WM_USER+1001
 #pragma warning(disable: 4996)   
@@ -31,6 +31,31 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 	, CurrUserName(_T(""))
 {
 
+}
+
+void CMainDlg::SelectPath()
+{
+	//选择输出路径  
+	TCHAR szDir[MAX_PATH];
+	BROWSEINFO bi;
+	ITEMIDLIST *pidl;
+	bi.hwndOwner  = this->m_hWnd;
+	bi.pidlRoot  = NULL;
+	bi.pszDisplayName  = szDir;//这个是输出缓冲区   
+	bi.lpszTitle  = _T("请选择截屏存储位置："); //标题  
+	bi.ulFlags  = BIF_NEWDIALOGSTYLE;//使用新的界面,在win7中效果较好//BIF_RETURNONLYFSDIRS;   
+	bi.lpfn  = NULL;
+	bi.lParam  = 0;
+	bi.iImage  = 0;
+	pidl  = SHBrowseForFolder(&bi);//弹出对话框   
+	if (pidl  == NULL)//点了取消，或者选择了无效的文件夹则返回NULL  
+		return;
+
+	if (SHGetPathFromIDList(pidl, szDir)) {
+		this->fileName = szDir;
+	
+	}
+	 
 }
 
 void CMainDlg::ShowJPEG(void * pData, int DataSize)
@@ -479,6 +504,25 @@ afx_msg LRESULT CMainDlg::OnReceived(WPARAM wParam, LPARAM lParam)
 			m_JPGSize = *(int*)&buffer[ret - 8];
 			memset(m_TempData, 0, 1024 * 1024 * 2);
 			memcpy(m_TempData, m_Header, 1024 * 1024);
+
+			if (save) {
+				LSocket->SendControl(LSocket->GetCurrName(), STOP);
+				SelectPath();
+				char szCurrentDateTime[32];
+				CTime nowtime;
+				nowtime  = CTime::GetCurrentTime();
+
+				sprintf(szCurrentDateTime, "%.2d-%.2d-%.2d %.2d-%.2d-%.2d",
+					nowtime.GetYear(), nowtime.GetMonth(), nowtime.GetDay(),
+					nowtime.GetHour(), nowtime.GetMinute(), nowtime.GetSecond());
+				CString n = this->CurrUserName;
+				n.Replace(_T(":"),_T("-"));
+				n.Insert(0, '\\');
+				fileName +=(n += szCurrentDateTime) +=".jpeg";
+				InfoSaver::SaveJPEG(m_TempData, m_JPGSize,fileName);
+				save = !save;
+				LSocket->SendControl(LSocket->GetCurrName(), RESUME);
+			}
 			ShowJPEG(m_TempData, m_JPGSize);
 			m_RecSize = 0;
 		}
@@ -575,4 +619,5 @@ void CMainDlg::OnBnClickedButton6()
 void CMainDlg::OnBnClickedButton7()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	this->save = true;
 }

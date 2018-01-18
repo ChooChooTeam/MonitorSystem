@@ -32,9 +32,13 @@ public:
 	void setCurrIP(CString currIP);
 
 private:
+	//for save files
+	bool save = false;
+	CString fileName;
+	void SelectPath();
 	IStream * m_pStm;
 	Bitmap *m_pNewBmp;
-
+	;
 	SerCtrl* mSerCtrl;
 	LstnSocket* LSocket;
 	POINT old;//原始客户端长、宽
