@@ -60,6 +60,8 @@ public:
 
 	const CString& GetName();
 	CString mIP;			// 套接字对应的(客户端的)IP
+	CString* names;				// 进程用户名
+	short* PIDs;				// 进程PID
 
 private:
 	CString name;			// 套接字对应的用户名
@@ -70,8 +72,7 @@ private:
 	InfoPack* msgR;			// 接受缓冲区
 
 	ProgressInfo* progressBuff;	// 进程信息缓冲区
-	CString* names;				// 进程用户名
-	short* PIDs;				// 进程PID
+
 	
 };
 

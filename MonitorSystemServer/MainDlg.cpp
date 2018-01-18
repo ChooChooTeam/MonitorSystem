@@ -83,15 +83,17 @@ void CMainDlg::ShowJPEG(void * pData, int DataSize)
 			nowtime.GetHour(), nowtime.GetMinute(), nowtime.GetSecond());
 		CString n = this->CurrUserName.Mid(5);
 		n.Insert(0, '\\');
-		fileName += (n += szCurrentDateTime) += ".png";
-		//Save to PNG
+		CString PNFFileName = fileName + (n += szCurrentDateTime) += ".png";
+
 		CLSID pngClsid;
 		CLSIDFromString(L"{557CF406-1A04-11D3-9A73-0000F81EF32E}", &pngClsid);
-		m_pNewBmp->Save(fileName, &pngClsid, NULL);
+		m_pNewBmp->Save(PNFFileName, &pngClsid, NULL);
+		
+		// Save Progress
+		CString ProgressFileName = fileName + n + ".txt";
+		CString& currName = LSocket->GetCurrName();
+		InfoSaver::SaveProgress(LSocket->GetProgressNames(currName), LSocket->GetProgressPIDs(currName), 100, ProgressFileName);
 	
-		//m_pNewBmp->Save(fileName);
-
-		//InfoSaver::SaveJPEG(m_TempData, m_JPGSize, fileName);
 
 		LSocket->SendControl(LSocket->GetCurrName(), RESUME);
 	}

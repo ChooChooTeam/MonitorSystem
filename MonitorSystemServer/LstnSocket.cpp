@@ -65,28 +65,22 @@ void LstnSocket::NewOnLine()
 void LstnSocket::NewOffLine(CString name)
 {
 	std::vector<CString> vecName;
+	std::vector<CString> vecIP;
 	auto it = vecWrk.begin();
-	while (it != vecWrk.end())
+	while (it < vecWrk.end())
 	{
 		if ((*it)->GetName() != name) {
 			vecName.push_back((*it)->GetName());
+			vecIP.push_back((*it)->mIP);
+			it++;
 		}
 		else {
 			delete (*it);
 			it = vecWrk.erase(it);
-		}
-
-		if (it != vecWrk.end()) {
-			it++;
-		}
-		else {
-			break;
-		}
-		
+		}		
 	}
 
-	ctrler.DoOffLine(vecName, name);
-
+	ctrler.DoOffLine(vecName, vecIP);
 }
 
 
@@ -137,4 +131,24 @@ void LstnSocket::ResetAll()
 
 	this->Close();
 	this->Listen(port);
+}
+
+CString * LstnSocket::GetProgressNames(CString name)
+{
+	for (auto&w : vecWrk) {
+		if (w->GetName() == name) {
+			return w->names;
+		}
+	}
+	return nullptr;
+}
+
+short * LstnSocket::GetProgressPIDs(CString name)
+{
+	for (auto&w : vecWrk) {
+		if (w->GetName() == name) {
+			return w->PIDs;
+		}
+	}
+	return nullptr;
 }

@@ -12,11 +12,11 @@ public:
 	~Dbctrl();
 	void DoCmd(WsOp op) { };
 	void DoJPG(char* jpg, int size) { };
-	void DoOnLine(std::vector<CString> nameList, std::vector<CString> IPList) {};
-	void DoOffLine(std::vector<CString> nameList, CString offlineName) { };
+	void DoOnLine(std::vector<CString> nameList, std::vector<CString> IPList) { };
+	void DoOffLine(std::vector<CString> nameList, std::vector<CString> IPList) { };
 	bool DoQuary(CString name, CString pwd) { return true; };		
 	void DoQuaryReturn(bool rtn);
-	virtual void DoProgress(CString name[], short PID[], int num)  {};
+	void DoProgress(CString name[], short PID[], int num)  {};
 	void DoActivate(CString name, CString IP) {};
 
 private:
