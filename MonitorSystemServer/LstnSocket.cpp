@@ -11,6 +11,7 @@ LstnSocket::LstnSocket(IControler & con):
 
 void LstnSocket::Listen(int nPort)
 {
+	this->port = nPort;
 	this->Create(nPort);
 	CAsyncSocket::Listen();
 }
@@ -44,10 +45,6 @@ void LstnSocket::OnAccept(int nErrorCode)
 
 void LstnSocket::OnClose(int nErrorCode)
 {
-	for (auto&i : vecWrk) {
-		delete i;
-		i = nullptr;
-	}
 	CAsyncSocket::OnClose(nErrorCode);
 }
 
@@ -128,4 +125,16 @@ bool LstnSocket::Activate(CString name)
 CString LstnSocket::GetCurrName()
 {
 	return currName;
+}
+
+void LstnSocket::ResetAll()
+{
+	//for (auto&i : vecWrk) {
+	//	delete i;
+	//	i = nullptr;
+	//}
+	vecWrk.clear();
+
+	this->Close();
+	this->Listen(port);
 }

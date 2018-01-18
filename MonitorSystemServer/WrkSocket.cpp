@@ -72,6 +72,12 @@ void WrkSocket::OnReceive(int nErrorCode)
 	int n;
 	if (!isLess) {
 		n = Receive(msgR, sizeof(InfoPack));
+		if (n == sizeof(InfoPack)) {
+			CString ss;
+			ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
+			OutputDebugString(ss);
+		}
+
 		if (n < sizeof(InfoPack)) {
 			lastLen = n; 
 			isLess = true;
@@ -79,14 +85,20 @@ void WrkSocket::OnReceive(int nErrorCode)
 			CString ss;
 			ss.Format(_T("拼接: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
 			OutputDebugString(ss);
-
+			CAsyncSocket::OnReceive(nErrorCode);
 			return;
 			
 		}
-		else {
+		else if(n == -1) {
 			CString ss;
-			ss.Format(_T("回调: 指令为%d 长度为%d 实际接收长度为%d\n"), msgR->op, msgR->mSize, n);
+			ss.Format(_T("重置连接\n"));
 			OutputDebugString(ss);
+			this->Close();
+			if (this->pParent != nullptr) {
+				this->pParent->ResetAll();
+				return;
+			}
+			
 		}
 	}
 	else {
@@ -95,8 +107,12 @@ void WrkSocket::OnReceive(int nErrorCode)
 		if (n == SOCKET_ERROR) {
 			int err = GetLastError();
 			CString ss;
-			ss.Format(_T("err = %d\n"), err);
+			ss.Format(_T("err = %d\n重置连接\n"), err);
 			OutputDebugString(ss);
+			if (this->pParent != nullptr) {
+				this->pParent->ResetAll();
+				return;
+			}
 		}
 
 		lastLen += n;
@@ -109,6 +125,7 @@ void WrkSocket::OnReceive(int nErrorCode)
 			isLess = false;
 		}
 		else {
+			CAsyncSocket::OnReceive(nErrorCode);
 			return;
 		}
 	}
