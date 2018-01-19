@@ -572,11 +572,13 @@ void CMainDlg::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 	// TODO: Add your message handler code here  
-	if (/*nType == SIZE_RESTORED ||*/ nType == SIZE_MAXIMIZED)
+	if ( nType == SIZE_MAXIMIZED)
 	{
+		//最大化窗口
 		maxSize();
 	}
 	else if(nType == SIZE_RESTORED) {
+		//还原窗口
 		reSize();
 	}
 	// TODO: 在此处添加消息处理程序代码
